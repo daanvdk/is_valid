@@ -1,14 +1,13 @@
 from unittest import TestCase
-from itertools import product
 import re
 
 from hypothesis import given
-# import hypothesis.strategies as hs
+import hypothesis.strategies as hs
 
 from is_valid import is_eq, is_neq, is_lt, is_leq, is_gt, is_geq, is_in,\
     is_none, is_null, is_in_range, is_match
 
-from .base import varying, numbers
+from .base import varying, numbers, regexs, regex_with_match
 
 
 class TestExpressionPredicates(TestCase):
@@ -77,80 +76,103 @@ class TestExpressionPredicates(TestCase):
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), b >= a)
 
-    def test_range(self):
-        values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        for name, predicate, start_in, stop_in, func in [
-            ('is_in_range', is_in_range, False, False,
-                lambda a, b, c: a < b < c),
-            ('is_in_range', is_in_range, False, True,
-                lambda a, b, c: a < b <= c),
-            ('is_in_range', is_in_range, True, False,
-                lambda a, b, c: a <= b < c),
-            ('is_in_range', is_in_range, True, True,
-                lambda a, b, c: a <= b <= c),
-        ]:
-            for start, stop in product(values, values):
-                is_func = predicate(
-                    start, stop,
-                    start_in=start_in, stop_in=stop_in
-                )
-                for value in values:
-                    with self.subTest('{}: non-detail == detail'.format(name)):
-                        self.assertEqual(
-                            is_func(value),
-                            is_func(value, explain=True)[0]
-                        )
-                    with self.subTest('{}: {}, {}, {!r}, {!r}'.format(
-                        name, start, start_in, stop, stop_in, value
-                    )):
-                        self.assertEqual(
-                            is_func(value),
-                            func(start, value, stop)
-                        )
+    @given(numbers, numbers, numbers)
+    def test_in_range_ex_ex(self, start, stop, value):
+        pred = is_in_range(start, stop, start_in=False, stop_in=False)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(value), start < value < stop)
 
-    def test_collection(self):
-        values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        collections = [set([1, 2, 3]), set([4, 5, 6]), set([7, 8, 9])]
-        for a in collections:
-            is_func_a = is_in(a)
-            for b in values:
-                with self.subTest('is_in: non-detail == detail'):
-                    self.assertEqual(
-                        is_func_a(b),
-                        is_func_a(b, explain=True)[0]
-                    )
-                with self.subTest('is_in: {!r}, {!r}'.format(b, a)):
-                    self.assertEqual(is_func_a(b), b in a)
+    @given(numbers, numbers, numbers)
+    def test_in_range_ex_in(self, start, stop, value):
+        pred = is_in_range(start, stop, start_in=False, stop_in=True)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(value), start < value <= stop)
 
-    def test_nullability(self):
-        values = [1, 2, 3, 4, 5, 6, 7, 8, 9, None]
-        for name, predicate in [('is_none', is_none), ('is_null', is_null)]:
-            for a in values:
-                with self.subTest('{}: non-detail == detail'.format(name)):
-                    self.assertEqual(
-                        predicate(a),
-                        predicate(a, explain=True)[0]
-                    )
-                with self.subTest('{}: {!r}'.format(name, a)):
-                    self.assertEqual(predicate(a), a is None)
+    @given(numbers, numbers, numbers)
+    def test_in_range_in_ex(self, start, stop, value):
+        pred = is_in_range(start, stop, start_in=True, stop_in=False)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(value), start <= value < stop)
 
-    def test_patterns(self):
-        patterns = [re.compile(r'^\d+$'), r'^[a-z]+$']
-        values = ['123', 'abc', 'ABC', '123abc', None, 123]
-        for pattern in patterns:
-            is_func = is_match(pattern)
-            if isinstance(pattern, str):
-                pattern = re.compile(pattern)
-            for value in values:
-                with self.subTest('is_match: non-detail == detail'):
-                    self.assertEqual(
-                        is_func(value),
-                        is_func(value, explain=True)[0]
-                    )
-                with self.subTest('is_match: {!r}, {!r}'.format(
-                    value, pattern.pattern
-                )):
-                    self.assertEqual(
-                        is_func(value),
-                        isinstance(value, str) and bool(pattern.match(value))
-                    )
+    @given(numbers, numbers, numbers)
+    def test_in_range_in_in(self, start, stop, value):
+        pred = is_in_range(start, stop, start_in=True, stop_in=True)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(value), start <= value <= stop)
+
+    @given(numbers)
+    def test_in_set_with_self(self, value):
+        pred = is_in(set([value]))
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertTrue(pred(value))
+
+    @given(numbers, hs.sets(numbers, max_size=20))
+    def test_in(self, value, collection):
+        pred = is_in(collection)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(value), value in collection)
+
+    def test_none(self):
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(is_none(None), is_none(None, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertTrue(is_none(None))
+
+    @given(varying)
+    def test_not_null(self, value):
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(is_null(value), is_null(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertFalse(is_null(value))
+
+    def test_null(self):
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(is_null(None), is_null(None, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertTrue(is_null(None))
+
+    @given(varying)
+    def test_not_none(self, value):
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(is_none(value), is_none(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertFalse(is_none(value))
+
+    @given(hs.sampled_from(regexs), varying)
+    def test_match(self, regex, value):
+        pred = is_match(regex)
+        if isinstance(regex, str):
+            regex = re.compile(regex)
+        with self.subTest('{}; explain=True == explain=False'.format(
+            regex.pattern
+        )):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('{}; pred correct'.format(regex.pattern)):
+            self.assertEqual(
+                pred(value),
+                isinstance(value, str) and bool(regex.match(value))
+            )
+
+    @given(regex_with_match())
+    def test_matches_match(self, value):
+        regex, match = value
+        pred = is_match(regex)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(
+                pred(value),
+                isinstance(value, str) and bool(regex.match(value))
+            )
