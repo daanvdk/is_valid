@@ -15,9 +15,9 @@ class TestExpressionPredicates(TestCase):
     @given(varying)
     def test_eq_to_self(self, a):
         pred = is_eq(a)
-        with self.subTest('explain; {}'.format(a)):
+        with self.subTest('explain=True == explain=False'):
             self.assertEqual(pred(a), pred(a, explain=True)[0])
-        with self.subTest('correct; {}'.format(a)):
+        with self.subTest('pred correct'):
             self.assertEqual(pred(a), a == a)
 
     @given(varying, varying)
@@ -31,9 +31,9 @@ class TestExpressionPredicates(TestCase):
     @given(varying)
     def test_neq_to_self(self, a):
         pred = is_neq(a)
-        with self.subTest('explain; {}'.format(a)):
+        with self.subTest('explain=True == explain=False'):
             self.assertEqual(pred(a), pred(a, explain=True)[0])
-        with self.subTest('correct; {}'.format(a)):
+        with self.subTest('pred correct'):
             self.assertEqual(pred(a), a != a)
 
     @given(varying, varying)
