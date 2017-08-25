@@ -49,7 +49,7 @@ provide a message the message of your assert error will be the error that the
 predicate gives when `detailed=True`.
 
 # Install
-'Is Valid?' is on PyPi, you can install it with:
+'Is Valid?' is on [PyPI](https://pypi.python.org/pypi/is-valid), you can install it with:
 ```
 pip install is-valid
 ```
