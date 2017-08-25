@@ -52,7 +52,7 @@ error that the validator gives when `detailed=True`.
 # Install
 'Is Valid?' is on PyPi, you can install it with:
 ```
-pip install isvalid
+pip install is-valid
 ```
 The module is written in pure python without any dependencies and is only a few
 hundred LOC.
