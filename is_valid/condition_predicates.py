@@ -22,6 +22,22 @@ def is_all(*predicates):
     return is_valid
 
 
+def is_one(*predicates):
+    def is_valid(data, explain=False):
+        if not explain:
+            return sum(1 for p in predicates if p(data)) == 1
+        explanation = {True: [], False: []}
+        for i, predicate in enumerate(predicates):
+            valid, subexplanation = predicate(data, explain=True)
+            explanation[valid].append(subexplanation)
+        return (
+            True, explanation
+        ) if len(explanation[True]) == 1 else (
+            False, explanation
+        )
+    return is_valid
+
+
 def is_if(cond, pred_if, pred_else=lambda _, explain=False: (
     True, 'data does not match the condition'
 ) if explain else True):
