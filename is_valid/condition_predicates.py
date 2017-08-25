@@ -41,16 +41,18 @@ def is_one(*predicates):
 def is_if(cond, pred_if, pred_else=lambda _, explain=False: (
     True, 'data does not match the condition'
 ) if explain else True):
-    def is_valid(data, explain=True):
+    def is_valid(data, explain=False):
         return (pred_if if cond(data) else pred_else)(data, explain=explain)
     return is_valid
 
 
 def is_cond(*conds):
-    def is_valid(_, explain=False):
-        return (
+    def is_valid(data, explain=False):
+        return next((
+            pred(data, explain=explain)
+            for cond, pred in conds
+            if cond(data)
+        ), (
             False, 'data matches none of the conditions'
-        ) if explain else False
-    for cond, predicate in reversed(conds):
-        is_valid = is_if(cond, predicate, is_valid)
+        ) if explain else False)
     return is_valid
