@@ -1,6 +1,8 @@
-def is_anything(data, detailed=False):
-    return (True, None) if detailed else True
+from .negation_predicates import is_not
 
 
-def is_nothing(data, detailed=False):
-    return (False, 'data is not nothing') if detailed else False
+def is_something(data, explain=False):
+    return (True, 'data is something') if explain else True
+
+
+is_nothing = is_not(is_something)

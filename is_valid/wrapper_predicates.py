@@ -1,25 +1,21 @@
 import json
 
 
-def is_transformed(
-    transform, validator, *args,
-    exceptions=[Exception], msg='data can\'t be transformed', **kwargs
-):
-    def is_valid(data, detailed=False):
+def is_transformed(transform, predicate, *args, exceptions=[
+    Exception
+], msg='data can\'t be transformed', **kwargs):
+    def is_valid(data, explain=False):
         try:
             data = transform(data, *args, **kwargs)
         except Exception as e:
-            if not any(isinstance(e, cls) for cls in exceptions):
+            if not any(isinstance(e, exc) for exc in exceptions):
                 raise e
-            return (False, msg) if detailed else False
-        return validator(data, detailed=detailed)
+            return (False, msg) if explain else False
+        return predicate(data, explain=explain)
     return is_valid
 
 
-def is_json(validator, *args, **kwargs):
-    return is_transformed(
-        json.loads, validator,
-        *args,
-        exceptions=[json.JSONDecodeError], msg='data is not valid json',
-        **kwargs
-    )
+def is_json(predicate, *args, **kwargs):
+    return is_transformed(json.loads, predicate, *args, exceptions=[
+        json.JSONDecodeError
+    ], msg='data is not valid json', **kwargs)

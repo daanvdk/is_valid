@@ -1,184 +1,178 @@
 from .type_predicates import is_iterable, is_list, is_dict, is_tuple, is_set
 
 
-def is_iterable_where(*validators):
-    def is_valid(data, detailed=False):
-        valid, errors = is_iterable(data, detailed=True)
+def is_iterable_where(*predicates):
+    def is_valid(data, explain=False):
+        valid, explanation = is_iterable(data, explain=True)
         if not valid:
-            return (valid, errors) if detailed else valid
-        if len(data) != len(validators):
+            return (False, explanation) if explain else False
+        if len(data) != len(predicates):
             return (
-                False, {'*': 'data has incorrect length'}
-            ) if detailed else False
-        if not detailed:
+                False, 'data has incorrect length'
+            ) if explain else False
+        if not explain:
             return all(
-                validator(value) for validator, value in zip(validators, data)
+                predicate(value) for predicate, value in zip(predicates, data)
             )
-        errors = {}
-        for i, (validator, value) in enumerate(zip(validators, data)):
-            valid, suberrors = validator(value, detailed=True)
-            if not valid:
-                errors[i] = suberrors
-        return (False, errors) if errors else (True, None)
+        reasons, errors = {}, {}
+        for i, (predicate, value) in enumerate(zip(predicates, data)):
+            valid, explanation = predicate(value, explain=True)
+            (reasons if valid else errors)[i] = explanation
+        return (True, reasons) if not errors else (False, explanation)
     return is_valid
 
 
-def is_iterable_of(validator):
-    def is_valid(data, detailed=False):
-        valid, errors = is_iterable(data, detailed=True)
+def is_iterable_of(predicate):
+    def is_valid(data, explain=False):
+        valid, explanation = is_iterable(data, explain=True)
         if not valid:
-            return (valid, errors) if detailed else valid
-        if not detailed:
-            return all(validator(value) for value in data)
-        errors = {}
+            return (False, explanation) if explain else False
+        if not explain:
+            return all(predicate(value) for value in data)
+        reasons, errors = {}, {}
         for i, value in enumerate(data):
-            valid, suberrors = validator(value, detailed=True)
-            if not valid:
-                errors[i] = suberrors
-        return (False, errors) if errors else (True, None)
+            valid, explanation = predicate(value, explain=True)
+            (reasons if valid else errors)[i] = explanation
+        return (True, reasons) if not errors else (False, explanation)
     return is_valid
 
 
-def is_dict_where(**validators):
-    def is_valid(data, detailed=False):
-        valid, errors = is_dict(data, detailed=True)
+def is_dict_where(**predicates):
+    def is_valid(data, explain=False):
+        valid, explanation = is_dict(data, explain=True)
         if not valid:
-            return (False, errors) if detailed else False
-        if set(data) != set(validators):
+            return (False, explanation) if explain else False
+        if set(data) != set(predicates):
             return (
-                False, 'the data keys are not equal to the validator keys'
-            ) if detailed else False
-        if not detailed:
-            return all(validators[key](value) for key, value in data.items())
-        errors = {}
+                False, 'the data keys are not equal to the predicate keys'
+            ) if explain else False
+        if not explain:
+            return all(predicates[key](value) for key, value in data.items())
+        reasons, errors = {}, {}
         for key, value in data.items():
-            valid, suberrors = validators[key](value, detailed=True)
-            if not valid:
-                errors[key] = suberrors
-        return (False, errors) if errors else (True, None)
+            valid, explanation = predicates[key](value, explain=True)
+            (reasons if valid else errors)[key] = explanation
+        return (True, reasons) if not errors else (False, explanation)
     return is_valid
 
 
-def is_subdict_where(**validators):
-    def is_valid(data, detailed=False):
-        valid, errors = is_dict(data, detailed=True)
+def is_subdict_where(**predicates):
+    def is_valid(data, explain=False):
+        valid, explanation = is_dict(data, explain=True)
         if not valid:
-            return (False, errors) if detailed else False
-        if not set(data) <= set(validators):
+            return (False, explanation) if explain else False
+        if not set(data) <= set(predicates):
             return (
-                False, 'the data keys are not a subset of the validator keys'
-            ) if detailed else False
-        if not detailed:
-            return all(validators[key](value) for key, value in data.items())
-        errors = {}
+                False, 'the data keys are not a subset of the predicate keys'
+            ) if explain else False
+        if not explain:
+            return all(predicates[key](value) for key, value in data.items())
+        reasons, errors = {}, {}
         for key, value in data.items():
-            valid, suberrors = validators[key](value, detailed=True)
-            if not valid:
-                errors[key] = suberrors
-        return (False, errors) if errors else (True, None)
+            valid, explanation = predicates[key](value, explain=True)
+            (reasons if valid else errors)[key] = explanation
+        return (True, reasons) if not errors else (False, explanation)
     return is_valid
 
 
-def is_superdict_where(**validators):
-    def is_valid(data, detailed=False):
-        valid, errors = is_dict(data, detailed=True)
+def is_superdict_where(**predicates):
+    def is_valid(data, explain=False):
+        valid, explanation = is_dict(data, explain=True)
         if not valid:
-            return (False, errors) if detailed else False
-        if not set(data) >= set(validators):
+            return (False, explanation) if explain else False
+        if not set(data) >= set(predicates):
             return (
-                False, 'the data keys are not a superset of the validator keys'
-            ) if detailed else False
-        if not detailed:
+                False, 'the data keys are not a superset of the predicate keys'
+            ) if explain else False
+        if not explain:
             return all(
-                validator(data[key]) for key, validator in validators.items()
+                predicate(data[key]) for key, predicate in predicates.items()
             )
-        errors = {}
-        for key, validator in validators.items():
-            valid, suberrors = validator(data[key], detailed=True)
-            if not valid:
-                errors[key] = suberrors
-        return (False, errors) if errors else (True, None)
+        reasons, errors = {}, {}
+        for key, predicate in predicates.items():
+            valid, explanation = predicate(data[key], explain=True)
+            (reasons if valid else errors)[key] = explanation
+        return (True, reasons) if not errors else (False, explanation)
     return is_valid
 
 
-def is_object_where(**validators):
-    def is_valid(data, detailed=False):
-        errors = {}
-        for attr, validator in validators.items():
+def is_object_where(**predicates):
+    def is_valid(data, explain=False):
+        reasons, errors = {}, {}
+        for attr, predicate in predicates.items():
             if hasattr(data, attr):
-                valid, error = validator(getattr(data, attr), detailed=True)
-                if not valid:
-                    if not detailed:
-                        return False
-                    errors[attr] = error
+                valid, explanation = predicate(
+                    getattr(data, attr), explain=True
+                )
+                if not valid and not explain:
+                    return False
+                (reasons if valid else explanation)[attr] = explanation
             else:
-                if not detailed:
+                if not explain:
                     return False
                 errors[attr] = 'data does not have this attribute'
-        if not detailed:
+        if not explain:
             return True
-        return (False, errors) if errors else (True, None)
+        return (True, reasons) if not errors else (False, explanation)
     return is_valid
 
 
-def is_list_where(*validators):
-    validator = is_iterable_where(*validators)
+def is_list_where(*predicates):
+    predicate = is_iterable_where(*predicates)
 
-    def is_valid(data, detailed=False):
-        valid, errors = is_list(data, detailed=True)
+    def is_valid(data, explain=False):
+        valid, explanation = is_list(data, explain=True)
         if not valid:
-            return (False, errors) if detailed else False
-        return validator(data, detailed=detailed)
+            return (False, explanation) if explain else False
+        return predicate(data, explain=explain)
     return is_valid
 
 
-def is_list_of(validator):
-    validator = is_iterable_of(validator)
+def is_list_of(predicate):
+    predicate = is_iterable_of(predicate)
 
-    def is_valid(data, detailed=False):
-        valid, errors = is_list(data, detailed=True)
+    def is_valid(data, explain=False):
+        valid, explanation = is_list(data, explain=True)
         if not valid:
-            return (False, errors) if detailed else False
-        return validator(data, detailed=detailed)
+            return (False, explanation) if explain else False
+        return predicate(data, explain=explain)
     return is_valid
 
 
-def is_tuple_where(*validators):
-    validator = is_iterable_where(*validators)
+def is_tuple_where(*predicates):
+    predicate = is_iterable_where(*predicates)
 
-    def is_valid(data, detailed=False):
-        valid, errors = is_tuple(data, detailed=True)
+    def is_valid(data, explain=False):
+        valid, explanation = is_tuple(data, explain=True)
         if not valid:
-            return (False, errors) if detailed else False
-        return validator(data, detailed=detailed)
+            return (False, explanation) if explain else False
+        return predicate(data, explain=explain)
     return is_valid
 
 
-def is_tuple_of(validator):
-    validator = is_iterable_of(validator)
+def is_tuple_of(predicate):
+    predicate = is_iterable_of(predicate)
 
-    def is_valid(data, detailed=False):
-        valid, errors = is_tuple(data, detailed=True)
+    def is_valid(data, explain=False):
+        valid, explanation = is_tuple(data, explain=True)
         if not valid:
-            return (False, errors) if detailed else False
-        return validator(data, detailed=detailed)
+            return (False, explanation) if explain else False
+        return predicate(data, explain=explain)
     return is_valid
 
 
-def is_set_of(validator):
-    validator = is_iterable_of(validator)
+def is_set_of(predicate):
+    predicate = is_iterable_of(predicate)
 
-    def is_valid(data, detailed=False):
-        valid, errors = is_set(data, detailed=True)
+    def is_valid(data, explain=False):
+        valid, explanation = is_set(data, explain=True)
         if not valid:
-            return (False, errors) if detailed else False
-        if not detailed:
-            return validator(data)
+            return (False, explanation) if explain else False
+        if not explain:
+            return predicate(data)
         elems = list(data)
-        valid, errors = validator(elems, detailed=True)
-        if not valid:
-            return (False, {
-                elems[key]: value for key, value in errors.items()
-            })
-        return (True, None)
+        valid, explanation = predicate(elems, explain=True)
+        return (True, explanation) if valid else (False, {
+            elems[i]: value for i, value in explanation.items()
+        })
     return is_valid

@@ -1,24 +1,26 @@
 from datetime import datetime, date, time, timedelta
 
 
-def is_iterable(data, detailed=False):
+def is_iterable(data, explain=False):
     try:
         iter(data)
-        return (True, None) if detailed else True
+        return (True, 'data is iterable') if explain else True
     except TypeError:
-        return (False, 'data is not iterable') if detailed else False
+        return (False, 'data is not iterable') if explain else False
 
 
 def is_instance(cls, rep=None):
     if rep is None:
         rep = 'an instance of {}'.format(cls.__name__)
 
-    def is_valid(data, detailed=False):
-        if not detailed:
+    def is_valid(data, explain=False):
+        if not explain:
             return isinstance(data, cls)
         return (
+            True, 'data is {}'.format(rep)
+        ) if isinstance(data, cls) else (
             False, 'data is not {}'.format(rep)
-        ) if not isinstance(data, cls) else (True, None)
+        )
     return is_valid
 
 
