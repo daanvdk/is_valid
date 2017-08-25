@@ -1,6 +1,7 @@
 from datetime import datetime, date, time, timedelta
 import re
 import json
+from functools import reduce
 
 
 def is_iterable(data, detailed=False):
@@ -107,6 +108,26 @@ def is_superdict_where(**validators):
             valid, suberrors = validator(data[key], detailed=True)
             if not valid:
                 errors[key] = suberrors
+        return (False, errors) if errors else (True, None)
+    return is_valid
+
+
+def is_object_where(**validators):
+    def is_valid(data, detailed=False):
+        errors = {}
+        for attr, validator in validators.items():
+            if hasattr(data, attr):
+                valid, error = validator(getattr(data, attr), detailed=True)
+                if not valid:
+                    if not detailed:
+                        return False
+                    errors[attr] = error
+            else:
+                if not detailed:
+                    return False
+                errors[attr] = 'data does not have this attribute'
+        if not detailed:
+            return True
         return (False, errors) if errors else (True, None)
     return is_valid
 
@@ -229,6 +250,13 @@ def is_leq(value, rep=None):
     return is_valid
 
 
+def is_in_range(start, stop, start_in=True, stop_in=False):
+    return is_all(
+        (is_geq if start_in else is_gt)(start),
+        (is_leq if stop_in else is_lt)(stop)
+    )
+
+
 def is_in(collection):
     def is_valid(data, detailed=False):
         if not detailed:
@@ -269,6 +297,18 @@ def is_not_none(data, detailed=False):
     return (False, 'data is not not None') if data is None else (True, None)
 
 
+def is_null(data, detailed=False):
+    if not detailed:
+        return data is None
+    return (False, 'data is not null') if data is not None else (True, None)
+
+
+def is_not_null(data, detailed=False):
+    if not detailed:
+        return data is not None
+    return (False, 'data is not not null') if data is None else (True, None)
+
+
 def is_not(validator):
     def is_valid(data, detailed=False):
         if not detailed:
@@ -291,6 +331,7 @@ is_datetime = is_instance(datetime, rep='datetime')
 is_date = is_instance(date, rep='date')
 is_time = is_instance(time, rep='time')
 is_timedelta = is_instance(timedelta, rep='timedelta')
+is_number = is_instance([int, float], rep='number')
 
 
 def is_match(regexp, flags=0):
@@ -396,6 +437,23 @@ def is_json(validator, *args, **kwargs):
         *args,
         exceptions=[json.JSONDecodeError], msg='data is not valid json',
         **kwargs
+    )
+
+
+def is_if(cond, if_validator, else_validator=is_anything):
+    def is_valid(data, detailed=True):
+        return (
+            if_validator if cond(data) else else_validator
+        )(data, detailed=detailed)
+
+
+def is_cond(*conds):
+    return reduce(
+        lambda e, cond: is_if(cond[0], cond[1], e),
+        reversed(conds),
+        lambda _, detailed=False: (
+            False, 'data matches none of the conditions'
+        ) if detailed else False
     )
 
 
