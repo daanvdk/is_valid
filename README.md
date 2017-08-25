@@ -1,16 +1,15 @@
 # Is Valid?
-'Is Valid?' is a simple lightweight python library to create validation functions
-that check that data is in a certain format.
+'Is Valid?' is a simple lightweight python library for validation predicates.
 
 ## Usage
-There are a lot of very basic functions like `is_str`:
+There are a lot of very basic predicates like `is_str`:
 ```python
 >>> is_str("foobar")
 True
 >>> is_str(None)
 False
 ```
-But also more complex functions like `is_match` or `is_list_of`:
+But also more complex predicate generators like `is_match` or `is_list_of`:
 ```python
 >>> is_integer_string = is_match(r'^\d+$')
 >>> is_integer_string('12345')
@@ -25,12 +24,12 @@ False
 >>> is_list_of_integer_strings({'123', '456', '789'})
 False
 ```
-As you can see in the example above you can nest these functions very easily
-creating powerful validation functions that examine complex structures easily.
+As you can see in the example above by nesting predicates you can create very
+powerful predicates that evaluate complex structures easily.
 
-In some cases just `True` or `False` doesn't cut it, you might want to know why
-your data is invalid. For this purpose all validation functions take a
-`detailed` keyword argument.
+In some cases just `False` doesn't cut it, you might want to know why
+your data is invalid. For this purpose all predicates take a `detailed`
+keyword argument.
 ```python
 >>> is_str("foobar", detailed=True)
 (True, None)
@@ -45,9 +44,9 @@ your data is invalid. For this purpose all validation functions take a
 ```
 You can also use this module for unittests, the module provides a mixin called
 `IsValidMixin` that you can mix in with your `TestCase` class to have access to
-`self.assertIsValid(validator, data, msg=None)` in your tests. If you don't
-provide a message the message of your assert error will automatically be the
-error that the validator gives when `detailed=True`.
+`self.assertIsValid(predicate, data, msg=None)` in your tests. If you don't
+provide a message the message of your assert error will be the error that the
+predicate gives when `detailed=True`.
 
 # Install
 'Is Valid?' is on PyPi, you can install it with:
