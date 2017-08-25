@@ -141,7 +141,7 @@ def is_not_null(data, detailed=False):
 
 
 def is_match(regexp, flags=0):
-    if isinstance(str, regexp):
+    if isinstance(regexp, str):
         regexp = re.compile(regexp, flags=flags)
     rep = '/{}/{}'.format(regexp.pattern, ''.join(char for flag, char in [
         (re.A, 'a'), (re.I, 'i'), (re.L, 'l'),
@@ -161,7 +161,7 @@ def is_match(regexp, flags=0):
 
 
 def is_not_match(regexp, flags=0):
-    if isinstance(str, regexp):
+    if isinstance(regexp, str):
         regexp = re.compile(regexp, flags=flags)
     rep = '/{}/{}'.format(regexp.pattern, ''.join(char for flag, char in [
         (re.A, 'a'), (re.I, 'i'), (re.L, 'l'),
