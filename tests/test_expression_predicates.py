@@ -2,47 +2,80 @@ from unittest import TestCase
 from itertools import product
 import re
 
+from hypothesis import given
+# import hypothesis.strategies as hs
+
 from is_valid import is_eq, is_neq, is_lt, is_leq, is_gt, is_geq, is_in,\
     is_none, is_null, is_in_range, is_match
+
+from .base import varying, numbers
 
 
 class TestExpressionPredicates(TestCase):
 
-    def test_equivalence(self):
-        values = [1, 2, 3, '1', '2', '3', [1, 2, 3], ['1', '2', '3']]
-        for name, predicate, func in [
-            ('is_eq', is_eq, lambda a, b: b == a),
-            ('is_neq', is_neq, lambda a, b: b != a),
-        ]:
-            for a in values:
-                is_func_a = predicate(a)
-                for b in values:
-                    with self.subTest('{}: non-detail == detail'.format(name)):
-                        self.assertEqual(
-                            is_func_a(b),
-                            is_func_a(b, explain=True)[0]
-                        )
-                    with self.subTest('{}: {!r}, {!r}'.format(name, b, a)):
-                        self.assertEqual(is_func_a(b), func(a, b))
+    @given(varying)
+    def test_eq_to_self(self, a):
+        pred = is_eq(a)
+        with self.subTest('explain; {}'.format(a)):
+            self.assertEqual(pred(a), pred(a, explain=True)[0])
+        with self.subTest('correct; {}'.format(a)):
+            self.assertEqual(pred(a), a == a)
 
-    def test_comparison(self):
-        values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        for name, predicate, func in [
-            ('is_lt', is_lt, lambda a, b: b < a),
-            ('is_leq', is_leq, lambda a, b: b <= a),
-            ('is_gt', is_gt, lambda a, b: b > a),
-            ('is_geq', is_geq, lambda a, b: b >= a),
-        ]:
-            for a in values:
-                is_func_a = predicate(a)
-                for b in values:
-                    with self.subTest('{}: non-detail == detail'.format(name)):
-                        self.assertEqual(
-                            is_func_a(b),
-                            is_func_a(b, explain=True)[0]
-                        )
-                    with self.subTest('{}: {!r}, {!r}'.format(name, b, a)):
-                        self.assertEqual(is_func_a(b), func(a, b))
+    @given(varying, varying)
+    def test_eq(self, a, b):
+        pred = is_eq(a)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(b), pred(b, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(b), a == b)
+
+    @given(varying)
+    def test_neq_to_self(self, a):
+        pred = is_neq(a)
+        with self.subTest('explain; {}'.format(a)):
+            self.assertEqual(pred(a), pred(a, explain=True)[0])
+        with self.subTest('correct; {}'.format(a)):
+            self.assertEqual(pred(a), a != a)
+
+    @given(varying, varying)
+    def test_neq(self, a, b):
+        pred = is_neq(a)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(b), pred(b, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(b), a != b)
+
+    @given(numbers, numbers)
+    def test_lt(self, a, b):
+        pred = is_lt(a)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(b), pred(b, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(b), b < a)
+
+    @given(numbers, numbers)
+    def test_leq(self, a, b):
+        pred = is_leq(a)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(b), pred(b, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(b), b <= a)
+
+    @given(numbers, numbers)
+    def test_gt(self, a, b):
+        pred = is_gt(a)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(b), pred(b, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(b), b > a)
+
+    @given(numbers, numbers)
+    def test_geq(self, a, b):
+        pred = is_geq(a)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(b), pred(b, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(b), b >= a)
 
     def test_range(self):
         values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
