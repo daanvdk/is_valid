@@ -252,6 +252,10 @@ def is_anything(data, detailed=False):
     return (True, None) if detailed else True
 
 
+def is_nothing(data, detailed=False):
+    return (False, 'data is not nothing') if detailed else False
+
+
 def is_none(data, detailed=False):
     if not detailed:
         return data is None
@@ -260,7 +264,7 @@ def is_none(data, detailed=False):
 
 def is_not_none(data, detailed=False):
     if not detailed:
-        return data is None
+        return data is not None
     return (False, 'data is not not None') if data is None else (True, None)
 
 
