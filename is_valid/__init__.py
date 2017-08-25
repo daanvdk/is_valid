@@ -1,5 +1,6 @@
 from datetime import datetime, date, time, timedelta
 import re
+import json
 
 
 def is_iterable(data, detailed=False):
@@ -374,10 +375,31 @@ def is_set_of(validator):
     return is_valid
 
 
+def is_transformed(
+    transform, validator, *args,
+    exceptions=[Exception], msg='data can\'t be transformed', **kwargs
+):
+    def is_valid(data, detailed=False):
+        try:
+            data = transform(data, *args, **kwargs)
+        except Exception as e:
+            if not any(isinstance(e, cls) for cls in exceptions):
+                raise e
+            return (False, msg) if detailed else False
+        return validator(data, detailed=detailed)
+    return is_valid
+
+
+def is_json(validator, *args, **kwargs):
+    return is_transformed(
+        json.loads, validator,
+        *args,
+        exceptions=[json.JSONDecodeError], msg='data is not valid json',
+        **kwargs
+    )
+
+
 class IsValidMixin:
     def assertIsValid(self, validator, data, msg=None):
         valid, error = validator(data, detailed=True)
-        self.assertTrue(
-            valid,
-            msg='Error: {}'.format(error) if msg is None else msg
-        )
+        self.assertTrue(valid, msg=str(error) if msg is None else msg)
