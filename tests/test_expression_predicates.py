@@ -3,7 +3,7 @@ from is_valid import is_eq, is_neq, is_lt, is_leq, is_gt, is_geq, is_in,\
     is_not_in, is_none, is_not_none, is_anything, is_nothing
 
 
-class TestExpressionFuncs(TestCase):
+class TestExpressionPredicates(TestCase):
 
     def test_equivalence(self):
         values = [1, 2, 3, '1', '2', '3', [1, 2, 3], ['1', '2', '3']]
