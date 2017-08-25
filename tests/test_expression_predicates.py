@@ -1,6 +1,6 @@
 from unittest import TestCase
 from is_valid import is_eq, is_neq, is_lt, is_leq, is_gt, is_geq, is_in,\
-    is_not_in, is_none, is_not_none, is_anything, is_nothing
+    is_not_in, is_none, is_not_none
 
 
 class TestExpressionPredicates(TestCase):
@@ -73,18 +73,3 @@ class TestExpressionPredicates(TestCase):
                     )
                 with self.subTest('{}: {!r}'.format(name, a)):
                     self.assertEqual(validator(a), func(a))
-
-    def test_extremes(self):
-        values = [1, 2, 3, 4, 5, 6, 7, 8, 9, None]
-        for name, validator, expected in [
-            ('is_anything', is_anything, True),
-            ('is_nothing', is_nothing, False),
-        ]:
-            for a in values:
-                with self.subTest('{}: non-detail == detail'.format(name)):
-                    self.assertEqual(
-                        validator(a),
-                        validator(a, detailed=True)[0]
-                    )
-                with self.subTest('{}: {!r}'.format(name, a)):
-                    self.assertEqual(validator(a), expected)
