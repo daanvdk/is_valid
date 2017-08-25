@@ -1,0 +1,14 @@
+sudo: false
+language: python
+python:
+    - "3.5"
+cache:
+    pip: true
+install:
+    - python3 setup.py install
+    - pip install flake8 codecov coverage
+script:
+    - flake8 jackster
+    - coverage run --include="is_valid/*" setup.py test
+after_success:
+    - codecov
