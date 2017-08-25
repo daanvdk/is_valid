@@ -14,5 +14,6 @@ setup(
     url='https://github.com/daanvdk/is_valid',
     keywords=['validation', 'nested'],
     classifiers=[],
-    test_suite='tests'
+    test_suite='tests',
+    tests_require=['hypothesis>=3.21.2'],
 )
