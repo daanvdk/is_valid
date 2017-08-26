@@ -178,9 +178,6 @@ invalid_json_data = """
 class MockTestCase:
 
     def __init__(self):
-        self.results = None
-
-    def run(self):
         self.results = {}
         for name, func in inspect.getmembers(self, inspect.ismethod):
             if name.startswith('test_'):
