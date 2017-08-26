@@ -1,4 +1,5 @@
 import re
+import inspect
 from datetime import datetime, date, time, timedelta
 
 import hypothesis.strategies as hs
@@ -172,3 +173,23 @@ invalid_json_data = """
     "bar": 1234567890
 }
 """
+
+
+class MockTestCase:
+
+    def __init__(self):
+        self.results = None
+
+    def run(self):
+        self.results = {}
+        for name, func in inspect.getmembers(self, inspect.ismethod):
+            if name.startswith('test_'):
+                try:
+                    func()
+                    self.results[name] = (True, None)
+                except AssertionError as e:
+                    self.results[name] = (False, e)
+
+    def assertTrue(self, value, msg='Not true.'):
+        if not value:
+            raise AssertionError(msg)
