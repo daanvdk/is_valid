@@ -4,7 +4,7 @@ from hypothesis import given
 
 from is_valid import is_something, is_nothing
 
-from .base import varying
+from .utils import varying
 
 
 class TestExtremePredicates(TestCase):

@@ -7,7 +7,7 @@ import hypothesis.strategies as hs
 from is_valid import is_eq, is_neq, is_lt, is_leq, is_gt, is_geq, is_in,\
     is_none, is_null, is_in_range, is_match
 
-from .base import varying, numbers, regexs, regex_with_match
+from .utils import varying, numbers, regexs, regex_with_match
 
 
 class TestExpressionPredicates(TestCase):

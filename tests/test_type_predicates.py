@@ -2,22 +2,12 @@ from unittest import TestCase
 from datetime import datetime, date, time, timedelta
 
 from hypothesis import given
-import hypothesis.strategies as hs
 
 from is_valid import is_iterable, is_instance, is_str, is_int, is_float,\
     is_bool, is_list, is_dict, is_set, is_tuple, is_datetime, is_date,\
     is_time, is_timedelta, is_number
 
-scalars = hs.one_of(
-    hs.text(), hs.integers(), hs.floats(), hs.booleans(),
-    hs.lists(hs.integers()), hs.dictionaries(hs.integers(), hs.integers()),
-    hs.sets(hs.integers()), hs.tuples(hs.integers()), hs.datetimes(),
-    hs.dates(), hs.times(), hs.timedeltas()
-)
-classes = hs.sampled_from([
-    str, int, float, bool, list, dict, set, tuple, datetime, date, time,
-    timedelta
-])
+from .utils import classes, scalars
 
 
 class TestTypePredicates(TestCase):

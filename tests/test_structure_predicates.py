@@ -3,70 +3,12 @@ from unittest import TestCase
 from hypothesis import given
 import hypothesis.strategies as hs
 
-from .base import FooBar, FooBarBaz, Foo, FooBaz
-
 from is_valid import is_eq, is_iterable_where, is_iterable_of, is_dict_where,\
     is_subdict_where, is_superdict_where, is_object_where, is_list_where,\
     is_list_of, is_tuple_where, is_tuple_of, is_set_of
 
-
-dicts = hs.one_of(
-    hs.fixed_dictionaries({
-        'foo': hs.booleans(),
-        'bar': hs.booleans()
-    }),
-    hs.fixed_dictionaries({
-        'foo': hs.booleans()
-    }),
-    hs.fixed_dictionaries({
-        'foo': hs.booleans(),
-        'bar': hs.booleans(),
-        'baz': hs.booleans()
-    }),
-    hs.fixed_dictionaries({
-        'foo': hs.booleans(),
-        'baz': hs.booleans()
-    }),
-    hs.booleans()
-)
-correct_dict = {'foo': True, 'bar': False}
-
-
-lists = hs.one_of(
-    hs.lists(hs.booleans(), min_size=0, max_size=4),
-    hs.booleans()
-)
-correct_list = [True, False]
-
-
-@hs.composite
-def tuples(draw):
-    l = draw(lists)
-    return tuple(l) if isinstance(l, list) else l
-
-
-correct_tuple = (True, False)
-
-
-@hs.composite
-def object_with_attrs(draw, *attrs):
-    return draw(hs.sampled_from([
-        FooBar(draw(hs.booleans()), draw(hs.booleans())),
-        FooBarBaz(
-            draw(hs.booleans()), draw(hs.booleans()), draw(hs.booleans())
-        ),
-        Foo(draw(hs.booleans())),
-        FooBaz(draw(hs.booleans()), draw(hs.booleans()))
-    ]))
-
-
-objects = hs.one_of(
-    object_with_attrs('foo', 'bar'),
-    object_with_attrs('foo', 'bar', 'baz'),
-    object_with_attrs('foo'),
-    object_with_attrs('foo', 'baz'),
-    hs.booleans()
-)
+from .utils import dicts, correct_dict, lists, correct_list, tuples,\
+    correct_tuple, objects
 
 
 class TestStructurePredicates(TestCase):

@@ -3,64 +3,7 @@ from unittest import TestCase
 from is_valid import is_json, is_dict_where, is_list_of, is_bool, is_str,\
     is_int
 
-
-json_data = """
-{
-    "foo": [
-        {
-            "bar": true,
-            "baz": "some string"
-        },
-        {
-            "bar": true,
-            "baz": "some string"
-        },
-        {
-            "bar": true,
-            "baz": "some string"
-        }
-    ],
-    "bar": 1234567890
-}
-"""
-incorrect_json_data = """
-{
-    "foo": [
-        {
-            "bar": true,
-            "baz": null
-        },
-        {
-            "bar": true,
-            "baz": "some string"
-        },
-        {
-            "bar": true,
-            "baz": "some string"
-        }
-    ],
-    "bar": 1234567890
-}
-"""
-invalid_json_data = """
-{
-    "foo": [
-        {
-            "bar": truee,
-            "baz": "some string"
-        },
-        {
-            "bar": true,
-            "baz": "some string"
-        },
-        {
-            "bar": true,
-            "baz": "some string"
-        }
-    ],
-    "bar": 1234567890
-}
-"""
+from .utils import json_data, incorrect_json_data, invalid_json_data
 
 
 class TestWrapperPredicates(TestCase):
