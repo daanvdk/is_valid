@@ -18,10 +18,6 @@ Predicates are functions that given a certain input return either `True` or
 `False` according to some rules that the input either follows or does not
 follow.
 
-These predicates are very useful for validation because we only want to know if
-something is valid or not and because they all just return `True` or `False`
-they are very composable.
-
 ## Example
 We are going to write a predicate that validates that our data is a list of
 books.
@@ -55,17 +51,27 @@ books = [
     {
         'title': 'Harry Potter and the Philosopher\'s Stone',
         'author': 'J. K. Rowling',
-        'pubdate': datetime.date(1997, 6, 26),
-        'ISBN': 747532699
+        'pubdate': '1997-6-26',
+        'ISBN': '0747532699'
     },
     {
         'title': 'The Fellowship of the Ring',
         'author': 'J. R. R. Tolkien',
         'pubdate': datetime.date(1954, 7, 29),
-        'ISBN': '0618574948'
-    },
+        'ISBN': '0-618-57494-8'
+    }
 ]
 ```
+If we call our predicate `is_list_of_books` on this data with the
+`explain=True` option we get the following result:
+```python
+(False, {
+    1: {'pubdate': 'data is not a datetime'},
+    2: {'ISBN': 'data does not match /^\d{9}(\d|X)$/'}
+})
+```
+We can then exactly see what is wrong, and with which book.
+
 
 ## Installation
 'Is Valid?' is on [PyPI](https://pypi.python.org/pypi/is-valid), you can install it with:
