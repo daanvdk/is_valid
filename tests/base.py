@@ -21,3 +21,23 @@ def regex_with_match(draw):
     regex = draw(hs.sampled_from(regexs))
     match = draw(hs.from_regex(regex))
     return (regex, match)
+
+
+class FooBar(object):
+    def __init__(self, foo, bar):
+        self.foo, self.bar = foo, bar
+
+
+class FooBarBaz(object):
+    def __init__(self, foo, bar, baz):
+        self.foo, self.bar, self.baz = foo, bar, baz
+
+
+class Foo(object):
+    def __init__(self, foo):
+        self.foo = foo
+
+
+class FooBaz(object):
+    def __init__(self, foo, baz):
+        self.foo, self.baz = foo, baz

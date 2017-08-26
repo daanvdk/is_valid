@@ -18,7 +18,7 @@ def is_iterable_where(*predicates):
         for i, (predicate, value) in enumerate(zip(predicates, data)):
             valid, explanation = predicate(value, explain=True)
             (reasons if valid else errors)[i] = explanation
-        return (True, reasons) if not errors else (False, explanation)
+        return (True, reasons) if not errors else (False, errors)
     return is_valid
 
 
@@ -33,7 +33,7 @@ def is_iterable_of(predicate):
         for i, value in enumerate(data):
             valid, explanation = predicate(value, explain=True)
             (reasons if valid else errors)[i] = explanation
-        return (True, reasons) if not errors else (False, explanation)
+        return (True, reasons) if not errors else (False, errors)
     return is_valid
 
 
@@ -52,7 +52,7 @@ def is_dict_where(**predicates):
         for key, value in data.items():
             valid, explanation = predicates[key](value, explain=True)
             (reasons if valid else errors)[key] = explanation
-        return (True, reasons) if not errors else (False, explanation)
+        return (True, reasons) if not errors else (False, errors)
     return is_valid
 
 
@@ -71,7 +71,7 @@ def is_subdict_where(**predicates):
         for key, value in data.items():
             valid, explanation = predicates[key](value, explain=True)
             (reasons if valid else errors)[key] = explanation
-        return (True, reasons) if not errors else (False, explanation)
+        return (True, reasons) if not errors else (False, errors)
     return is_valid
 
 
@@ -92,7 +92,7 @@ def is_superdict_where(**predicates):
         for key, predicate in predicates.items():
             valid, explanation = predicate(data[key], explain=True)
             (reasons if valid else errors)[key] = explanation
-        return (True, reasons) if not errors else (False, explanation)
+        return (True, reasons) if not errors else (False, errors)
     return is_valid
 
 
@@ -106,14 +106,14 @@ def is_object_where(**predicates):
                 )
                 if not valid and not explain:
                     return False
-                (reasons if valid else explanation)[attr] = explanation
+                (reasons if valid else errors)[attr] = explanation
             else:
                 if not explain:
                     return False
                 errors[attr] = 'data does not have this attribute'
         if not explain:
             return True
-        return (True, reasons) if not errors else (False, explanation)
+        return (True, reasons) if not errors else (False, errors)
     return is_valid
 
 
