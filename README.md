@@ -66,8 +66,8 @@ If we call our predicate `is_list_of_books` on this data with the
 `explain=True` option we get the following result:
 ```python
 (False, {
-    1: {'pubdate': 'data is not a datetime'},
-    2: {'ISBN': 'data does not match /^\d{9}(\d|X)$/'}
+    1: {'pubdate': 'data is not a date'},
+    2: {'ISBN': 'data does not match /^\\d{9}(\\d|X)$/'}
 })
 ```
 We can then exactly see what is wrong, and with which book.
