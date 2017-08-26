@@ -1,7 +1,8 @@
 <h1 style="text-align: center;">
-    <img src="https://raw.githubusercontent.com/Daanvdk/is_valid/master/logo.png" /><br/>
+    <img src="https://raw.githubusercontent.com/Daanvdk/is_valid/master/logo.png" /><br />
     Is Valid?
 </h1>
+
 [![pypi_version](
     https://badge.fury.io/py/is-valid.svg
 )](https://pypi.python.org/pypi/is-valid)
