@@ -1,5 +1,4 @@
 from unittest import TestCase
-from json import loads
 
 from is_valid import is_json, is_dict_where, is_list_of, is_bool, is_str,\
     is_int
