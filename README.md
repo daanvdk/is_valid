@@ -1,8 +1,6 @@
-<h1>
-    <div style="text-align: center;">
-        <img src="https://raw.githubusercontent.com/Daanvdk/is_valid/master/logo.png" /><br />
-        Is Valid?
-    </div>
+<h1 align="center">
+    <img src="https://raw.githubusercontent.com/Daanvdk/is_valid/master/logo.png" /><br />
+    Is Valid?
 </h1>
 
 [![pypi_version](
