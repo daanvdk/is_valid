@@ -23,7 +23,7 @@ def is_transformed(transform, predicate, *args, exceptions=[
     return is_valid
 
 
-def is_json(predicate, *args, **kwargs):
-    return is_transformed(json.loads, predicate, *args, exceptions=[
+def is_json(predicate, *args, loader=json.loads, **kwargs):
+    return is_transformed(loader, predicate, *args, exceptions=[
         json.JSONDecodeError
     ], msg='data is not valid json', **kwargs)
