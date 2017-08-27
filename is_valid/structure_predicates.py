@@ -37,7 +37,9 @@ def is_iterable_of(predicate):
     return is_valid
 
 
-def is_dict_where(**predicates):
+def is_dict_where(*args, **kwargs):
+    predicates = dict(*args, **kwargs)
+
     def is_valid(data, explain=False):
         valid, explanation = is_dict(data, explain=True)
         if not valid:
@@ -56,7 +58,9 @@ def is_dict_where(**predicates):
     return is_valid
 
 
-def is_subdict_where(**predicates):
+def is_subdict_where(*args, **kwargs):
+    predicates = dict(*args, **kwargs)
+
     def is_valid(data, explain=False):
         valid, explanation = is_dict(data, explain=True)
         if not valid:
@@ -75,7 +79,9 @@ def is_subdict_where(**predicates):
     return is_valid
 
 
-def is_superdict_where(**predicates):
+def is_superdict_where(*args, **kwargs):
+    predicates = dict(*args, **kwargs)
+
     def is_valid(data, explain=False):
         valid, explanation = is_dict(data, explain=True)
         if not valid:
