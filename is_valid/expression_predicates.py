@@ -1,7 +1,7 @@
 import re
 
 from .condition_predicates import is_all
-from .negation_predicates import is_not
+from .base_predicates import is_not
 from .type_predicates import is_str
 
 

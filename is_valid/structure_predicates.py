@@ -1,11 +1,9 @@
 from .type_predicates import is_iterable, is_list, is_dict, is_tuple, is_set
+from .condition_predicates import is_if
 
 
 def is_iterable_where(*predicates):
     def is_valid(data, explain=False):
-        valid, explanation = is_iterable(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
         if len(data) != len(predicates):
             return (
                 False, 'data has incorrect length'
@@ -19,14 +17,11 @@ def is_iterable_where(*predicates):
             valid, explanation = predicate(value, explain=True)
             (reasons if valid else errors)[i] = explanation
         return (True, reasons) if not errors else (False, errors)
-    return is_valid
+    return is_if(is_iterable, is_valid, else_valid=False)
 
 
 def is_iterable_of(predicate):
     def is_valid(data, explain=False):
-        valid, explanation = is_iterable(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
         if not explain:
             return all(predicate(value) for value in data)
         reasons, errors = {}, {}
@@ -34,16 +29,13 @@ def is_iterable_of(predicate):
             valid, explanation = predicate(value, explain=True)
             (reasons if valid else errors)[i] = explanation
         return (True, reasons) if not errors else (False, errors)
-    return is_valid
+    return is_if(is_iterable, is_valid, else_valid=False)
 
 
 def is_dict_where(*args, **kwargs):
     predicates = dict(*args, **kwargs)
 
     def is_valid(data, explain=False):
-        valid, explanation = is_dict(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
         if set(data) != set(predicates):
             return (
                 False, 'the data keys are not equal to the predicate keys'
@@ -55,16 +47,13 @@ def is_dict_where(*args, **kwargs):
             valid, explanation = predicates[key](value, explain=True)
             (reasons if valid else errors)[key] = explanation
         return (True, reasons) if not errors else (False, errors)
-    return is_valid
+    return is_if(is_dict, is_valid, else_valid=False)
 
 
 def is_subdict_where(*args, **kwargs):
     predicates = dict(*args, **kwargs)
 
     def is_valid(data, explain=False):
-        valid, explanation = is_dict(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
         if not set(data) <= set(predicates):
             return (
                 False, 'the data keys are not a subset of the predicate keys'
@@ -76,16 +65,13 @@ def is_subdict_where(*args, **kwargs):
             valid, explanation = predicates[key](value, explain=True)
             (reasons if valid else errors)[key] = explanation
         return (True, reasons) if not errors else (False, errors)
-    return is_valid
+    return is_if(is_dict, is_valid, else_valid=False)
 
 
 def is_superdict_where(*args, **kwargs):
     predicates = dict(*args, **kwargs)
 
     def is_valid(data, explain=False):
-        valid, explanation = is_dict(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
         if not set(data) >= set(predicates):
             return (
                 False, 'the data keys are not a superset of the predicate keys'
@@ -99,7 +85,29 @@ def is_superdict_where(*args, **kwargs):
             valid, explanation = predicate(data[key], explain=True)
             (reasons if valid else errors)[key] = explanation
         return (True, reasons) if not errors else (False, errors)
-    return is_valid
+    return is_if(is_dict, is_valid, else_valid=False)
+
+
+def is_dict_of(key_predicate, val_predicate):
+    def is_valid(data, explain=False):
+        if not explain:
+            return all(
+                key_predicate(key) and val_predicate(val)
+                for key, val in data.items()
+            )
+        reasons, errors = {}, {}
+        for key, val in data.items():
+            reason, error = {}, {}
+            key_valid, key_explanation = key_predicate(key, explain=True)
+            (reason if key_valid else error)['key'] = key_explanation
+            val_valid, val_explanation = val_predicate(val, explain=True)
+            (reason if val_valid else error)['value'] = val_explanation
+            if not error:
+                reasons[key] = reason
+            else:
+                errors[key] = error
+        return (True, reasons) if not errors else (False, errors)
+    return is_if(is_dict, is_valid, else_valid=False)
 
 
 def is_object_where(**predicates):
@@ -124,56 +132,25 @@ def is_object_where(**predicates):
 
 
 def is_list_where(*predicates):
-    predicate = is_iterable_where(*predicates)
-
-    def is_valid(data, explain=False):
-        valid, explanation = is_list(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
-        return predicate(data, explain=explain)
-    return is_valid
+    return is_if(is_list, is_iterable_where(*predicates), else_valid=False)
 
 
 def is_list_of(predicate):
-    predicate = is_iterable_of(predicate)
-
-    def is_valid(data, explain=False):
-        valid, explanation = is_list(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
-        return predicate(data, explain=explain)
-    return is_valid
+    return is_if(is_list, is_iterable_of(predicate), else_valid=False)
 
 
 def is_tuple_where(*predicates):
-    predicate = is_iterable_where(*predicates)
-
-    def is_valid(data, explain=False):
-        valid, explanation = is_tuple(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
-        return predicate(data, explain=explain)
-    return is_valid
+    return is_if(is_tuple, is_iterable_where(*predicates), else_valid=False)
 
 
 def is_tuple_of(predicate):
-    predicate = is_iterable_of(predicate)
-
-    def is_valid(data, explain=False):
-        valid, explanation = is_tuple(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
-        return predicate(data, explain=explain)
-    return is_valid
+    return is_if(is_tuple, is_iterable_of(predicate), else_valid=False)
 
 
 def is_set_of(predicate):
     predicate = is_iterable_of(predicate)
 
     def is_valid(data, explain=False):
-        valid, explanation = is_set(data, explain=True)
-        if not valid:
-            return (False, explanation) if explain else False
         if not explain:
             return predicate(data)
         elems = list(data)
@@ -181,4 +158,4 @@ def is_set_of(predicate):
         return (True, explanation) if valid else (False, {
             elems[i]: value for i, value in explanation.items()
         })
-    return is_valid
+    return is_if(is_set, predicate, else_valid=False)

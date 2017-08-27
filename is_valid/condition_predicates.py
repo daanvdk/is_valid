@@ -38,21 +38,28 @@ def is_one(*predicates):
     return is_valid
 
 
-def is_if(cond, pred_if, pred_else=lambda _, explain=False: (
-    True, 'data does not match the condition'
-) if explain else True):
+def is_if(condition, if_predicate, else_predicate=None, else_valid=True):
     def is_valid(data, explain=False):
-        return (pred_if if cond(data) else pred_else)(data, explain=explain)
+        if else_predicate:
+            return (
+                if_predicate if condition(data) else else_predicate
+            )(data, explain=explain)
+        if not explain:
+            return if_predicate(data) if condition(data) else else_valid
+        valid, explanation = condition(data, explain=True)
+        return if_predicate(data, explain=True) if valid else (
+            else_valid, explanation
+        )
     return is_valid
 
 
-def is_cond(*conds):
-    def is_valid(data, explain=False):
-        return next((
-            pred(data, explain=explain)
-            for cond, pred in conds
-            if cond(data)
-        ), (
-            False, 'data matches none of the conditions'
-        ) if explain else False)
+def is_cond(
+    *conditions,
+    default=lambda _, explain=False: (
+        False, 'data matches none of the conditions'
+    ) if explain else False
+):
+    is_valid = default
+    for condition, predicate in reversed(conditions):
+        is_valid = is_if(condition, predicate, is_valid)
     return is_valid
