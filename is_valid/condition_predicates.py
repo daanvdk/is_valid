@@ -1,3 +1,6 @@
+from .base_predicates import is_fixed
+
+
 def is_any(*predicates):
     def is_valid(data, explain=False):
         if not explain:
@@ -55,9 +58,7 @@ def is_if(condition, if_predicate, else_predicate=None, else_valid=True):
 
 def is_cond(
     *conditions,
-    default=lambda _, explain=False: (
-        False, 'data matches none of the conditions'
-    ) if explain else False
+    default=is_fixed(False, 'data matches none of the conditions')
 ):
     is_valid = default
     for condition, predicate in reversed(conditions):
