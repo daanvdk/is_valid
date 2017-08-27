@@ -5,3 +5,4 @@ Getting Started
    :maxdepth: 2
 
    intro
+   installation

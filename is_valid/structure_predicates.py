@@ -3,6 +3,13 @@ from .condition_predicates import is_if
 
 
 def is_iterable_where(*predicates):
+    """
+    Generates a predicate that checks that the data is an iterable where
+    the 1st element of the data is valid according to the 1st given predicate,
+    the 2nd element of the data is valid according to the 2nd given predicate
+    and so on. Also requires that the amount of elements in the iterable is
+    equal to the amount of predicates given.
+    """
     def is_valid(data, explain=False):
         if len(data) != len(predicates):
             return (
@@ -21,6 +28,10 @@ def is_iterable_where(*predicates):
 
 
 def is_iterable_of(predicate):
+    """
+    Generates a predicate that checks that the data is an iterable where
+    every element of the data is valid according to the given predicate.
+    """
     def is_valid(data, explain=False):
         if not explain:
             return all(predicate(value) for value in data)
@@ -33,6 +44,15 @@ def is_iterable_of(predicate):
 
 
 def is_dict_where(*args, **kwargs):
+    """
+    Generates a predicate that checks that the data is a dict where for every
+    key the value corresponding to that key is valid according to the given
+    predicate corresponding to that key. If the keys of the data and the keys
+    of the given predicates do not match the data is considered invalid.
+
+    The arguments for this function work exactly the same as that of the dict
+    constructor.
+    """
     predicates = dict(*args, **kwargs)
 
     def is_valid(data, explain=False):
@@ -51,6 +71,15 @@ def is_dict_where(*args, **kwargs):
 
 
 def is_subdict_where(*args, **kwargs):
+    """
+    Generates a predicate that checks that the data is a dict where for every
+    key the value corresponding to that key is valid according to the given
+    predicate corresponding to that key. If not all of the keys in the data
+    have a corresponding predicate the data is considered invalid.
+
+    The arguments for this function work exactly the same as that of the dict
+    constructor.
+    """
     predicates = dict(*args, **kwargs)
 
     def is_valid(data, explain=False):
@@ -69,6 +98,15 @@ def is_subdict_where(*args, **kwargs):
 
 
 def is_superdict_where(*args, **kwargs):
+    """
+    Generates a predicate that checks that the data is a dict where for every
+    key the value corresponding to that key is valid according to the given
+    predicate corresponding to that key. If not all of the keys in the given
+    predicates are in the data the data is considered invalid.
+
+    The arguments for this function work exactly the same as that of the dict
+    constructor.
+    """
     predicates = dict(*args, **kwargs)
 
     def is_valid(data, explain=False):
@@ -89,6 +127,11 @@ def is_superdict_where(*args, **kwargs):
 
 
 def is_dict_of(key_predicate, val_predicate):
+    """
+    Generates a predicate that checks that the data is a dict where every key
+    is valid according to ``key_predicate`` and every value is valid according
+    to ``val_predicate``.
+    """
     def is_valid(data, explain=False):
         if not explain:
             return all(
@@ -111,6 +154,10 @@ def is_dict_of(key_predicate, val_predicate):
 
 
 def is_object_where(**predicates):
+    """
+    Generates a predicate that checks that the data is an object where every
+    given predicate holds for the associated attribute on the object.
+    """
     def is_valid(data, explain=False):
         reasons, errors = {}, {}
         for attr, predicate in predicates.items():
@@ -132,22 +179,48 @@ def is_object_where(**predicates):
 
 
 def is_list_where(*predicates):
+    """
+    Generates a predicate that checks that the data is a list where the 1st
+    element of the data is valid according to the 1st given predicate, the 2nd
+    element of the data is valid according to the 2nd given predicate and so
+    on. Also requires that the amount of elements in the list is equal to the
+    amount of predicates given.
+    """
     return is_if(is_list, is_iterable_where(*predicates), else_valid=False)
 
 
 def is_list_of(predicate):
+    """
+    Generates a predicate that checks that the data is a list where every
+    element of the data is valid according to the given predicate.
+    """
     return is_if(is_list, is_iterable_of(predicate), else_valid=False)
 
 
 def is_tuple_where(*predicates):
+    """
+    Generates a predicate that checks that the data is a tuple where the 1st
+    element of the data is valid according to the 1st given predicate, the 2nd
+    element of the data is valid according to the 2nd given predicate and so
+    on. Also requires that the amount of elements in the tuple is equal to the
+    amount of predicates given.
+    """
     return is_if(is_tuple, is_iterable_where(*predicates), else_valid=False)
 
 
 def is_tuple_of(predicate):
+    """
+    Generates a predicate that checks that the data is a tuple where every
+    element of the data is valid according to the given predicate.
+    """
     return is_if(is_tuple, is_iterable_of(predicate), else_valid=False)
 
 
 def is_set_of(predicate):
+    """
+    Generates a predicate that checks that the data is a set where every
+    element of the data is valid according to the given predicate.
+    """
     predicate = is_iterable_of(predicate)
 
     def is_valid(data, explain=False):

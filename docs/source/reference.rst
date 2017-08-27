@@ -27,6 +27,10 @@ Reference
 - :meth:`is_valid.is_none`
 - :meth:`is_valid.is_null`
 - :meth:`is_valid.is_match`
+- :meth:`is_valid.is_not`
+- :meth:`is_valid.is_fixed`
+- :meth:`is_valid.is_something`
+- :meth:`is_valid.is_nothing`
 - :meth:`is_valid.is_any`
 - :meth:`is_valid.is_all`
 - :meth:`is_valid.is_one`
@@ -46,9 +50,6 @@ Reference
 - :meth:`is_valid.is_set_of`
 - :meth:`is_valid.is_json`
 - :meth:`is_valid.is_transformed`
-- :meth:`is_valid.is_fixed`
-- :meth:`is_valid.is_something`
-- :meth:`is_valid.is_nothing`
 - :class:`is_valid.test.IsValidMixin`
 
 .. module:: is_valid
@@ -79,6 +80,10 @@ Reference
 .. autofunction:: is_none
 .. autofunction:: is_null
 .. autofunction:: is_match
+.. autofunction:: is_not
+.. autofunction:: is_fixed
+.. autofunction:: is_something
+.. autofunction:: is_nothing
 .. autofunction:: is_any
 .. autofunction:: is_all
 .. autofunction:: is_one
@@ -98,10 +103,8 @@ Reference
 .. autofunction:: is_set_of
 .. autofunction:: is_json
 .. autofunction:: is_transformed
-.. autofunction:: is_fixed
-.. autofunction:: is_something
-.. autofunction:: is_nothing
 
 .. module:: is_valid.test
 
 .. autoclass:: IsValidMixin
+   :members:
