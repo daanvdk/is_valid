@@ -72,9 +72,14 @@ If we call our predicate `is_list_of_books` on this data with the
 ```
 We can then exactly see what is wrong, and with which book.
 
+## Documentation
+You can find the documentation on [Read the Docs](
+    https://is-valid.readthedocs.io
+).
 
 ## Installation
-'Is Valid?' is on [PyPI](https://pypi.python.org/pypi/is-valid), you can install it with:
+'Is Valid?' is on [PyPI](https://pypi.python.org/pypi/is-valid), you can
+install it with:
 ```
 pip install is-valid
 ```
