@@ -4,13 +4,13 @@
 </h1>
 
 [![pypi_version](
-    https://badge.fury.io/py/is-valid.svg
-)](https://pypi.python.org/pypi/is-valid)
+    https://img.shields.io/pypi/v/is_valid.svg
+)](https://pypi.python.org/pypi/is_valid)
 [![build_status](
-    https://travis-ci.org/Daanvdk/is_valid.svg?branch=master
+    https://img.shields.io/travis/Daanvdk/is_valid.svg
 )](https://travis-ci.org/Daanvdk/is_valid)
 [![code_coverage](
-    https://codecov.io/gh/Daanvdk/is_valid/branch/master/graph/badge.svg
+    https://img.shields.io/codecov/c/github/Daanvdk/is_valid.svg
 )](https://codecov.io/gh/Daanvdk/is_valid)
 
 'Is Valid?' is a simple lightweight python library for validation predicates.
