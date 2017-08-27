@@ -5,7 +5,7 @@ import hypothesis.strategies as hs
 
 from is_valid import is_eq, is_iterable_where, is_iterable_of, is_dict_where,\
     is_subdict_where, is_superdict_where, is_object_where, is_list_where,\
-    is_list_of, is_tuple_where, is_tuple_of, is_set_of
+    is_list_of, is_tuple_where, is_tuple_of, is_set_of, is_int, is_dict_of
 
 from .utils import dicts, correct_dict, lists, correct_list, tuples,\
     correct_tuple, objects
@@ -41,6 +41,21 @@ class TestStructurePredicates(TestCase):
             self.assertEqual(pred(value), isinstance(value, dict) and all(
                 key in value and val == value[key]
                 for key, val in correct_dict.items()
+            ))
+
+    @given(hs.dictionaries(
+        hs.one_of(hs.integers(), hs.text()),
+        hs.one_of(hs.integers(), hs.text()),
+        max_size=5
+    ))
+    def test_is_dict_of(self, value):
+        pred = is_dict_of(is_int, is_int)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(value), isinstance(value, dict) and all(
+                isinstance(key, int) and isinstance(val, int)
+                for key, val in value.items()
             ))
 
     @given(objects)

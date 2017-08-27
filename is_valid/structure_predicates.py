@@ -158,4 +158,4 @@ def is_set_of(predicate):
         return (True, explanation) if valid else (False, {
             elems[i]: value for i, value in explanation.items()
         })
-    return is_if(is_set, predicate, else_valid=False)
+    return is_if(is_set, is_valid, else_valid=False)
