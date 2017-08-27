@@ -1,20 +1,14 @@
-.. Is Valid? documentation master file, created by
-   sphinx-quickstart on Sun Aug 27 19:45:33 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Is Valid?'s documentation!
 =====================================
 
+'Is Valid?' is a simple lightweight python library to create validation
+predicates.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   installation
+   getting_started/index
+   reference
+   about
