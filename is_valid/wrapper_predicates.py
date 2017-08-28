@@ -1,5 +1,8 @@
 import json
 
+from .condition_predicates import is_if
+from .type_predicates import is_str
+
 
 def is_transformed(
     transform, predicate, *args,
@@ -57,7 +60,11 @@ def is_json(predicate, *args, loader=json.loads, **kwargs):
 
     All other arguments provided will be passed on to the JSON loader.
     """
-    return is_transformed(
-        loader, predicate, *args,
-        exceptions=[jsonError], msg='data is not valid json', **kwargs
+    return is_if(
+        is_str,
+        is_transformed(
+            loader, predicate, *args,
+            exceptions=[jsonError], msg='data is not valid json', **kwargs
+        ),
+        else_valid=False
     )
