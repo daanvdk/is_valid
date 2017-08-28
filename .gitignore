@@ -33,3 +33,6 @@ nosetests.xml
 coverage.xml
 .hypothesis/
 .eggs/
+
+# development
+.vscode/
