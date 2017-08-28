@@ -34,13 +34,6 @@ def is_transformed(
     return is_valid
 
 
-# Python <=3.4 compatibility
-try:
-    jsonError = json.JSONDecodeError
-except AttributeError:
-    jsonError = ValueError
-
-
 def is_json(predicate, *args, loader=json.loads, **kwargs):
     """
     Generates a predicate that checks if the data is valid according to some
@@ -54,5 +47,5 @@ def is_json(predicate, *args, loader=json.loads, **kwargs):
     """
     return is_if(is_str, is_transformed(
         loader, predicate, *args,
-        exceptions=[jsonError], msg='data is not valid json', **kwargs
+        exceptions=[ValueError], msg='data is not valid json', **kwargs
     ), else_valid=False)
