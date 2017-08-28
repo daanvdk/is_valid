@@ -1,9 +1,10 @@
 import json
 
 
-def is_transformed(transform, predicate, *args, exceptions=[
-    Exception
-], msg='data can\'t be transformed', **kwargs):
+def is_transformed(
+    transform, predicate, *args,
+    exceptions=[Exception], msg='data can\'t be transformed', **kwargs
+):
     """
     Generates a predicate that checks if the data is valid according to some
     predicate after a function has been applied to the data. If this function
@@ -38,6 +39,13 @@ def is_transformed(transform, predicate, *args, exceptions=[
     return is_valid
 
 
+# Python <=3.4 compatibility
+try:
+    jsonError = json.JSONDecodeError
+except AttributeError:
+    jsonError = ValueError
+
+
 def is_json(predicate, *args, loader=json.loads, **kwargs):
     """
     Generates a predicate that checks if the data is valid according to some
@@ -49,6 +57,7 @@ def is_json(predicate, *args, loader=json.loads, **kwargs):
 
     All other arguments provided will be passed on to the JSON loader.
     """
-    return is_transformed(loader, predicate, *args, exceptions=[
-        json.JSONDecodeError
-    ], msg='data is not valid json', **kwargs)
+    return is_transformed(
+        loader, predicate, *args,
+        exceptions=[jsonError], msg='data is not valid json', **kwargs
+    )
