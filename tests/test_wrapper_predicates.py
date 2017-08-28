@@ -61,9 +61,9 @@ class TestWrapperPredicates(TestCase):
 
     def test_is_json_failing_loader(self):
         def failing_loader(body):
-            raise ValueError()
+            raise NotImplementedError()
 
         json_pred = is_json(self.pred, loader=failing_loader)
         with self.subTest('pred raises'):
-            with self.assertRaises(ValueError):
+            with self.assertRaises(NotImplementedError):
                 json_pred(json_data)
