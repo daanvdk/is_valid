@@ -1,4 +1,4 @@
-def is_fixed(valid, explanation): 
+def is_fixed(valid, explanation):
     """
     Generates a predicate that returns a certain value for valid and
     explanation that it will always return regardless of what data you put into
