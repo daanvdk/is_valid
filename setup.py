@@ -7,7 +7,7 @@ setup(
     packages=['is_valid'],
     package_dir={'is_valid': 'is_valid'},
     license='MIT',
-    version='0.2.1',
+    version='0.3.0',
     description='A small validation library.',
     author='Daan van der Kallen',
     author_email='mail@daanvdk.com',
@@ -16,4 +16,5 @@ setup(
     classifiers=[],
     test_suite='tests',
     tests_require=['hypothesis>=3.21.2'],
+    python_requires=">=3.3",
 )
