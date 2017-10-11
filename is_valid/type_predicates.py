@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, date, time, timedelta
 
 
@@ -57,3 +58,14 @@ is_time = is_instance(time, rep='a time')
 is_timedelta = is_instance(timedelta, rep='a timedelta')
 #: A predicate that checks if the data is a number.
 is_number = is_instance((int, float), rep='a number')
+
+
+def is_json(data, explain=False):
+    """
+    A predicate that checks if the data is valid json.
+    """
+    try:
+        json.loads(data)
+        return (True, 'data is valid json') if explain else True
+    except ValueError:
+        return (False, 'data is not valid json') if explain else False

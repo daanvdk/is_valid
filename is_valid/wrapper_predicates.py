@@ -34,7 +34,7 @@ def is_transformed(
     return is_valid
 
 
-def is_json(predicate, *args, loader=json.loads, **kwargs):
+def is_json_where(predicate, *args, loader=json.loads, **kwargs):
     """
     Generates a predicate that checks if the data is valid according to some
     predicate after it has been decoded as JSON. The predicate considers the

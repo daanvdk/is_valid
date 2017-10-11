@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from is_valid import is_json, is_dict_where, is_list_of, is_bool, is_str,\
-    is_int
+from is_valid import is_json_where, is_dict_where, is_list_of, is_bool,\
+    is_str, is_int
 
 from .utils import json_data, incorrect_json_data, invalid_json_data
 
@@ -18,9 +18,9 @@ class TestWrapperPredicates(TestCase):
             ),
             bar=is_int
         )
-        self.json_pred = is_json(self.pred)
+        self.json_pred = is_json_where(self.pred)
 
-    def test_is_json(self):
+    def test_is_json_where(self):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 self.json_pred(json_data),
@@ -29,7 +29,7 @@ class TestWrapperPredicates(TestCase):
         with self.subTest('pred correct'):
             self.assertTrue(self.json_pred(json_data))
 
-    def test_is_json_incorrect(self):
+    def test_is_json_where_incorrect(self):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 self.json_pred(incorrect_json_data),
@@ -38,7 +38,7 @@ class TestWrapperPredicates(TestCase):
         with self.subTest('pred correct'):
             self.assertFalse(self.json_pred(incorrect_json_data))
 
-    def test_is_json_invalid(self):
+    def test_is_json_where_invalid(self):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 self.json_pred(invalid_json_data),
@@ -47,11 +47,11 @@ class TestWrapperPredicates(TestCase):
         with self.subTest('pred correct'):
             self.assertFalse(self.json_pred(invalid_json_data))
 
-    def test_is_json_failing_loader(self):
+    def test_is_json_where_failing_loader(self):
         def failing_loader(body):
             raise NotImplementedError()
 
-        json_pred = is_json(self.pred, loader=failing_loader)
+        json_pred = is_json_where(self.pred, loader=failing_loader)
         with self.subTest('pred raises'):
             with self.assertRaises(NotImplementedError):
                 json_pred(json_data)

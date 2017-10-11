@@ -5,9 +5,9 @@ from hypothesis import given
 
 from is_valid import is_iterable, is_instance, is_str, is_int, is_float,\
     is_bool, is_list, is_dict, is_set, is_tuple, is_datetime, is_date,\
-    is_time, is_timedelta, is_number
+    is_time, is_timedelta, is_number, is_json
 
-from .utils import classes, scalars
+from .utils import classes, scalars, json_data, invalid_json_data
 
 
 class TestTypePredicates(TestCase):
@@ -128,3 +128,20 @@ class TestTypePredicates(TestCase):
             )
         with self.subTest('pred correct'):
             self.assertEqual(is_number(value), isinstance(value, (int, float)))
+
+    def test_is_json_valid_data(self):
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(
+                is_json(json_data), is_json(json_data, explain=True)[0]
+            )
+        with self.subTest('pred correct'):
+            self.assertTrue(is_json(json_data))
+
+    def test_is_json_invalid_data(self):
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(
+                is_json(invalid_json_data),
+                is_json(invalid_json_data, explain=True)[0]
+            )
+        with self.subTest('pred correct'):
+            self.assertFalse(is_json(invalid_json_data))
