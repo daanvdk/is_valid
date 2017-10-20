@@ -6,6 +6,9 @@
 [![pypi_version](
     https://img.shields.io/pypi/v/is_valid.svg
 )](https://pypi.python.org/pypi/is_valid)
+![python_versions](
+    https://img.shields.io/pypi/pyversions/is-valid.svg
+)
 [![build_status](
     https://img.shields.io/travis/Daanvdk/is_valid.svg
 )](https://travis-ci.org/Daanvdk/is_valid)
