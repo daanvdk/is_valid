@@ -25,3 +25,14 @@ class TestNegationPredicates(TestCase):
             self.assertEqual(not_pred(b), not_pred(b, explain=True)[0])
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), not_pred(b))
+
+    @given(
+        hs.sampled_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+        hs.sampled_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+    )
+    def test_not_on_non_pred(self, a, b):
+        pred = is_not(a)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(b), pred(b, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(b), a != b)

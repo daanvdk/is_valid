@@ -1,4 +1,5 @@
 from .base_predicates import is_fixed
+from .expression_predicates import is_eq
 
 
 def is_any(*predicates):
@@ -6,6 +7,11 @@ def is_any(*predicates):
     Generates a predicate that will consider data valid if and only if any of
     the given predicates considers the data valid.
     """
+    predicates = [
+        predicate if callable(predicate) else is_eq(predicate)
+        for predicate in predicates
+    ]
+
     def is_valid(data, explain=False):
         if not explain:
             return any(predicate(data) for predicate in predicates)
@@ -22,6 +28,11 @@ def is_all(*predicates):
     Generates a predicate that will consider data valid if and only if all of
     the given predicates considers the data valid.
     """
+    predicates = [
+        predicate if callable(predicate) else is_eq(predicate)
+        for predicate in predicates
+    ]
+
     def is_valid(data, explain=False):
         if not explain:
             return all(predicate(data) for predicate in predicates)
@@ -38,6 +49,11 @@ def is_one(*predicates):
     Generates a predicate that will consider data valid if and only if exactly
     one of the given predicates considers the data valid.
     """
+    predicates = [
+        predicate if callable(predicate) else is_eq(predicate)
+        for predicate in predicates
+    ]
+
     def is_valid(data, explain=False):
         if not explain:
             return sum(1 for p in predicates if p(data)) == 1
@@ -62,6 +78,13 @@ def is_if(condition, if_predicate, else_predicate=None, else_valid=True):
     data invalid, as explanation it will reuse the explanation that the
     condition returned.
     """
+    if not callable(condition):
+        condition = is_eq(condition)
+    if not callable(if_predicate):
+        if_predicate = is_eq(if_predicate)
+    if else_predicate is not None and not callable(else_predicate):
+        else_predicate = is_eq(else_predicate)
+
     def is_valid(data, explain=False):
         if else_predicate:
             return (
@@ -89,7 +112,11 @@ def is_cond(
     always consider the data invalid with the explanation that the data matches
     none of the conditions.
     """
-    is_valid = default
+    is_valid = default if callable(default) else is_eq(default)
     for condition, predicate in reversed(conditions):
-        is_valid = is_if(condition, predicate, is_valid)
+        is_valid = is_if(
+            condition,
+            predicate if callable(predicate) else is_eq(predicate),
+            is_valid
+        )
     return is_valid

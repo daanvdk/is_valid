@@ -4,7 +4,7 @@ import re
 from hypothesis import given
 import hypothesis.strategies as hs
 
-from is_valid import is_eq, is_neq, is_lt, is_leq, is_gt, is_geq, is_in,\
+from is_valid import is_eq, is_lt, is_leq, is_gt, is_geq, is_in,\
     is_none, is_null, is_in_range, is_match
 
 from .utils import varying, numbers, regexs, regex_with_match
@@ -27,22 +27,6 @@ class TestExpressionPredicates(TestCase):
             self.assertEqual(pred(b), pred(b, explain=True)[0])
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), a == b)
-
-    @given(varying)
-    def test_neq_to_self(self, a):
-        pred = is_neq(a)
-        with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(a), pred(a, explain=True)[0])
-        with self.subTest('pred correct'):
-            self.assertEqual(pred(a), a != a)
-
-    @given(varying, varying)
-    def test_neq(self, a, b):
-        pred = is_neq(a)
-        with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(b), pred(b, explain=True)[0])
-        with self.subTest('pred correct'):
-            self.assertEqual(pred(b), a != b)
 
     @given(numbers, numbers)
     def test_lt(self, a, b):
@@ -124,12 +108,6 @@ class TestExpressionPredicates(TestCase):
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), value in collection)
 
-    def test_none(self):
-        with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_none(None), is_none(None, explain=True)[0])
-        with self.subTest('pred correct'):
-            self.assertTrue(is_none(None))
-
     @given(varying)
     def test_not_null(self, value):
         with self.subTest('explain=True == explain=False'):
@@ -149,6 +127,12 @@ class TestExpressionPredicates(TestCase):
             self.assertEqual(is_none(value), is_none(value, explain=True)[0])
         with self.subTest('pred correct'):
             self.assertFalse(is_none(value))
+
+    def test_none(self):
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(is_none(None), is_none(None, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertTrue(is_none(None))
 
     @given(hs.sampled_from(regexs), varying)
     def test_match(self, regex, value):

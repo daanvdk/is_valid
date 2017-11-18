@@ -1,5 +1,6 @@
 import json
 
+from .expression_predicates import is_eq
 from .condition_predicates import is_if
 from .type_predicates import is_str
 
@@ -23,6 +24,9 @@ def is_transformed(
 
     All other arguments provided will be passed on to the transform function.
     """
+    if not callable(predicate):
+        predicate = is_eq(predicate)
+
     def is_valid(data, explain=False):
         try:
             data = transform(data, *args, **kwargs)

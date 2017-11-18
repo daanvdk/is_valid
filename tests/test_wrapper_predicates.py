@@ -1,4 +1,5 @@
 from unittest import TestCase
+import json
 
 from is_valid import is_json_where, is_dict_where, is_list_of, is_bool,\
     is_str, is_int
@@ -55,3 +56,10 @@ class TestWrapperPredicates(TestCase):
         with self.subTest('pred raises'):
             with self.assertRaises(NotImplementedError):
                 json_pred(json_data)
+
+    def test_is_json_on_non_pred(self):
+        pred = is_json_where(json.loads(json_data))
+        with self.subTest('valid data'):
+            self.assertTrue(pred(json_data))
+        with self.subTest('invalid json'):
+            self.assertFalse(pred(incorrect_json_data))

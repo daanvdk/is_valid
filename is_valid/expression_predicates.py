@@ -1,7 +1,5 @@
 import re
 
-from .condition_predicates import is_all
-from .base_predicates import is_not
 from .type_predicates import is_str
 
 
@@ -24,16 +22,6 @@ def is_eq(value, rep=None):
             False, 'data is not equal to {}'.format(rep)
         )
     return is_valid
-
-
-def is_neq(value, rep=None):
-    """
-    Generates a predicate that checks if the data is not equal to the given
-    value. The optional keyword argument ``rep`` specifies what the value
-    should be called in the explanation. If no value for ``rep`` is given it
-    will just use ``repr(value)``.
-    """
-    return is_not(is_eq(value, rep=rep))
 
 
 def is_gt(value, rep=None):
@@ -120,17 +108,34 @@ def is_leq(value, rep=None):
     return is_valid
 
 
-def is_in_range(start, stop, start_in=True, stop_in=False):
+def is_in_range(
+    start, stop, start_in=True, stop_in=False, start_rep=None, stop_rep=None
+):
     """
     Generates a predicate that checks if the data is within the range specified
     by ``start`` and ``stop``. The optional arguments ``start_in`` and
     ``stop_in`` specify whether respectively ``start`` and ``stop`` should be
     included or excluded from the range.
     """
-    return is_all(
-        (is_geq if start_in else is_gt)(start),
-        (is_leq if stop_in else is_lt)(stop)
-    )
+    if start_rep is None:
+        start_rep = repr(start_rep)
+    if stop_rep is None:
+        stop_rep = repr(stop_rep)
+    
+    start_predicate = (is_geq if start_in else is_gt)(start, rep=start_rep)
+    stop_predicate = (is_leq if stop_in else is_lt)(stop, rep=stop_rep)
+
+    def is_valid(data, explain=False):
+        if not explain:
+            return start_predicate(data) and stop_predicate(data)
+        valid, explanation = start_predicate(data, explain=True)
+        if not valid:
+            return (False, explanation)
+        valid, explanation = stop_predicate(data, explanation)
+        if not valid:
+            return (False, explanation)
+        return (True, 'placeholder')
+    return is_valid
 
 
 def is_in(collection):

@@ -58,6 +58,20 @@ class TestStructurePredicates(TestCase):
                 for key, val in value.items()
             ))
 
+    @given(hs.dictionaries(
+        hs.sampled_from([1, 2]),
+        hs.sampled_from([1, 2]),
+        max_size=5
+    ))
+    def test_is_dict_of_on_non_pred(self, value):
+        pred = is_dict_of(1, 1)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(value), isinstance(value, dict) and all(
+                entry == (1, 1) for entry in value.items()
+            ))
+
     @given(objects)
     def test_is_object_where(self, value):
         pred = is_object_where(foo=is_eq(True), bar=is_eq(False))
@@ -118,7 +132,7 @@ class TestStructurePredicates(TestCase):
 
     @given(hs.one_of(lists, tuples()))
     def test_is_iterable_of(self, value):
-        pred = is_iterable_of(is_eq(True))
+        pred = is_iterable_of(True)
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(pred(value), pred(value, explain=True)[0])
         with self.subTest('pred correct'):

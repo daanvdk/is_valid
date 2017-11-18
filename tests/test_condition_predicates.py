@@ -64,6 +64,15 @@ class TestConditionPredicates(TestCase):
         with self.subTest('pred correct'):
             self.assertEqual(pred(1), pred_if(1) if cond(1) else pred_else(1))
 
+    @given(hs.sampled_from([1, 3, 4, 5, 6, 7, 8, 9, 10]))
+    def test_is_if_on_non_preds(self, a):
+        pred = is_if(5, 5, 2)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(a), pred(a, explain=True)[0])
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(a), a in [2, 5])
+
+
     @given(hs.lists(hs.tuples(
         hs.sampled_from([is_something, is_nothing]),
         hs.sampled_from([is_something, is_nothing])

@@ -1,5 +1,6 @@
 from .type_predicates import is_iterable, is_list, is_dict, is_tuple, is_set
 from .condition_predicates import is_if
+from .expression_predicates import is_eq
 
 
 def is_iterable_where(*predicates):
@@ -10,7 +11,13 @@ def is_iterable_where(*predicates):
     and so on. Also requires that the amount of elements in the iterable is
     equal to the amount of predicates given.
     """
+    predicates = [
+        predicate if callable(predicate) else is_eq(predicate)
+        for predicate in predicates
+    ]
+
     def is_valid(data, explain=False):
+        data = list(data)
         if len(data) != len(predicates):
             return (
                 False, 'data has incorrect length'
@@ -32,6 +39,9 @@ def is_iterable_of(predicate):
     Generates a predicate that checks that the data is an iterable where
     every element of the data is valid according to the given predicate.
     """
+    if not callable(predicate):
+        predicate = is_eq(predicate)
+
     def is_valid(data, explain=False):
         if not explain:
             return all(predicate(value) for value in data)
@@ -53,7 +63,10 @@ def is_dict_where(*args, **kwargs):
     The arguments for this function work exactly the same as that of the dict
     constructor.
     """
-    predicates = dict(*args, **kwargs)
+    predicates = {
+        key: predicate if callable(predicate) else is_eq(predicate)
+        for key, predicate in dict(*args, **kwargs).items()
+    }
 
     def is_valid(data, explain=False):
         if set(data) != set(predicates):
@@ -80,7 +93,10 @@ def is_subdict_where(*args, **kwargs):
     The arguments for this function work exactly the same as that of the dict
     constructor.
     """
-    predicates = dict(*args, **kwargs)
+    predicates = {
+        key: predicate if callable(predicate) else is_eq(predicate)
+        for key, predicate in dict(*args, **kwargs).items()
+    }
 
     def is_valid(data, explain=False):
         if not set(data) <= set(predicates):
@@ -107,7 +123,10 @@ def is_superdict_where(*args, **kwargs):
     The arguments for this function work exactly the same as that of the dict
     constructor.
     """
-    predicates = dict(*args, **kwargs)
+    predicates = {
+        key: predicate if callable(predicate) else is_eq(predicate)
+        for key, predicate in dict(*args, **kwargs).items()
+    }
 
     def is_valid(data, explain=False):
         if not set(data) >= set(predicates):
@@ -132,6 +151,11 @@ def is_dict_of(key_predicate, val_predicate):
     is valid according to ``key_predicate`` and every value is valid according
     to ``val_predicate``.
     """
+    if not callable(key_predicate):
+        key_predicate = is_eq(key_predicate)
+    if not callable(val_predicate):
+        val_predicate = is_eq(val_predicate)
+
     def is_valid(data, explain=False):
         if not explain:
             return all(
@@ -158,6 +182,11 @@ def is_object_where(**predicates):
     Generates a predicate that checks that the data is an object where every
     given predicate holds for the associated attribute on the object.
     """
+    predicates = {
+        key: predicate if callable(predicate) else is_eq(predicate)
+        for key, predicate in predicates.items()
+    }
+
     def is_valid(data, explain=False):
         reasons, errors = {}, {}
         for attr, predicate in predicates.items():

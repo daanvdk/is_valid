@@ -1,3 +1,6 @@
+from .expression_predicates import is_eq
+
+
 def is_fixed(valid, explanation):
     """
     Generates a predicate that returns a certain value for valid and
@@ -23,6 +26,9 @@ def is_not(predicate):
     consider the data valid the generated predicate will consider it invalid,
     and the other way around. It reuses the explanation of the given predicate.
     """
+    if not callable(predicate):
+        predicate = is_eq(predicate)
+
     def is_valid(data, explain=False):
         if not explain:
             return not predicate(data)
