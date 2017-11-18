@@ -1,14 +1,21 @@
-class IsValidMixin:
+from .expression_predicates import is_eq
+
+
+def assert_valid(predicate):
     """
-    A mixin for ``unittest``-like TestCase classes.
+    Creates a function that asserts that the data is valid according to the
+    given predicate. If no ``msg`` is provided to this function the explanation
+    of the predicate will be used for the AssertionError in case the assertion
+    fails.
     """
-    def assertIsValid(self, predicate, data, msg=None):
-        """
-        Asserts that the data is valid according to the given predicate. If no
-        ``msg`` is provided the explanation of the predicate will be used for
-        the AssertionError in case the assertion fails.
-        """
-        if msg is not None:
-            self.assertTrue(predicate(data), msg=msg)
-        valid, explanation = predicate(data, explain=True)
-        self.assertTrue(valid, msg=str(explanation))
+    if not callable(predicate):
+        predicate = is_eq(predicate)
+
+    def res(data, msg=None):
+        if msg is None:
+            valid, explanation = predicate(data, explain=True)
+        else:
+            valid, explanation = predicate(data), msg
+        if not valid:
+            raise AssertionError(str(explanation))
+    return res

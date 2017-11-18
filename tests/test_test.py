@@ -1,27 +1,32 @@
 from unittest import TestCase
 
 from is_valid import is_eq
-from is_valid.test import IsValidMixin
+from is_valid.test import assert_valid
 
 from .utils import MockTestCase
 
 
-class MockTest(MockTestCase, IsValidMixin):
+class MockTest(MockTestCase):
+
+    def __init__(self):
+        super().__init__()
+        self.assertion = assert_valid(True)
 
     def test_pass(self):
-        self.assertIsValid(is_eq(True), True)
+        self.assertion(True)
 
     def test_fail(self):
-        self.assertIsValid(is_eq(True), False)
+        self.assertion(False)
 
     def test_fail_with_msg(self):
-        self.assertIsValid(is_eq(True), False, msg='foobar')
+        self.assertion(False, msg='foobar')
 
 
 class TestTest(TestCase):
 
     def setUp(self):
         self.mocktest = MockTest()
+        self.mocktest.run()
 
     def test_pass(self):
         passed, e = self.mocktest.results['test_pass']
