@@ -121,7 +121,7 @@ def is_in_range(
         start_rep = repr(start_rep)
     if stop_rep is None:
         stop_rep = repr(stop_rep)
-    
+
     start_predicate = (is_geq if start_in else is_gt)(start, rep=start_rep)
     stop_predicate = (is_leq if stop_in else is_lt)(stop, rep=stop_rep)
 

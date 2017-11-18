@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-from is_valid import is_eq
 from is_valid.test import assert_valid
 
 from .utils import MockTestCase

@@ -68,8 +68,8 @@ correct_list = [True, False]
 
 @hs.composite
 def tuples(draw):
-    l = draw(lists)
-    return tuple(l) if isinstance(l, list) else l
+    list_ = draw(lists)
+    return tuple(list_) if isinstance(list_, list) else list_
 
 
 correct_tuple = (True, False)
