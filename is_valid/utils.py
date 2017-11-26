@@ -1,9 +1,13 @@
+from .explanation import Explanation
 
 
 def explain(
     predicate,
-    explanation_valid='data is valid',
-    explanation_invalid='data is not valid'
+    code='valid',
+    message_valid='data is valid',
+    message_invalid='data is not valid',
+    details_valid=None,
+    details_invalid=None,
 ):
     """
     Wraps a predicate with an explanation. You can set the explanation messages
@@ -14,7 +18,7 @@ def explain(
     explanations.
     """
     return lambda data, explain=False: (
-        (True, explanation_valid)
+        Explanation(True, code, message_valid, details_valid)
         if predicate(data) else
-        (False, explanation_invalid)
+        Explanation(False, 'not_' + code, message_invalid, details_invalid)
     ) if explain else predicate(data)

@@ -1,23 +1,26 @@
+from .explanation import Explanation
 from .expression_predicates import is_eq
 
 
-def is_fixed(valid, explanation):
+def is_fixed(valid, code, message):
     """
-    Generates a predicate that returns a certain value for valid and
-    explanation that it will always return regardless of what data you put into
+    Generates a predicate that returns a certain value for valid, code, and
+    message that it will always return regardless of what data you put into
     it.
     """
-    return lambda _, explain=False: (valid, explanation) if explain else valid
+    return lambda _, explain=False: (
+        Explanation(valid, code, message) if explain else valid
+    )
 
 
 #: A predicate that regardless of what data you put into will always consider
 #: it valid with the explanation 'data is something'. This is the weakest
 #: predicate possible.
-is_something = is_fixed(True, 'data is something')
+is_something = is_fixed(True, 'is_something', 'data is something')
 #: A predicate that regardless of what data you put into will always consider
 #: it invalid with the explanation 'data is something'. This is the strongest
 #: predicate possible.
-is_nothing = is_fixed(False, 'data is something')
+is_nothing = is_fixed(False, 'is_something', 'data is something')
 
 
 def is_not(predicate):
@@ -29,9 +32,6 @@ def is_not(predicate):
     if not callable(predicate):
         predicate = is_eq(predicate)
 
-    def is_valid(data, explain=False):
-        if not explain:
-            return not predicate(data)
-        valid, explanation = predicate(data, explain=True)
-        return (not valid, explanation)
-    return is_valid
+    return lambda data, explain=False: (
+        ~predicate(data, explain=True) if explain else not predicate(data)
+    )

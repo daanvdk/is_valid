@@ -16,7 +16,7 @@ class TestExpressionPredicates(TestCase):
     def test_eq_to_self(self, a):
         pred = is_eq(a)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(a), pred(a, explain=True)[0])
+            self.assertEqual(pred(a), pred(a, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(a), a == a)
 
@@ -24,7 +24,7 @@ class TestExpressionPredicates(TestCase):
     def test_eq(self, a, b):
         pred = is_eq(a)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(b), pred(b, explain=True)[0])
+            self.assertEqual(pred(b), pred(b, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), a == b)
 
@@ -32,7 +32,7 @@ class TestExpressionPredicates(TestCase):
     def test_lt(self, a, b):
         pred = is_lt(a)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(b), pred(b, explain=True)[0])
+            self.assertEqual(pred(b), pred(b, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), b < a)
 
@@ -40,7 +40,7 @@ class TestExpressionPredicates(TestCase):
     def test_leq(self, a, b):
         pred = is_leq(a)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(b), pred(b, explain=True)[0])
+            self.assertEqual(pred(b), pred(b, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), b <= a)
 
@@ -48,7 +48,7 @@ class TestExpressionPredicates(TestCase):
     def test_gt(self, a, b):
         pred = is_gt(a)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(b), pred(b, explain=True)[0])
+            self.assertEqual(pred(b), pred(b, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), b > a)
 
@@ -56,7 +56,7 @@ class TestExpressionPredicates(TestCase):
     def test_geq(self, a, b):
         pred = is_geq(a)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(b), pred(b, explain=True)[0])
+            self.assertEqual(pred(b), pred(b, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), b >= a)
 
@@ -64,7 +64,7 @@ class TestExpressionPredicates(TestCase):
     def test_in_range_ex_ex(self, start, stop, value):
         pred = is_in_range(start, stop, start_in=False, stop_in=False)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), start < value < stop)
 
@@ -72,7 +72,7 @@ class TestExpressionPredicates(TestCase):
     def test_in_range_ex_in(self, start, stop, value):
         pred = is_in_range(start, stop, start_in=False, stop_in=True)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), start < value <= stop)
 
@@ -80,7 +80,7 @@ class TestExpressionPredicates(TestCase):
     def test_in_range_in_ex(self, start, stop, value):
         pred = is_in_range(start, stop, start_in=True, stop_in=False)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), start <= value < stop)
 
@@ -88,7 +88,7 @@ class TestExpressionPredicates(TestCase):
     def test_in_range_in_in(self, start, stop, value):
         pred = is_in_range(start, stop, start_in=True, stop_in=True)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), start <= value <= stop)
 
@@ -96,7 +96,7 @@ class TestExpressionPredicates(TestCase):
     def test_in_set_with_self(self, value):
         pred = is_in(set([value]))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertTrue(pred(value))
 
@@ -104,33 +104,33 @@ class TestExpressionPredicates(TestCase):
     def test_in(self, value, collection):
         pred = is_in(collection)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), value in collection)
 
     @given(varying)
     def test_not_null(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_null(value), is_null(value, explain=True)[0])
+            self.assertEqual(is_null(value), is_null(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertFalse(is_null(value))
 
     def test_null(self):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_null(None), is_null(None, explain=True)[0])
+            self.assertEqual(is_null(None), is_null(None, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertTrue(is_null(None))
 
     @given(varying)
     def test_not_none(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_none(value), is_none(value, explain=True)[0])
+            self.assertEqual(is_none(value), is_none(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertFalse(is_none(value))
 
     def test_none(self):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_none(None), is_none(None, explain=True)[0])
+            self.assertEqual(is_none(None), is_none(None, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertTrue(is_none(None))
 
@@ -142,7 +142,7 @@ class TestExpressionPredicates(TestCase):
         with self.subTest('{}; explain=True == explain=False'.format(
             regex.pattern
         )):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('{}; pred correct'.format(regex.pattern)):
             self.assertEqual(
                 pred(value),
@@ -154,7 +154,7 @@ class TestExpressionPredicates(TestCase):
         regex, match = value
         pred = is_match(regex)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(
                 pred(value),

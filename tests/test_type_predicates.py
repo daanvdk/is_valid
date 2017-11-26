@@ -16,7 +16,7 @@ class TestTypePredicates(TestCase):
     def test_is_instance(self, cls, value):
         pred = is_instance(cls)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), isinstance(value, cls))
 
@@ -24,7 +24,7 @@ class TestTypePredicates(TestCase):
     def test_is_iterable(self, value):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
-                is_iterable(value), is_iterable(value, explain=True)[0]
+                is_iterable(value), is_iterable(value, explain=True).valid
             )
         with self.subTest('pred correct'):
             self.assertEqual(
@@ -35,56 +35,56 @@ class TestTypePredicates(TestCase):
     @given(scalars)
     def test_is_str(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_str(value), is_str(value, explain=True)[0])
+            self.assertEqual(is_str(value), is_str(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_str(value), isinstance(value, str))
 
     @given(scalars)
     def test_is_int(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_int(value), is_int(value, explain=True)[0])
+            self.assertEqual(is_int(value), is_int(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_int(value), isinstance(value, int))
 
     @given(scalars)
     def test_is_float(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_float(value), is_float(value, explain=True)[0])
+            self.assertEqual(is_float(value), is_float(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_float(value), isinstance(value, float))
 
     @given(scalars)
     def test_is_bool(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_bool(value), is_bool(value, explain=True)[0])
+            self.assertEqual(is_bool(value), is_bool(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_bool(value), isinstance(value, bool))
 
     @given(scalars)
     def test_is_list(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_list(value), is_list(value, explain=True)[0])
+            self.assertEqual(is_list(value), is_list(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_list(value), isinstance(value, list))
 
     @given(scalars)
     def test_is_dict(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_dict(value), is_dict(value, explain=True)[0])
+            self.assertEqual(is_dict(value), is_dict(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_dict(value), isinstance(value, dict))
 
     @given(scalars)
     def test_is_set(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_set(value), is_set(value, explain=True)[0])
+            self.assertEqual(is_set(value), is_set(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_set(value), isinstance(value, set))
 
     @given(scalars)
     def test_is_tuple(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_tuple(value), is_tuple(value, explain=True)[0])
+            self.assertEqual(is_tuple(value), is_tuple(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_tuple(value), isinstance(value, tuple))
 
@@ -92,7 +92,7 @@ class TestTypePredicates(TestCase):
     def test_is_datetime(self, value):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
-                is_datetime(value), is_datetime(value, explain=True)[0]
+                is_datetime(value), is_datetime(value, explain=True).valid
             )
         with self.subTest('pred correct'):
             self.assertEqual(is_datetime(value), isinstance(value, datetime))
@@ -100,14 +100,14 @@ class TestTypePredicates(TestCase):
     @given(scalars)
     def test_is_date(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_date(value), is_date(value, explain=True)[0])
+            self.assertEqual(is_date(value), is_date(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_date(value), isinstance(value, date))
 
     @given(scalars)
     def test_is_time(self, value):
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(is_time(value), is_time(value, explain=True)[0])
+            self.assertEqual(is_time(value), is_time(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_time(value), isinstance(value, time))
 
@@ -115,7 +115,7 @@ class TestTypePredicates(TestCase):
     def test_is_timedelta(self, value):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
-                is_timedelta(value), is_timedelta(value, explain=True)[0]
+                is_timedelta(value), is_timedelta(value, explain=True).valid
             )
         with self.subTest('pred correct'):
             self.assertEqual(is_timedelta(value), isinstance(value, timedelta))
@@ -124,7 +124,7 @@ class TestTypePredicates(TestCase):
     def test_is_number(self, value):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
-                is_number(value), is_number(value, explain=True)[0]
+                is_number(value), is_number(value, explain=True).valid
             )
         with self.subTest('pred correct'):
             self.assertEqual(is_number(value), isinstance(value, (int, float)))
@@ -132,7 +132,7 @@ class TestTypePredicates(TestCase):
     def test_is_json_valid_data(self):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
-                is_json(json_data), is_json(json_data, explain=True)[0]
+                is_json(json_data), is_json(json_data, explain=True).valid
             )
         with self.subTest('pred correct'):
             self.assertTrue(is_json(json_data))
@@ -141,7 +141,7 @@ class TestTypePredicates(TestCase):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 is_json(invalid_json_data),
-                is_json(invalid_json_data, explain=True)[0]
+                is_json(invalid_json_data, explain=True).valid
             )
         with self.subTest('pred correct'):
             self.assertFalse(is_json(invalid_json_data))

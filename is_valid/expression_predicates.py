@@ -1,5 +1,7 @@
 import re
 
+from .explanation import Explanation
+from .utils import explain
 from .type_predicates import is_str
 
 
@@ -12,16 +14,12 @@ def is_eq(value, rep=None):
     """
     if rep is None:
         rep = repr(value)
-
-    def is_valid(data, explain=False):
-        if not explain:
-            return data == value
-        return (
-            True, 'data is equal to {}'.format(rep)
-        ) if data == value else (
-            False, 'data is not equal to {}'.format(rep)
-        )
-    return is_valid
+    return explain(
+        lambda data: data == value,
+        'equal_to',
+        'Data is equal to {}.'.format(rep),
+        'Data is not equal to {}.'.format(rep),
+    )
 
 
 def is_gt(value, rep=None):
@@ -33,16 +31,12 @@ def is_gt(value, rep=None):
     """
     if rep is None:
         rep = repr(value)
-
-    def is_valid(data, explain=False):
-        if not explain:
-            return data > value
-        return (
-            True, 'data is greater than {}'.format(rep)
-        ) if data > value else (
-            False, 'data is not greater than {}'.format(rep)
-        )
-    return is_valid
+    return explain(
+        lambda data: data > value,
+        'greater_than',
+        'Data is greater than {}.'.format(rep),
+        'Data is not greater than {}.'.format(rep),
+    )
 
 
 def is_geq(value, rep=None):
@@ -54,37 +48,29 @@ def is_geq(value, rep=None):
     """
     if rep is None:
         rep = repr(value)
-
-    def is_valid(data, explain=False):
-        if not explain:
-            return data >= value
-        return (
-            True, 'data is greater than or equal to {}'.format(rep)
-        ) if data >= value else (
-            False, 'data is not greater than or equal to {}'.format(rep)
-        )
-    return is_valid
+    return explain(
+        lambda data: data >= value,
+        'greater_than_or_equal_to',
+        'Data is greater than or equal to {}.'.format(rep),
+        'Data is not greater than or equal to {}.'.format(rep),
+    )
 
 
 def is_lt(value, rep=None):
     """
-    Generates a predicate that checks if the data lower than the given value.
-    The optional keyword argument ``rep`` specifies what the value should be
-    called in the explanation. If no value for ``rep`` is given it will just
-    use ``repr(value)``.
+    Generates a predicate that checks if the data is lower than the given
+    value. The optional keyword argument ``rep`` specifies what the value
+    should be called in the explanation. If no value for ``rep`` is given it
+    will just use ``repr(value)``.
     """
     if rep is None:
         rep = repr(value)
-
-    def is_valid(data, explain=False):
-        if not explain:
-            return data < value
-        return (
-            True, 'data is lower than {}'.format(rep)
-        ) if data < value else (
-            False, 'data is not lower than {}'.format(rep)
-        )
-    return is_valid
+    return explain(
+        lambda data: data < value,
+        'lower_than',
+        'Data is lower than {}.'.format(rep),
+        'Data is not lower than {}.'.format(rep),
+    )
 
 
 def is_leq(value, rep=None):
@@ -96,16 +82,12 @@ def is_leq(value, rep=None):
     """
     if rep is None:
         rep = repr(value)
-
-    def is_valid(data, explain=False):
-        if not explain:
-            return data <= value
-        return (
-            True, 'data is lower than or equal to {}'.format(rep)
-        ) if data <= value else (
-            False, 'data is not lower than or equal to {}'.format(rep)
-        )
-    return is_valid
+    return explain(
+        lambda data: data <= value,
+        'lower_than_or_equal_to',
+        'Data is lower than or equal to {}.'.format(rep),
+        'Data is not lower than or equal to {}.'.format(rep),
+    )
 
 
 def is_in_range(
@@ -128,13 +110,17 @@ def is_in_range(
     def is_valid(data, explain=False):
         if not explain:
             return start_predicate(data) and stop_predicate(data)
-        valid, explanation = start_predicate(data, explain=True)
-        if not valid:
-            return (False, explanation)
-        valid, explanation = stop_predicate(data, explanation)
-        if not valid:
-            return (False, explanation)
-        return (True, 'placeholder')
+        start_explanation = start_predicate(data, explain=True)
+        if not start_explanation:
+            return start_explanation
+        stop_explanation = stop_predicate(data, explain=True)
+        if not stop_explanation:
+            return stop_explanation
+        return Explanation(
+            True, 'in_range',
+            start_explanation.message[:-1] + ' and ' +
+            stop_explanation.message[9:],
+        )
     return is_valid
 
 
@@ -143,69 +129,55 @@ def is_in(collection):
     Generates a predicate that checks if the data is within the given
     collection.
     """
-    def is_valid(data, explain=False):
-        if not explain:
-            return data in collection
-        return (
-            True, 'data is in collection'
-        ) if data in collection else (
-            False, 'data is not in collection'
-        )
-    return is_valid
-
-
-def is_none(data, explain=False):
-    """
-    A predicate that checks if the data is None.
-    """
-    if not explain:
-        return data is None
-    return (
-        True, 'data is none'
-    ) if data is None else (
-        False, 'data is not none'
+    return explain(
+        lambda data: data in collection,
+        'in_collection',
+        'Data is contained within the collection.',
+        'Data is not contained within the collection.',
     )
 
 
-def is_null(data, explain=False):
-    """
-    A predicate that checks if the data is None. Differs from
-    ``is_none`` in it's explanation. This predicate will use the word `null` in
-    it's explanation instead of `none`.
-    """
-    if not explain:
-        return data is None
-    return (
-        True, 'data is null'
-    ) if data is None else (
-        False, 'data is not null'
-    )
+#: A predicate that checks if the data is None.
+is_none = explain(
+    lambda data: data is None,
+    'none', 'Data is None.', 'Data is not None.',
+)
+#: A predicate that checks if the data is None. Differs from ``is_none`` in
+#: it's explanation. This predicate will use the word `null` in it's
+#: explanation instead of `None`.
+is_null = explain(
+    lambda data: data is None,
+    'null', 'Data is null.', 'Data is not null.',
+)
 
 
-def is_match(pattern, flags=0):
+def is_match(regexp, flags=0, rep=None):
     """
     A predicate that checks if the data matches the given pattern. If a string
     is provided as a pattern this predicate will compile it first. The
     optional parameter ``flags`` allows you to specify flags for this
     aforementioned compilation.
     """
-    regexp = (
-        re.compile(pattern, flags=flags)
-    ) if isinstance(pattern, str) else pattern
-    rep = '/{}/{}'.format(regexp.pattern, ''.join(char for flag, char in [
-        (re.A, 'a'), (re.I, 'i'), (re.L, 'l'),
-        (re.M, 'm'), (re.S, 's'), (re.X, 'x'),
-    ] if regexp.flags & flag))
+    if isinstance(regexp, str):
+        regexp = re.compile(regexp, flags=flags)
+    if rep is None:
+        rep = '/{}/{}'.format(
+            regexp.pattern,
+            ''.join(char for flag, char in [
+                (re.A, 'a'), (re.I, 'i'), (re.L, 'l'),
+                (re.M, 'm'), (re.S, 's'), (re.X, 'x'),
+            ] if regexp.flags & flag)
+        )
 
     def is_valid(data, explain=False):
-        valid, errors = is_str(data, explain=True)
-        if not valid:
-            return (False, errors) if explain else False
+        res = is_str(data, explain=explain)
+        if not res:
+            return res
         if not explain:
             return bool(regexp.match(data))
-        return (
-            True, 'data does match {}'.format(rep)
-        ) if regexp.match(data) else (
-            False, 'data does not match {}'.format(rep)
+        return Explanation(
+            True, 'match', 'Data does match {}.'.format(rep),
+        ) if regexp.match(data) else Explanation(
+            False, 'not_match', 'Data does not match {}.'.format(rep),
         )
     return is_valid

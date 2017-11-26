@@ -25,7 +25,7 @@ class TestWrapperPredicates(TestCase):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 self.json_pred(json_data),
-                self.json_pred(json_data, explain=True)[0]
+                self.json_pred(json_data, explain=True).valid
             )
         with self.subTest('pred correct'):
             self.assertTrue(self.json_pred(json_data))
@@ -34,7 +34,7 @@ class TestWrapperPredicates(TestCase):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 self.json_pred(incorrect_json_data),
-                self.json_pred(incorrect_json_data, explain=True)[0]
+                self.json_pred(incorrect_json_data, explain=True).valid
             )
         with self.subTest('pred correct'):
             self.assertFalse(self.json_pred(incorrect_json_data))
@@ -43,7 +43,7 @@ class TestWrapperPredicates(TestCase):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 self.json_pred(invalid_json_data),
-                self.json_pred(invalid_json_data, explain=True)[0]
+                self.json_pred(invalid_json_data, explain=True).valid
             )
         with self.subTest('pred correct'):
             self.assertFalse(self.json_pred(invalid_json_data))

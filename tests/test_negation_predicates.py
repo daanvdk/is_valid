@@ -13,7 +13,7 @@ class TestNegationPredicates(TestCase):
         pred = is_lt(a)
         not_pred = is_not(pred)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(not_pred(b), not_pred(b, explain=True)[0])
+            self.assertEqual(not_pred(b), not_pred(b, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertNotEqual(pred(b), not_pred(b))
 
@@ -22,7 +22,7 @@ class TestNegationPredicates(TestCase):
         pred = is_lt(a)
         not_pred = is_not(is_not(pred))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(not_pred(b), not_pred(b, explain=True)[0])
+            self.assertEqual(not_pred(b), not_pred(b, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), not_pred(b))
 
@@ -33,6 +33,6 @@ class TestNegationPredicates(TestCase):
     def test_not_on_non_pred(self, a, b):
         pred = is_not(a)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(b), pred(b, explain=True)[0])
+            self.assertEqual(pred(b), pred(b, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(b), a != b)

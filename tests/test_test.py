@@ -18,7 +18,7 @@ class MockTest(MockTestCase):
         self.assertion(False)
 
     def test_fail_with_msg(self):
-        self.assertion(False, msg='foobar')
+        self.assertion(False, message='foobar')
 
 
 class TestTest(TestCase):

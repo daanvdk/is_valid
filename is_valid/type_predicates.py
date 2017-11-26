@@ -1,14 +1,21 @@
 import json
 from datetime import datetime, date, time, timedelta
 
+from .utils import explain
 
-def is_iterable(data, explain=False):
-    """A predicate that checks if the data is iterable."""
+
+def _is_iterable(data):
     try:
         iter(data)
-        return (True, 'data is iterable') if explain else True
+        return True
     except TypeError:
-        return (False, 'data is not iterable') if explain else False
+        return False
+
+
+#: A predicate that checks if the data is iterable.
+is_iterable = explain(
+    _is_iterable, 'iterable', 'Data is iterable.', 'Data is not iterable.'
+)
 
 
 def is_instance(cls, rep=None):
@@ -20,16 +27,10 @@ def is_instance(cls, rep=None):
     """
     if rep is None:
         rep = 'an instance of {}'.format(cls.__name__)
-
-    def is_valid(data, explain=False):
-        if not explain:
-            return isinstance(data, cls)
-        return (
-            True, 'data is {}'.format(rep)
-        ) if isinstance(data, cls) else (
-            False, 'data is not {}'.format(rep)
-        )
-    return is_valid
+    return explain(
+        lambda data: isinstance(data, cls),
+        'instance_of', 'Data is {}'.format(rep), 'Data is not {}'.format(rep),
+    )
 
 
 #: A predicate that checks if the data is a string.
@@ -60,12 +61,15 @@ is_timedelta = is_instance(timedelta, rep='a timedelta')
 is_number = is_instance((int, float), rep='a number')
 
 
-def is_json(data, explain=False):
-    """
-    A predicate that checks if the data is valid json.
-    """
+def _is_json(data):
     try:
         json.loads(data)
-        return (True, 'data is valid json') if explain else True
+        return True
     except ValueError:
-        return (False, 'data is not valid json') if explain else False
+        return False
+
+
+#: A predicate that checks if the data is valid json.
+is_json = explain(
+    _is_json, 'json', 'Data is valid json.', 'Data is not valid json.'
+)

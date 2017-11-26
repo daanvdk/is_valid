@@ -17,7 +17,7 @@ class TestStructurePredicates(TestCase):
     def test_is_dict_where(self, value):
         pred = is_dict_where(foo=is_eq(True), bar=is_eq(False))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), value == correct_dict)
 
@@ -25,7 +25,7 @@ class TestStructurePredicates(TestCase):
     def test_is_subdict_where(self, value):
         pred = is_subdict_where(foo=is_eq(True), bar=is_eq(False))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), isinstance(value, dict) and all(
                 key in correct_dict and val == correct_dict[key]
@@ -36,7 +36,7 @@ class TestStructurePredicates(TestCase):
     def test_is_superdict_where(self, value):
         pred = is_superdict_where(foo=is_eq(True), bar=is_eq(False))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), isinstance(value, dict) and all(
                 key in value and val == value[key]
@@ -51,7 +51,7 @@ class TestStructurePredicates(TestCase):
     def test_is_dict_of(self, value):
         pred = is_dict_of(is_int, is_int)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), isinstance(value, dict) and all(
                 isinstance(key, int) and isinstance(val, int)
@@ -66,7 +66,7 @@ class TestStructurePredicates(TestCase):
     def test_is_dict_of_on_non_pred(self, value):
         pred = is_dict_of(1, 1)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), isinstance(value, dict) and all(
                 entry == (1, 1) for entry in value.items()
@@ -76,7 +76,7 @@ class TestStructurePredicates(TestCase):
     def test_is_object_where(self, value):
         pred = is_object_where(foo=is_eq(True), bar=is_eq(False))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), (
                 isinstance(value, object) and
@@ -88,7 +88,7 @@ class TestStructurePredicates(TestCase):
     def test_is_list_where(self, value):
         pred = is_list_where(is_eq(True), is_eq(False))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), value == correct_list)
 
@@ -96,7 +96,7 @@ class TestStructurePredicates(TestCase):
     def test_is_list_of(self, value):
         pred = is_list_of(is_eq(True))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(
                 pred(value), isinstance(value, list) and all(value)
@@ -106,7 +106,7 @@ class TestStructurePredicates(TestCase):
     def test_is_tuple_where(self, value):
         pred = is_tuple_where(is_eq(True), is_eq(False))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(value), value == correct_tuple)
 
@@ -114,7 +114,7 @@ class TestStructurePredicates(TestCase):
     def test_is_tuple_of(self, value):
         pred = is_tuple_of(is_eq(True))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(
                 pred(value), isinstance(value, tuple) and all(value)
@@ -124,7 +124,7 @@ class TestStructurePredicates(TestCase):
     def test_is_iterable_where(self, value):
         pred = is_iterable_where(is_eq(True), is_eq(False))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(
                 pred(value), value in (correct_tuple, correct_list)
@@ -134,7 +134,7 @@ class TestStructurePredicates(TestCase):
     def test_is_iterable_of(self, value):
         pred = is_iterable_of(True)
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(
                 pred(value), isinstance(value, (list, tuple)) and all(value)
@@ -144,7 +144,7 @@ class TestStructurePredicates(TestCase):
     def test_is_set_of(self, value):
         pred = is_set_of(is_eq(True))
         with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(value), pred(value, explain=True)[0])
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
         with self.subTest('pred correct'):
             self.assertEqual(
                 pred(value), isinstance(value, set) and all(value)
