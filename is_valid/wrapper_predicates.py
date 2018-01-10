@@ -1,7 +1,8 @@
 import json
 
 from .explanation import Explanation
-from .expression_predicates import is_eq
+from .base_predicates import is_not
+from .expression_predicates import is_eq, is_none, is_null
 from .condition_predicates import is_if
 from .type_predicates import is_str
 
@@ -54,3 +55,15 @@ def is_json_where(predicate, *args, loader=json.loads, **kwargs):
         code='json', message='Data is not valid json.',
         **kwargs
     ), else_valid=False)
+
+
+def is_optional(predicate):
+    if not callable(predicate):
+        predicate = is_eq(predicate)
+    return is_if(is_not(is_none), predicate)
+
+
+def is_nullable(predicate):
+    if not callable(predicate):
+        predicate = is_eq(predicate)
+    return is_if(is_not(is_null), predicate)

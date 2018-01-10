@@ -2,12 +2,12 @@ from unittest import TestCase
 import json
 
 from is_valid import is_json_where, is_dict_where, is_list_of, is_bool,\
-    is_str, is_int
+    is_str, is_int, is_optional, is_nullable
 
 from .utils import json_data, incorrect_json_data, invalid_json_data
 
 
-class TestWrapperPredicates(TestCase):
+class TestJSON(TestCase):
 
     def setUp(self):
         self.pred = is_dict_where(
@@ -63,3 +63,28 @@ class TestWrapperPredicates(TestCase):
             self.assertTrue(pred(json_data))
         with self.subTest('invalid json'):
             self.assertFalse(pred(incorrect_json_data))
+
+
+class TestOptionalPredicates(TestCase):
+
+    def test_is_optional(self):
+        pred = is_optional(1)
+        for value, expected in [(1, True), (None, True), (0, False)]:
+            with self.subTest(
+                'explain=True == explain=False; {}; {}'
+                .format(value, expected)
+            ):
+                self.assertEqual(pred(value), pred(value, explain=True).valid)
+            with self.subTest('pred correct; {}; {}'.format(value, expected)):
+                self.assertEqual(pred(value), expected)
+
+    def test_is_nullable(self):
+        pred = is_nullable(1)
+        for value, expected in [(1, True), (None, True), (0, False)]:
+            with self.subTest(
+                'explain=True == explain=False; {}; {}'
+                .format(value, expected)
+            ):
+                self.assertEqual(pred(value), pred(value, explain=True).valid)
+            with self.subTest('pred correct; {}; {}'.format(value, expected)):
+                self.assertEqual(pred(value), expected)
