@@ -22,6 +22,20 @@ class TestStructurePredicates(TestCase):
             self.assertEqual(pred(value), value == correct_dict)
 
     @given(dicts)
+    def test_is_dict_where_required_and_optional(self, value):
+        pred = is_dict_where(dict(foo=True), dict(bar=True))
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(value), pred(value, explain=True).valid)
+        with self.subTest('pred correct'):
+            self.assertEqual(
+                pred(value),
+                isinstance(value, dict) and
+                value.get('foo', False) and
+                value.get('bar', True) and
+                'baz' not in value
+            )
+
+    @given(dicts)
     def test_is_subdict_where(self, value):
         pred = is_subdict_where(foo=is_eq(True), bar=is_eq(False))
         with self.subTest('explain=True == explain=False'):

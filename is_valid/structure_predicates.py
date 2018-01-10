@@ -82,14 +82,25 @@ def is_dict_where(*args, **kwargs):
     The arguments for this function work exactly the same as that of the dict
     constructor.
     """
-    predicates = {
-        key: predicate if callable(predicate) else is_eq(predicate)
-        for key, predicate in dict(*args, **kwargs).items()
-    }
+    if len(args) == 2 and len(kwargs) == 0:
+        required_predicates = {
+            key: predicate if callable(predicate) else is_eq(predicate)
+            for key, predicate in args[0].items()
+        }
+        optional_predicates = {
+            key: predicate if callable(predicate) else is_eq(predicate)
+            for key, predicate in args[1].items()
+        }
+    else:
+        required_predicates = {
+            key: predicate if callable(predicate) else is_eq(predicate)
+            for key, predicate in dict(*args, **kwargs).items()
+        }
+        optional_predicates = {}
 
     def is_valid(data, explain=False):
-        missing = set(predicates) - set(data)
-        extra = set(data) - set(predicates)
+        missing = set(required_predicates) - set(data)
+        extra = set(data) - set(required_predicates) - set(optional_predicates)
         if missing or extra:
             return Explanation(
                 False, 'keys_do_not_match',
@@ -99,6 +110,10 @@ def is_dict_where(*args, **kwargs):
                     'extra': extra,
                 }.items() if v},
             ) if explain else False
+
+        predicates = optional_predicates
+        predicates.update(required_predicates)
+
         if not explain:
             return all(predicates[key](value) for key, value in data.items())
         reasons, errors = {}, {}
