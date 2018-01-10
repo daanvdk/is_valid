@@ -22,3 +22,14 @@ def explain(
         if predicate(data) else
         Explanation(False, 'not_' + code, message_invalid, details_invalid)
     ) if explain else predicate(data)
+
+
+class PredicateWrapper:
+
+    def __init__(self, predicate=None):
+        self.predicate = predicate
+
+    def __call__(self, data, explain=False):
+        if self.predicate is None:
+            raise AttributeError('PredicateWrapper has no predicate.')
+        return self.predicate(data, explain=explain)
