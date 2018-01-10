@@ -147,5 +147,9 @@ def is_cond(
     """
     is_valid = default if callable(default) else is_eq(default)
     for condition, predicate in reversed(conditions):
+        if not callable(condition):
+            condition = is_eq(condition)
+        if not callable(predicate):
+            predicate = is_eq(predicate)
         is_valid = is_if(condition, predicate, is_valid)
     return is_valid
