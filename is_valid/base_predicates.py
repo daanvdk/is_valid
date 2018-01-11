@@ -2,14 +2,14 @@ from .explanation import Explanation
 from .expression_predicates import is_eq
 
 
-def is_fixed(valid, code, message):
+def is_fixed(valid, code, message, details=None):
     """
     Generates a predicate that returns a certain value for valid, code, and
     message that it will always return regardless of what data you put into
     it.
     """
     return lambda _, explain=False: (
-        Explanation(valid, code, message) if explain else valid
+        Explanation(valid, code, message, details) if explain else valid
     )
 
 

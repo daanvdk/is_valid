@@ -74,8 +74,8 @@ class TestConditionPredicates(TestCase):
 
 
     @given(hs.lists(hs.tuples(
-        hs.sampled_from([is_something, is_nothing]),
-        hs.sampled_from([is_something, is_nothing])
+        hs.sampled_from([0, 1]),
+        hs.sampled_from([0, 1])
     ), min_size=1, max_size=5))
     def test_conds(self, conds):
         pred = is_cond(*conds)
@@ -84,5 +84,5 @@ class TestConditionPredicates(TestCase):
         with self.subTest('pred correct'):
             self.assertEqual(
                 pred(1),
-                next((pred(1) for cond, pred in conds if cond(1)), False)
+                next((pred == 1 for cond, pred in conds if cond == 1), False)
             )

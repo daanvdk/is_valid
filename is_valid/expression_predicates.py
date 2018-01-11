@@ -132,8 +132,8 @@ def is_in(collection):
     return explain(
         lambda data: data in collection,
         'in_collection',
-        'Data is contained within the collection.',
-        'Data is not contained within the collection.',
+        'Data is in the collection.',
+        'Data is not in the collection.',
     )
 
 
