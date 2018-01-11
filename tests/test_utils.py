@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from is_valid import is_eq, is_something, is_nothing
-from is_valid.utils import explain, PredicateWrapper
+from is_valid.utils import explain, Wrapper
 
 
 class TestExplain(TestCase):
@@ -32,21 +32,21 @@ class TestExplain(TestCase):
             )
 
 
-class TestPredicateWrapper(TestCase):
+class TestWrapper(TestCase):
 
     def test_wrapper_predicate(self):
-        wrapper = PredicateWrapper()
+        wrapper = Wrapper()
         with self.assertRaises(AttributeError):
             wrapper(None)
-        wrapper.predicate = is_something
+        wrapper.func= is_something
         self._test(wrapper, None, True)
-        wrapper.predicate = is_nothing
+        wrapper.func = is_nothing
         self._test(wrapper, None, False)
 
     def test_wrapper_predicate_with_arg(self):
-        wrapper = PredicateWrapper(is_something)
+        wrapper = Wrapper(is_something)
         self._test(wrapper, None, True)
-        wrapper.predicate = is_nothing
+        wrapper.func = is_nothing
         self._test(wrapper, None, False)
     
     def _test(self, predicate, value, expected):

@@ -24,12 +24,12 @@ def explain(
     ) if explain else predicate(data)
 
 
-class PredicateWrapper:
+class Wrapper:
 
-    def __init__(self, predicate=None):
-        self.predicate = predicate
-
-    def __call__(self, data, explain=False):
-        if self.predicate is None:
-            raise AttributeError('PredicateWrapper has no predicate.')
-        return self.predicate(data, explain=explain)
+    def __init__(self, func=None):
+        self.func = func
+    
+    def __call__(self, *args, **kwargs):
+        if self.func is None:
+            raise AttributeError('Wrapper has no function.')
+        return self.func(*args, **kwargs)
