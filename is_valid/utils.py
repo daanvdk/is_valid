@@ -28,7 +28,7 @@ class Wrapper:
 
     def __init__(self, func=None):
         self.func = func
-    
+
     def __call__(self, *args, **kwargs):
         if self.func is None:
             raise AttributeError('Wrapper has no function.')
