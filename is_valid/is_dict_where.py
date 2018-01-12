@@ -43,11 +43,11 @@ class is_dict_where(Predicate):
         if missing or extra:
             return Explanation(
                 False, 'keys_incorrect',
-                'The data keys do not follow the specification determined by'
+                'The data keys do not follow the specification determined by '
                 'the predicates.',
                 {k: v for k, v in {
-                    'missing': missing,
-                    'extra': extra,
+                    'missing': list(missing),
+                    'extra': list(extra),
                 }.items() if v},
             ) if explain else False
 

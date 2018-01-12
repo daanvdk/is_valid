@@ -28,9 +28,9 @@ class is_superdict_where(Predicate):
         if missing:
             return Explanation(
                 False, 'keys_incorrect',
-                'The data keys do not follow the specification determined by'
+                'The data keys do not follow the specification determined by '
                 'the predicates.',
-                {'missing': missing},
+                {'missing': list(missing)},
             ) if explain else False
         if not explain:
             return all(

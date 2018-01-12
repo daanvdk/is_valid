@@ -28,9 +28,9 @@ class is_subdict_where(Predicate):
         if extra:
             return Explanation(
                 False, 'keys_incorrect',
-                'The data keys do not follow the specification determined by'
+                'The data keys do not follow the specification determined by '
                 'the predicates.',
-                {'extra': extra},
+                {'extra': list(extra)},
             ) if explain else False
 
         if not explain:
