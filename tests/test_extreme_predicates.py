@@ -3,6 +3,7 @@ from unittest import TestCase
 from hypothesis import given
 
 from is_valid import is_something, is_nothing
+from is_valid.base import Predicate
 
 from .utils import varying
 
@@ -26,3 +27,11 @@ class TestExtremePredicates(TestCase):
             )
         with self.subTest('pred correct'):
             self.assertFalse(is_nothing(value))
+
+    def test_predicate(self):
+        predicate = Predicate()
+        with self.assertRaises(NotImplementedError):
+            predicate(0)
+        with self.assertRaises(NotImplementedError):
+            predicate.explain(0)
+        

@@ -1,13 +1,13 @@
 from unittest import TestCase
 
-from is_valid import is_eq, is_something, is_nothing
+from is_valid import is_something, is_nothing
 from is_valid.utils import explain, Wrapper
 
 
 class TestExplain(TestCase):
 
     def setUp(self):
-        self.predicate = explain(is_eq(1), 'valid', 'foo', 'bar')
+        self.predicate = explain(1, 'valid', 'foo', 'bar')
 
     def test_explain_valid(self):
         with self.subTest('explain=True == explain=False'):
@@ -48,7 +48,7 @@ class TestWrapper(TestCase):
         self._test(wrapper, None, True)
         wrapper.func = is_nothing
         self._test(wrapper, None, False)
-    
+
     def _test(self, predicate, value, expected):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(

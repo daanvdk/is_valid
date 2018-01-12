@@ -17,14 +17,17 @@ class TestNegationPredicates(TestCase):
         with self.subTest('pred correct'):
             self.assertNotEqual(pred(b), not_pred(b))
 
-    @given(hs.floats(), hs.floats())
-    def test_not_not(self, a, b):
-        pred = is_lt(a)
+    def test_not_not(self):
+        pred = is_lt(1)
         not_pred = is_not(is_not(pred))
-        with self.subTest('explain=True == explain=False'):
-            self.assertEqual(not_pred(b), not_pred(b, explain=True).valid)
-        with self.subTest('pred correct'):
-            self.assertEqual(pred(b), not_pred(b))
+        self.assertEqual(pred, not_pred)
+
+    def test_not_with_invert(self):
+        pred = is_lt(1)
+        normal = is_not(pred)
+        with_invert = ~pred
+        self.assertEqual(normal.__class__, normal.__class__)
+        self.assertEqual(normal._predicate, with_invert._predicate)
 
     @given(
         hs.sampled_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
