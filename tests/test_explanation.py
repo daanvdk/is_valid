@@ -25,9 +25,9 @@ class ExplanationTest(TestCase):
         ))
 
     def test_json(self):
-        self.assertEqual(self.explanation.json(), json.dumps(dict(
+        self.assertEqual(json.loads(self.explanation.json()), dict(
             code='code', message='message', details='details',
-        )))
+        ))
 
     def test_dict_advanced(self):
         self.maxDiff = None
