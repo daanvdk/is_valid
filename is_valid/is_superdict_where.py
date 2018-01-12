@@ -17,6 +17,8 @@ class is_superdict_where(Predicate):
 
     prerequisites = [is_dict]
 
+    _missing_exp = Explanation(False, 'missing', 'Key is missing')
+
     def __init__(self, *args, **kwargs):
         self._predicates = {
             key: predicate if callable(predicate) else is_eq(predicate)
@@ -24,23 +26,19 @@ class is_superdict_where(Predicate):
         }
 
     def _evaluate(self, data, explain):
+        evaluate = set(data) & set(self._predicates)
         missing = set(self._predicates) - set(data)
-        if missing:
-            return Explanation(
-                False, 'keys_incorrect',
-                'The data keys do not follow the specification determined by '
-                'the predicates.',
-                {'missing': list(missing)},
-            ) if explain else False
         if not explain:
-            return all(
-                predicate(data[key])
-                for key, predicate in self._predicates.items()
+            return not missing and all(
+                self._predicates[key](data[key])
+                for key in evaluate
             )
         reasons, errors = {}, {}
-        for key, predicate in self._predicates.items():
-            explanation = predicate(data[key], explain=True)
+        for key in evaluate:
+            explanation = self._predicates[key].explain(data[key])
             (reasons if explanation else errors)[key] = explanation
+        for key in missing:
+            errors[key] = self._missing_exp
         return Explanation(
             True, 'superdict_where',
             'Data is a superdict where all the given predicates hold.',

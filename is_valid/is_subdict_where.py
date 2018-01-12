@@ -17,6 +17,8 @@ class is_subdict_where(Predicate):
 
     prerequisites = [is_dict]
 
+    _extra_exp = Explanation(False, 'not_allowed', 'Key is not allowed.')
+
     def __init__(self, *args, **kwargs):
         self._predicates = {
             key: predicate if callable(predicate) else is_eq(predicate)
@@ -24,24 +26,19 @@ class is_subdict_where(Predicate):
         }
 
     def _evaluate(self, data, explain):
+        evaluate = set(data) & set(self._predicates)
         extra = set(data) - set(self._predicates)
-        if extra:
-            return Explanation(
-                False, 'keys_incorrect',
-                'The data keys do not follow the specification determined by '
-                'the predicates.',
-                {'extra': list(extra)},
-            ) if explain else False
-
         if not explain:
-            return all(
-                self._predicates[key](value)
-                for key, value in data.items()
+            return not extra and all(
+                self._predicates[key](data[key])
+                for key in evaluate
             )
         reasons, errors = {}, {}
-        for key, value in data.items():
-            explanation = self._predicates[key](value, explain=True)
+        for key in evaluate:
+            explanation = self._predicates[key].explain(data[key])
             (reasons if explanation else errors)[key] = explanation
+        for key in extra:
+            errors[key] = self._extra_exp
         return Explanation(
             True, 'subdict_where',
             'Data is a subdict where all the given predicates hold.',

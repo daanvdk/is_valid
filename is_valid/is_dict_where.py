@@ -17,6 +17,9 @@ class is_dict_where(Predicate):
 
     prerequisites = [is_dict]
 
+    _missing_exp = Explanation(False, 'missing', 'Key is missing')
+    _extra_exp = Explanation(False, 'not_allowed', 'Key is not allowed.')
+
     def __init__(self, *args, **kwargs):
         if len(args) == 2 and len(kwargs) == 0:
             self._required = {
@@ -38,28 +41,22 @@ class is_dict_where(Predicate):
         self._predicates.update(self._required)
 
     def _evaluate(self, data, explain):
+        evaluate = set(data) & set(self._predicates)
         missing = set(self._required) - set(data)
         extra = set(data) - set(self._required) - set(self._optional)
-        if missing or extra:
-            return Explanation(
-                False, 'keys_incorrect',
-                'The data keys do not follow the specification determined by '
-                'the predicates.',
-                {k: v for k, v in {
-                    'missing': list(missing),
-                    'extra': list(extra),
-                }.items() if v},
-            ) if explain else False
-
         if not explain:
-            return all(
-                self._predicates[key](value)
-                for key, value in data.items()
+            return not extra and not missing and all(
+                self._predicates[key](data[key])
+                for key in evaluate
             )
         reasons, errors = {}, {}
-        for key, value in data.items():
-            explanation = self._predicates[key](value, explain=True)
+        for key in evaluate:
+            explanation = self._predicates[key].explain(data[key])
             (reasons if explanation else errors)[key] = explanation
+        for key in missing:
+            errors[key] = self._missing_exp
+        for key in extra:
+            errors[key] = self._extra_exp
         return Explanation(
             True, 'dict_where',
             'Data is a dict where all the given predicates hold.',
