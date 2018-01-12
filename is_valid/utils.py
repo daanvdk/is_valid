@@ -1,6 +1,7 @@
 from .base import Predicate
 from .explanation import Explanation
 from .is_eq import is_eq
+import warnings
 
 
 class explain(Predicate):
@@ -38,10 +39,27 @@ class explain(Predicate):
 
 class Wrapper:
 
-    def __init__(self, func=None):
-        self.func = func
+    def __init__(self, wrapped=None):
+        super().__setattr__('_wrapped', wrapped)
+
+    def wrap(self, wrapped):
+        super().__setattr__('_wrapped', wrapped)
+
+    def __getattr__(self, attr):
+        return getattr(self._wrapped, attr)
+
+    def __setattr__(self, attr, value):
+        if attr == 'func':
+            warnings.warn(
+                'Assigning directly to Wrapper.func is deprecated, use '
+                'Wrapper.wrap(obj) instead.',
+                PendingDeprecationWarning
+            )
+            super().__setattr__('_wrapped', value)
+        else:
+            setattr(self._wrapped, attr, value)
 
     def __call__(self, *args, **kwargs):
-        if self.func is None:
-            raise AttributeError('Wrapper has no function.')
-        return self.func(*args, **kwargs)
+        if self._wrapped is None:
+            raise AttributeError('Wrapper has nothing wrapped.')
+        return self._wrapped(*args, **kwargs)

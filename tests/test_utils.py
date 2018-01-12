@@ -1,6 +1,7 @@
 from unittest import TestCase
+import warnings
 
-from is_valid import is_something, is_nothing
+from is_valid import is_something, is_nothing, is_eq
 from is_valid.utils import explain, Wrapper
 
 
@@ -38,22 +39,34 @@ class TestWrapper(TestCase):
         wrapper = Wrapper()
         with self.assertRaises(AttributeError):
             wrapper(None)
-        wrapper.func = is_something
+        wrapper.wrap(is_something)
         self._test(wrapper, None, True)
-        wrapper.func = is_nothing
+        wrapper.wrap(is_nothing)
         self._test(wrapper, None, False)
 
     def test_wrapper_predicate_with_arg(self):
         wrapper = Wrapper(is_something)
         self._test(wrapper, None, True)
-        wrapper.func = is_nothing
+        wrapper.wrap(is_nothing)
         self._test(wrapper, None, False)
 
     def _test(self, predicate, value, expected):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 predicate(value),
-                predicate(value, explain=True).valid
+                predicate.explain(value).valid
             )
         with self.subTest('pred correct'):
             self.assertEqual(predicate(value), expected)
+
+    def test_warning_func(self):
+        wrapper = Wrapper()
+        with warnings.catch_warnings(record=True) as w:
+            wrapper.func = is_eq(0)
+        self.assertTrue(len(w) == 1)
+        self.assertEqual(w[0].category, PendingDeprecationWarning)
+        self._test(wrapper, 0, True)
+        self._test(wrapper, 1, False)
+        wrapper._value = 1
+        self._test(wrapper, 0, False)
+        self._test(wrapper, 1, True)
