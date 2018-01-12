@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.1](https://pypi.python.org/pypi/is-valid/0.5.0) - 2018/12/12
+- Fix bug where `is_dict_of` didn't check if the value was a dict beforehand
+but only if it was iterable, thus leading to an exception being thrown when a
+value was evaluated that was iterable but not a dict.
+
 ## [0.5.0](https://pypi.python.org/pypi/is-valid/0.5.0) - 2018/12/12
 - Introduction of this changelog.
 - `is_dict_where` now also accepts two dicts as arguments to indicate

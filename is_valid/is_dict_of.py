@@ -1,7 +1,7 @@
 from .base import Predicate
 from .explanation import Explanation
 from .is_eq import is_eq
-from .is_iterable import is_iterable
+from .is_dict import is_dict
 
 
 class is_dict_of(Predicate):
@@ -11,7 +11,7 @@ class is_dict_of(Predicate):
     to ``val_predicate``.
     """
 
-    prerequisites = [is_iterable]
+    prerequisites = [is_dict]
 
     def __init__(self, key_predicate, value_predicate):
         if not callable(key_predicate):
