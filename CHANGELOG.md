@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.5.1](https://pypi.python.org/pypi/is-valid/0.5.0) - 2018/12/12
+## [0.5.1](https://pypi.python.org/pypi/is-valid/0.5.1) - 2018/12/12
 - Fix bug where `is_dict_of` didn't check if the value was a dict beforehand
 but only if it was iterable, thus leading to an exception being thrown when a
 value was evaluated that was iterable but not a dict.
