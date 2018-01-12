@@ -38,7 +38,7 @@ class TestWrapper(TestCase):
         wrapper = Wrapper()
         with self.assertRaises(AttributeError):
             wrapper(None)
-        wrapper.func= is_something
+        wrapper.func = is_something
         self._test(wrapper, None, True)
         wrapper.func = is_nothing
         self._test(wrapper, None, False)
