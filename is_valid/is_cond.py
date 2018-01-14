@@ -6,6 +6,10 @@ from .is_fixed import is_fixed
 is_no_match = is_fixed(False, 'no_match', 'None of the conditions match.')
 
 
+def identity(data):
+    return data
+
+
 class is_cond(Predicate):
     """
     Generates a predicate that given pairs of condition and validation
@@ -17,15 +21,23 @@ class is_cond(Predicate):
     none of the conditions.
     """
 
-    def __init__(self, *conditions, default=is_no_match):
+    def __init__(
+        self, *conditions,
+        cond_trans=identity, pred_trans=identity,
+        default=is_no_match
+    ):
         self._conditions = [
             (c if callable(c) else is_eq(c), p if callable(p) else is_eq(p))
             for c, p in conditions
         ]
+        self._cond_trans = cond_trans
+        self._pred_trans = pred_trans
         self._default = default if callable(default) else is_eq(default)
 
     def _evaluate(self, data, explain):
+        cond_data = self._cond_trans(data)
+        pred_data = self._pred_trans(data)
         for condition, predicate in self._conditions:
-            if condition(data):
-                return predicate(data, explain)
-        return self._default(data, explain)
+            if condition(cond_data):
+                return predicate(pred_data, explain)
+        return self._default(pred_data, explain)
