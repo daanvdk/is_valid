@@ -10,6 +10,12 @@ Instead of just giving an explanation that the keys are incorrect with details
 about which keys are extra and which are missing the explanation now gives
 explanation objects that state `not_allowed` or `missing` for these keys
 while also evaluating the keys that were present and could be evaluated.
+- `is_iterable_where` and it's subclasses (`is_tuple_of`, `is_list_of`) saw a
+small overhaul in how their explanation objects work. Instead of just giving an
+explanation that the length is incorrect the explanation now gives explanation
+objects that state `overflow` or `missing` for when data is too long or too
+short for the incorrect indexes while also evaluating the elements that were
+present and could be evaluated.
 - Transform methods were added to `is_cond`, with `trans_cond` and `trans_pred`
 you can alter the data before it gets entered into the conds or preds
 respectively. By default they just do nothing with the data.
