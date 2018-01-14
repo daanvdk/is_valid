@@ -1,5 +1,4 @@
 from unittest import TestCase
-import warnings
 
 from is_valid import is_something, is_nothing, is_eq
 from is_valid.utils import explain, Wrapper
@@ -39,10 +38,12 @@ class TestWrapper(TestCase):
         wrapper = Wrapper()
         with self.assertRaises(AttributeError):
             wrapper(None)
-        wrapper.wrap(is_something)
-        self._test(wrapper, None, True)
-        wrapper.wrap(is_nothing)
-        self._test(wrapper, None, False)
+        wrapper.wrap(is_eq(0))
+        self._test(wrapper, 0, True)
+        wrapper.wrap(is_eq(1))
+        self._test(wrapper, 0, False)
+        wrapper._value = 0
+        self._test(wrapper, 0, True)
 
     def test_wrapper_predicate_with_arg(self):
         wrapper = Wrapper(is_something)
@@ -58,15 +59,3 @@ class TestWrapper(TestCase):
             )
         with self.subTest('pred correct'):
             self.assertEqual(predicate(value), expected)
-
-    def test_warning_func(self):
-        wrapper = Wrapper()
-        with warnings.catch_warnings(record=True) as w:
-            wrapper.func = is_eq(0)
-        self.assertTrue(len(w) == 1)
-        self.assertEqual(w[0].category, PendingDeprecationWarning)
-        self._test(wrapper, 0, True)
-        self._test(wrapper, 1, False)
-        wrapper._value = 1
-        self._test(wrapper, 0, False)
-        self._test(wrapper, 1, True)
