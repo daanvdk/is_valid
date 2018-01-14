@@ -12,22 +12,22 @@ class TestExplain(TestCase):
     def test_explain_valid(self):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
-                self.predicate(1), self.predicate(1, explain=True).valid
+                self.predicate(1), self.predicate.explain(1).valid
             )
         with self.subTest('pred correct'):
             self.assertEqual(
-                self.predicate(1, explain=True).dict(include_valid=True),
+                self.predicate.explain(1).dict(include_valid=True),
                 {'valid': True, 'code': 'valid', 'message': 'foo'}
             )
 
     def test_explain_invalid(self):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
-                self.predicate(0), self.predicate(0, explain=True).valid
+                self.predicate(0), self.predicate.explain(0).valid
             )
         with self.subTest('pred correct'):
             self.assertEqual(
-                self.predicate(0, explain=True).dict(include_valid=True),
+                self.predicate.explain(0).dict(include_valid=True),
                 {'valid': False, 'code': 'not_valid', 'message': 'bar'}
             )
 

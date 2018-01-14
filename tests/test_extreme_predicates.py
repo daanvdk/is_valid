@@ -14,7 +14,7 @@ class TestExtremePredicates(TestCase):
     def test_something(self, value):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
-                is_something(value), is_something(value, explain=True).valid
+                is_something(value), is_something.explain(value).valid
             )
         with self.subTest('pred correct'):
             self.assertTrue(is_something(value))
@@ -23,7 +23,7 @@ class TestExtremePredicates(TestCase):
     def test_nothing(self, value):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
-                is_nothing(value), is_nothing(value, explain=True).valid
+                is_nothing(value), is_nothing.explain(value).valid
             )
         with self.subTest('pred correct'):
             self.assertFalse(is_nothing(value))
@@ -34,4 +34,3 @@ class TestExtremePredicates(TestCase):
             predicate(0)
         with self.assertRaises(NotImplementedError):
             predicate.explain(0)
-        

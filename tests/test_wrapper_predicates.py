@@ -25,7 +25,7 @@ class TestJSON(TestCase):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 self.json_pred(json_data),
-                self.json_pred(json_data, explain=True).valid
+                self.json_pred.explain(json_data).valid
             )
         with self.subTest('pred correct'):
             self.assertTrue(self.json_pred(json_data))
@@ -34,7 +34,7 @@ class TestJSON(TestCase):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 self.json_pred(incorrect_json_data),
-                self.json_pred(incorrect_json_data, explain=True).valid
+                self.json_pred.explain(incorrect_json_data).valid
             )
         with self.subTest('pred correct'):
             self.assertFalse(self.json_pred(incorrect_json_data))
@@ -43,7 +43,7 @@ class TestJSON(TestCase):
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(
                 self.json_pred(invalid_json_data),
-                self.json_pred(invalid_json_data, explain=True).valid
+                self.json_pred.explain(invalid_json_data).valid
             )
         with self.subTest('pred correct'):
             self.assertFalse(self.json_pred(invalid_json_data))
@@ -74,7 +74,7 @@ class TestOptionalPredicates(TestCase):
                 'explain=True == explain=False; {}; {}'
                 .format(value, expected)
             ):
-                self.assertEqual(pred(value), pred(value, explain=True).valid)
+                self.assertEqual(pred(value), pred.explain(value).valid)
             with self.subTest('pred correct; {}; {}'.format(value, expected)):
                 self.assertEqual(pred(value), expected)
 
@@ -85,6 +85,6 @@ class TestOptionalPredicates(TestCase):
                 'explain=True == explain=False; {}; {}'
                 .format(value, expected)
             ):
-                self.assertEqual(pred(value), pred(value, explain=True).valid)
+                self.assertEqual(pred(value), pred.explain(value).valid)
             with self.subTest('pred correct; {}; {}'.format(value, expected)):
                 self.assertEqual(pred(value), expected)
