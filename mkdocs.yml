@@ -1,0 +1,13 @@
+site_name: Is Valid
+repo_url: https://github.com/daanvdk/is_valid/
+pages:
+  - Home: index.md
+  - Handbook:
+    - Introduction: handbook/introduction.md
+    - Installation: handbook/installation.md
+    - Getting started: handbook/getting_started.md
+  - Reference:
+    - Overview: reference/index.md
+    - Predicate: reference/Predicate.md
+  - Changelog: changelog.md
+  - About: about.md

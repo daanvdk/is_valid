@@ -1,6 +1,6 @@
 <h1 align="center">
     <img src="https://raw.githubusercontent.com/Daanvdk/is_valid/master/logo.png" /><br />
-    Is Valid?
+    Is Valid
 </h1>
 
 [![pypi_version](
@@ -16,7 +16,7 @@
     https://img.shields.io/codecov/c/github/Daanvdk/is_valid.svg
 )](https://codecov.io/gh/Daanvdk/is_valid)
 
-'Is Valid?' is a simple lightweight python library for validation predicates.
+'Is Valid' is a simple lightweight python library for validation predicates.
 Predicates are functions that given a certain input return either `True` or
 `False` according to some rules that the input either follows or does not
 follow.
