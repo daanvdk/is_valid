@@ -21,9 +21,9 @@ class is_lt(Predicate):
             False, 'not_lower_than', 'Data is not lower than {}'.format(rep)
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         return (
             (self._valid_exp if explain else True)
-            if data < self._value else
+            if data < context(self._value) else
             (self._not_valid_exp if explain else False)
         )

@@ -30,14 +30,17 @@ class is_in_range(Predicate):
             self._stop._valid_exp.message[9:],
         )
 
-    def _evaluate_explain(self, data):
-        res = self._start.explain(data)
+    def _evaluate_explain(self, data, context):
+        res = self._start.explain(data, context)
         if not res:
             return res
-        res = self._stop.explain(data)
+        res = self._stop.explain(data, context)
         if not res:
             return res
         return self._valid_exp
 
-    def _evaluate_no_explain(self, data):
-        return self._start(data) and self._stop(data)
+    def _evaluate_no_explain(self, data, context):
+        return (
+            self._start(data, context=context) and
+            self._stop(data, context=context)
+        )

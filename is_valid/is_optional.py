@@ -10,8 +10,8 @@ class is_optional(Predicate):
             predicate = is_eq(predicate)
         self._predicate = predicate
 
-    def _evaluate(self, data, explain):
-        res = is_none(data, explain)
+    def _evaluate(self, data, explain, context):
+        res = is_none(data, explain, context)
         if res:
             return res
-        return self._predicate(data, explain)
+        return self._predicate(data, explain, context)

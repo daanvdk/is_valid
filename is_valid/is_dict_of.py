@@ -21,13 +21,13 @@ class is_dict_of(Predicate):
         self._key = key_predicate
         self._value = value_predicate
 
-    def _evaluate_explain(self, data):
+    def _evaluate_explain(self, data, context):
         reasons, errors = {}, {}
         for key, value in data.items():
             reason, error = {}, {}
-            explanation = self._key.explain(key)
+            explanation = self._key.explain(key, context)
             (reason if explanation else error)['key'] = explanation
-            explanation = self._value.explain(value)
+            explanation = self._value.explain(value, context)
             (reason if explanation else error)['value'] = explanation
             if error:
                 errors[key] = error
@@ -43,8 +43,9 @@ class is_dict_of(Predicate):
             errors,
         )
 
-    def _evaluate_no_explain(self, data):
+    def _evaluate_no_explain(self, data, context):
         return all(
-            self._key(key) and self._value(value)
+            self._key(key, context=context) and
+            self._value(value, context=context)
             for key, value in data.items()
         )

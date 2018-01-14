@@ -34,7 +34,7 @@ class is_match(Predicate):
             False, 'not_match', 'Data does not match {}'.format(rep)
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         return (
             (self._valid_exp if explain else True)
             if (

@@ -7,9 +7,9 @@ class is_set_of(is_iterable_of):
 
     prerequisites = [is_set]
 
-    def _evaluate_explain(self, data):
+    def _evaluate_explain(self, data, context):
         data = list(data)
-        explanation = super()._evaluate_explain(data)
+        explanation = super()._evaluate_explain(data, context)
         return Explanation(
             explanation.valid, explanation.code, explanation.message,
             {data[i]: e for i, e in explanation.details.items()},

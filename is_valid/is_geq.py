@@ -23,9 +23,9 @@ class is_geq(Predicate):
             'Data is not greater than or equal to {}'.format(rep)
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         return (
             (self._valid_exp if explain else True)
-            if data >= self._value else
+            if data >= context(self._value) else
             (self._not_valid_exp if explain else False)
         )

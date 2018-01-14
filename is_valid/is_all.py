@@ -19,10 +19,10 @@ class is_all(Predicate):
             else:
                 self._predicates.append(predicate)
 
-    def _evaluate_explain(self, data):
+    def _evaluate_explain(self, data, context):
         reasons, errors = [], []
         for predicate in self._predicates:
-            explanation = predicate.explain(data)
+            explanation = predicate.explain(data, context)
             (reasons if explanation else errors).append(explanation)
         return Explanation(
             True, 'all_hold',
@@ -34,5 +34,8 @@ class is_all(Predicate):
             errors,
         )
 
-    def _evaluate_no_explain(self, data):
-        return all(predicate(data) for predicate in self._predicates)
+    def _evaluate_no_explain(self, data, context):
+        return all(
+            predicate(data, context=context)
+            for predicate in self._predicates
+        )

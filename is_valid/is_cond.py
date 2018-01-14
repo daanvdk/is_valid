@@ -34,10 +34,10 @@ class is_cond(Predicate):
         self._pred_trans = pred_trans
         self._default = default if callable(default) else is_eq(default)
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         cond_data = self._cond_trans(data)
         pred_data = self._pred_trans(data)
         for condition, predicate in self._conditions:
-            if condition(cond_data):
-                return predicate(pred_data, explain)
-        return self._default(pred_data, explain)
+            if condition(cond_data, context=context):
+                return predicate(pred_data, explain, context)
+        return self._default(pred_data, explain, context)

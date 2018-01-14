@@ -14,7 +14,7 @@ class is_iterable(Predicate):
             False, 'not_iterable', 'Data is not iterable.'
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         try:
             iter(data)
         except TypeError:

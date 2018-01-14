@@ -13,5 +13,5 @@ class is_fixed(Predicate):
         self._valid = valid
         self._explanation = Explanation(valid, code, message, details)
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         return self._explanation if explain else self._valid

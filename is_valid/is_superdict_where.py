@@ -25,12 +25,12 @@ class is_superdict_where(Predicate):
             for key, predicate in dict(*args, **kwargs).items()
         }
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         evaluate = set(data) & set(self._predicates)
         missing = set(self._predicates) - set(data)
         if not explain:
             return not missing and all(
-                self._predicates[key](data[key])
+                self._predicates[key](data[key], context=context)
                 for key in evaluate
             )
         reasons, errors = {}, {}

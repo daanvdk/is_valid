@@ -15,10 +15,10 @@ class is_one(Predicate):
             for predicate in predicates
         ]
 
-    def _evaluate_explain(self, data):
+    def _evaluate_explain(self, data, context):
         reasons, errors = [], []
         for predicate in self._predicates:
-            explanation = predicate.explain(data)
+            explanation = predicate.explain(data, context)
             (reasons if explanation else errors).append(explanation)
         return Explanation(
             True, 'one_holds',
@@ -34,10 +34,10 @@ class is_one(Predicate):
             reasons,
          )
 
-    def _evaluate_no_explain(self, data):
+    def _evaluate_no_explain(self, data, context):
         one = False
         for predicate in self._predicates:
-            if predicate(data):
+            if predicate(data, context=context):
                 if one:
                     return False
                 one = True

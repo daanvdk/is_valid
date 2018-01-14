@@ -14,7 +14,7 @@ class is_none(Predicate):
             False, 'not_none', 'Data is not None.'
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         return (
             (self._valid_exp if explain else True)
             if data is None else

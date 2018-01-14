@@ -50,6 +50,8 @@ from .is_transformed import is_transformed
 from .is_json_where import is_json_where
 from .is_optional import is_optional
 from .is_nullable import is_nullable
+from .is_with import is_with
+from .get import Get
 
 __all__ = [
     Explanation, is_fixed, is_something, is_nothing, is_not, is_all, is_any,
@@ -60,5 +62,5 @@ __all__ = [
     is_set_of, is_iterable, is_instance, is_str, is_int, is_float, is_bool,
     is_list, is_dict, is_set, is_tuple, is_datetime, is_date, is_time,
     is_timedelta, is_number, is_json, is_transformed, is_json_where,
-    is_optional, is_nullable,
+    is_optional, is_nullable, is_with, Get,
 ]

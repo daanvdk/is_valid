@@ -21,9 +21,9 @@ class is_instance(Predicate):
             False, 'not_instance_of', 'Data is not {}'.format(rep)
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         return (
             (self._valid_exp if explain else True)
-            if isinstance(data, self._cls) else
+            if isinstance(data, context(self._cls)) else
             (self._not_valid_exp if explain else False)
         )

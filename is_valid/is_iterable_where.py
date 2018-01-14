@@ -25,15 +25,18 @@ class is_iterable_where(Predicate):
             'Data should have {} elements.'.format(len(predicates)),
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         data = list(data)
         if len(data) != len(self._predicates):
             return self._incorrect_length if explain else False
         if not explain:
-            return all(p(v) for p, v in zip(self._predicates, data))
+            return all(
+                predicate(value, context=context)
+                for predicate, value in zip(self._predicates, data)
+            )
         reasons, errors = {}, {}
         for i, (predicate, value) in enumerate(zip(self._predicates, data)):
-            explanation = predicate.explain(value)
+            explanation = predicate.explain(value, context)
             (reasons if explanation else errors)[i] = explanation
         return Explanation(
             True, 'all_valid',

@@ -40,18 +40,18 @@ class is_dict_where(Predicate):
         self._predicates = dict(self._optional)
         self._predicates.update(self._required)
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         evaluate = set(data) & set(self._predicates)
         missing = set(self._required) - set(data)
         extra = set(data) - set(self._required) - set(self._optional)
         if not explain:
             return not extra and not missing and all(
-                self._predicates[key](data[key])
+                self._predicates[key](data[key], context=context)
                 for key in evaluate
             )
         reasons, errors = {}, {}
         for key in evaluate:
-            explanation = self._predicates[key].explain(data[key])
+            explanation = self._predicates[key].explain(data[key], context)
             (reasons if explanation else errors)[key] = explanation
         for key in missing:
             errors[key] = self._missing_exp

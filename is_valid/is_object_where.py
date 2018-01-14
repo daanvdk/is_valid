@@ -20,11 +20,11 @@ class is_object_where(Predicate):
             for attr, predicate in dict(*args, **kwargs).items()
         }
 
-    def _evaluate_explain(self, data):
+    def _evaluate_explain(self, data, context):
         reasons, errors = {}, {}
         for attr, predicate in self._predicates.items():
             if hasattr(data, attr):
-                explanation = predicate(getattr(data, attr), explain=True)
+                explanation = predicate.explain(getattr(data, attr), context)
                 (reasons if explanation else errors)[attr] = explanation
             else:
                 errors[attr] = self._no_such_attr
@@ -38,8 +38,9 @@ class is_object_where(Predicate):
             errors,
         )
 
-    def _evaluate_no_explain(self, data):
+    def _evaluate_no_explain(self, data, context):
         return all(
-            hasattr(data, attr) and predicate(getattr(data, attr))
+            hasattr(data, attr) and
+            predicate(getattr(data, attr), context=context)
             for attr, predicate in self._predicates.items()
         )

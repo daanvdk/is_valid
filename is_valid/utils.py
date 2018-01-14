@@ -29,7 +29,7 @@ class explain(Predicate):
             False, 'not_{}'.format(code), message_invalid, details_invalid
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         return (
             (self._valid_exp if explain else True)
             if self._predicate(data) else

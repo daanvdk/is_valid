@@ -15,7 +15,7 @@ class is_json(Predicate):
             False, 'not_json', 'Data is not json.'
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         try:
             loads(data)
         except ValueError:

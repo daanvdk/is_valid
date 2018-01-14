@@ -17,10 +17,10 @@ class is_iterable_of(Predicate):
             predicate = is_eq(predicate)
         self._predicate = predicate
 
-    def _evaluate_explain(self, data):
+    def _evaluate_explain(self, data, context):
         reasons, errors = {}, {}
         for i, value in enumerate(data):
-            explanation = self._predicate.explain(value)
+            explanation = self._predicate.explain(value, context)
             (reasons if explanation else errors)[i] = explanation
         return Explanation(
             True, 'all_valid',
@@ -32,5 +32,8 @@ class is_iterable_of(Predicate):
             errors,
         )
 
-    def _evaluate_no_explain(self, data):
-        return all(map(self._predicate, data))
+    def _evaluate_no_explain(self, data, context):
+        return all(
+            self._predicate(value, context=context)
+            for value in data
+        )

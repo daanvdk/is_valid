@@ -28,12 +28,12 @@ class is_if(Predicate):
         )
         self._else_valid = else_valid
 
-    def _evaluate(self, data, explain):
-        res = self._cond(data, explain and self._else is None)
+    def _evaluate(self, data, explain, context):
+        res = self._cond(data, explain and self._else is None, context)
         if res:
-            return self._if(data, explain)
+            return self._if(data, explain, context)
         if self._else is not None:
-            return self._else(data, explain)
+            return self._else(data, explain, context)
         if self._else_valid:
             res = ~res if explain else not res
         return res

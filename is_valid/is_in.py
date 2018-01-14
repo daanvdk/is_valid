@@ -19,9 +19,9 @@ class is_in(Predicate):
             'Data is not in {}.'.format(rep)
         )
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         return (
             (self._valid_exp if explain else True)
-            if data in self._collection else
+            if data in context(self._collection) else
             (self._not_valid_exp if explain else False)
         )

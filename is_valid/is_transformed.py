@@ -33,11 +33,11 @@ class is_transformed(Predicate):
         self._args = args
         self._kwargs = kwargs
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         try:
             data = self._transform(data, *self._args, **self._kwargs)
         except Exception as e:
             if not any(isinstance(e, exc) for exc in self._exceptions):
                 raise e
             return self._not_valid_exp if explain else False
-        return self._predicate(data, explain)
+        return self._predicate(data, explain, context)

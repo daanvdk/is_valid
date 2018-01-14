@@ -19,9 +19,9 @@ class is_not(Predicate):
             predicate = is_eq(predicate)
         self._predicate = predicate
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         return (
-            ~self._predicate.explain(data)
+            ~self._predicate.explain(data, context)
             if explain else
-            not self._predicate(data)
+            not self._predicate(data, context=context)
         )

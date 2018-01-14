@@ -25,17 +25,17 @@ class is_subdict_where(Predicate):
             for key, predicate in dict(*args, **kwargs).items()
         }
 
-    def _evaluate(self, data, explain):
+    def _evaluate(self, data, explain, context):
         evaluate = set(data) & set(self._predicates)
         extra = set(data) - set(self._predicates)
         if not explain:
             return not extra and all(
-                self._predicates[key](data[key])
+                self._predicates[key](data[key], context=context)
                 for key in evaluate
             )
         reasons, errors = {}, {}
         for key in evaluate:
-            explanation = self._predicates[key].explain(data[key])
+            explanation = self._predicates[key].explain(data[key], context)
             (reasons if explanation else errors)[key] = explanation
         for key in extra:
             errors[key] = self._extra_exp
