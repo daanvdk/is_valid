@@ -1,6 +1,6 @@
 # Changelog
 
-## Head
+## [0.6.0](https://pypi.python.org/pypi/is-valid/0.6.0) - 2018/01/17
 - `Wrapper` class has been updated, it now doesn't just wrap function calls but
 also underlying attributes of the wrapped object. You now change what is
 wrapped by calling `Wrapper.wrap(obj)` instead of `Wrapper.func = obj`.
@@ -25,12 +25,12 @@ entered for that key. Then in the following predicate you can use `Get`-objects
 to reference to that specific key. See the tests for a good example.
 - `is_byte` was added which checks for an int in range 0 to 255.
 
-## [0.5.1](https://pypi.python.org/pypi/is-valid/0.5.1) - 2018/12/12
+## [0.5.1](https://pypi.python.org/pypi/is-valid/0.5.1) - 2018/01/12
 - Fix bug where `is_dict_of` didn't check if the value was a dict beforehand
 but only if it was iterable, thus leading to an exception being thrown when a
 value was evaluated that was iterable but not a dict.
 
-## [0.5.0](https://pypi.python.org/pypi/is-valid/0.5.0) - 2018/12/12
+## [0.5.0](https://pypi.python.org/pypi/is-valid/0.5.0) - 2018/01/12
 - Introduction of this changelog.
 - `is_dict_where` now also accepts two dicts as arguments to indicate
 required and optional keys respectively.
