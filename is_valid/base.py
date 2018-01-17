@@ -1,4 +1,6 @@
 from collections import defaultdict
+
+from .explanation import Explanation
 from .get import Get
 
 
@@ -22,11 +24,16 @@ class Predicate(object):
     def __call__(self, data, explain=False, context=None):
         if context is None:
             context = Context()
-        for prerequisite in self.prerequisites:
-            res = prerequisite(data, explain, context)
-            if not res:
-                return res
-        return self._evaluate(data, explain, context)
+        if isinstance(context, dict):
+            context = Context(context)
+        try:
+            for prerequisite in self.prerequisites:
+                res = prerequisite(data, explain, context)
+                if not res:
+                    return res
+            return self._evaluate(data, explain, context)
+        except ContextError as e:
+            return e.explanation if explain else False
 
     def explain(self, data, context=None):
         return self(data, True, context)
@@ -44,10 +51,21 @@ class Predicate(object):
         return is_not(self)
 
 
+class ContextError(Exception):
+    def __init__(self, key):
+        self.explanation = Explanation(
+            False, 'context_missing',
+            'No context found for key \'{}\''.format(key),
+        )
+        super().__init__(self.explanation.message)
+
+
 class Context(object):
 
-    def __init__(self):
+    def __init__(self, base={}):
         self._values = defaultdict(list)
+        for key, value in base.items():
+            self.push(key, value)
 
     def push(self, key, value):
         self._values[key].append(value)
@@ -58,9 +76,7 @@ class Context(object):
     def __call__(self, value):
         if isinstance(value, Get):
             if not self._values[value._key]:
-                raise ValueError(
-                    'Context has no value for key: {}'.format(value._key)
-                )
+                raise ContextError(value._key)
             return value._transform(self._values[value._key][-1])
         return value
 

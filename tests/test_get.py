@@ -1,9 +1,9 @@
 from unittest import TestCase
 from is_valid import is_with, is_dict_where, is_list_of, is_str, is_number,\
-    is_transformed, Get
+    is_transformed, Get, is_eq
 
 
-class TestGet(TestCase):
+class TestTablePred(TestCase):
 
     def setUp(self):
         self.pred = is_with(
@@ -70,9 +70,37 @@ class TestGet(TestCase):
                 )
             ),
         )
-        with self.subTest('explain=True'):
-            with self.assertRaises(ValueError):
-                pred.explain(value)
-        with self.subTest('explain=False'):
-            with self.assertRaises(ValueError):
-                pred(value)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(
+                pred(value),
+                pred.explain(value).valid
+            )
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(value), False)
+
+
+class TestParam(TestCase):
+
+    def test_correct(self):
+        pred = is_eq(Get('a'))
+        for context, value, expected in [
+            ({'a': 0}, 0, True),
+            ({'a': 0}, 1, False),
+            ({'a': 1}, 0, False),
+            ({'a': 1}, 1, True),
+            ({'b': 1}, 1, False),
+            ({}, 1, False),
+        ]:
+            with self.subTest(
+                'explain=True == explain=False; {}; {}; {}'
+                .format(context, value, expected)
+            ):
+                self.assertEqual(
+                    pred(value, context=context),
+                    pred.explain(value, context).valid
+                )
+            with self.subTest(
+                'pred correct; {}; {}; {}'
+                .format(context, value, expected)
+            ):
+                self.assertEqual(pred(value, context=context), expected)
