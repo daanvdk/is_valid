@@ -1,5 +1,5 @@
 from .base import Predicate
-from .is_eq import is_eq
+from .is_eq import to_pred
 
 
 class is_if(Predicate):
@@ -15,16 +15,10 @@ class is_if(Predicate):
     def __init__(
         self, condition, if_predicate, else_predicate=None, else_valid=True
     ):
-        self._cond = condition if callable(condition) else is_eq(condition)
-        self._if = (
-            if_predicate
-            if callable(if_predicate) else
-            is_eq(if_predicate)
-        )
+        self._cond = to_pred(condition)
+        self._if = to_pred(if_predicate)
         self._else = (
-            else_predicate
-            if else_predicate is None or callable(else_predicate) else
-            is_eq(else_predicate)
+            None if else_predicate is None else to_pred(else_predicate)
         )
         self._else_valid = else_valid
 

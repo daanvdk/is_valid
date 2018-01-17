@@ -20,6 +20,7 @@ class explain(Predicate):
     ):
         if not callable(predicate):
             predicate = is_eq(predicate)
+        self._context = isinstance(predicate, Predicate)
         self._predicate = predicate
         self._valid_exp = Explanation(
             True, code, message_valid, details_valid
@@ -30,9 +31,11 @@ class explain(Predicate):
 
     def _evaluate(self, data, explain, context):
         return (
-            (self._valid_exp if explain else True)
-            if self._predicate(data) else
-            (self._not_valid_exp if explain else False)
+            (self._valid_exp if explain else True) if (
+                self._predicate(data, context=context)
+                if self._context else
+                self._predicate(data)
+            ) else (self._not_valid_exp if explain else False)
         )
 
 

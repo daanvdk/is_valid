@@ -1,14 +1,12 @@
 from .base import Predicate
 from .is_null import is_null
-from .is_eq import is_eq
+from .is_eq import to_pred
 
 
 class is_nullable(Predicate):
 
     def __init__(self, predicate):
-        if not callable(predicate):
-            predicate = is_eq(predicate)
-        self._predicate = predicate
+        self._predicate = to_pred(predicate)
 
     def _evaluate(self, data, explain, context):
         res = is_null(data, explain, context)

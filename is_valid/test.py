@@ -1,4 +1,4 @@
-from .is_eq import is_eq
+from .is_eq import to_pred
 
 
 class assert_valid(object):
@@ -10,9 +10,7 @@ class assert_valid(object):
     """
 
     def __init__(self, predicate):
-        if not callable(predicate):
-            predicate = is_eq(predicate)
-        self._predicate = predicate
+        self._predicate = to_pred(predicate)
 
     def __call__(self, data, message=None, advanced=True):
         if message is None:

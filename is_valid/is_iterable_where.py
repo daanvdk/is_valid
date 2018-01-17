@@ -1,6 +1,6 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import is_eq
+from .is_eq import to_pred
 from .is_iterable import is_iterable
 
 
@@ -19,10 +19,7 @@ class is_iterable_where(Predicate):
     _missing_exp = Explanation(False, 'missing', 'Data is missing.')
 
     def __init__(self, *predicates):
-        self._predicates = [
-            predicate if callable(predicate) else is_eq(predicate)
-            for predicate in predicates
-        ]
+        self._predicates = [to_pred(predicate) for predicate in predicates]
 
     def _evaluate(self, data, explain, context):
         data = list(data)

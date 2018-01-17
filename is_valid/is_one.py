@@ -1,6 +1,6 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import is_eq
+from .is_eq import to_pred
 
 
 class is_one(Predicate):
@@ -10,10 +10,7 @@ class is_one(Predicate):
     """
 
     def __init__(self, *predicates):
-        self._predicates = [
-            is_eq(predicate) if not callable(predicate) else predicate
-            for predicate in predicates
-        ]
+        self._predicates = [to_pred(predicate) for predicate in predicates]
 
     def _evaluate_explain(self, data, context):
         reasons, errors = [], []

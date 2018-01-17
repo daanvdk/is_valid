@@ -1,6 +1,6 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import is_eq
+from .is_eq import to_pred
 
 
 class is_transformed(Predicate):
@@ -22,10 +22,8 @@ class is_transformed(Predicate):
         code='not_transformable', message='Data can\'t be transformed.',
         **kwargs
     ):
-        if not callable(predicate):
-            predicate = is_eq(predicate)
         self._transform = transform
-        self._predicate = predicate
+        self._predicate = to_pred(predicate)
         self._exceptions = exceptions
         self._not_valid_exp = Explanation(
             False, 'not_{}'.format(code), message

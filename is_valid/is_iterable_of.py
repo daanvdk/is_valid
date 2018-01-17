@@ -1,6 +1,6 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import is_eq
+from .is_eq import to_pred
 from .is_iterable import is_iterable
 
 
@@ -13,9 +13,7 @@ class is_iterable_of(Predicate):
     prerequisites = [is_iterable]
 
     def __init__(self, predicate):
-        if not callable(predicate):
-            predicate = is_eq(predicate)
-        self._predicate = predicate
+        self._predicate = to_pred(predicate)
 
     def _evaluate_explain(self, data, context):
         reasons, errors = {}, {}

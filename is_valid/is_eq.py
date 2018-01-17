@@ -27,3 +27,7 @@ class is_eq(Predicate):
             if data == context(self._value) else
             (self._not_valid_exp if explain else False)
         )
+
+
+def to_pred(value):
+    return value if isinstance(value, Predicate) else is_eq(value)

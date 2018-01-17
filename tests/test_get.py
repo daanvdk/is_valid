@@ -7,7 +7,7 @@ class TestTablePred(TestCase):
 
     def setUp(self):
         self.pred = is_with(
-            'len', lambda data: len(data['columns']),
+            {'len': lambda data: len(data['columns'])},
             is_dict_where(
                 columns=is_list_of(is_str),
                 rows=is_list_of(

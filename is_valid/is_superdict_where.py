@@ -1,6 +1,6 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import is_eq
+from .is_eq import to_pred
 from .is_dict import is_dict
 
 
@@ -21,7 +21,7 @@ class is_superdict_where(Predicate):
 
     def __init__(self, *args, **kwargs):
         self._predicates = {
-            key: predicate if callable(predicate) else is_eq(predicate)
+            key: to_pred(predicate)
             for key, predicate in dict(*args, **kwargs).items()
         }
 

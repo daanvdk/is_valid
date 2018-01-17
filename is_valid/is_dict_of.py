@@ -1,6 +1,6 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import is_eq
+from .is_eq import to_pred
 from .is_dict import is_dict
 
 
@@ -14,12 +14,8 @@ class is_dict_of(Predicate):
     prerequisites = [is_dict]
 
     def __init__(self, key_predicate, value_predicate):
-        if not callable(key_predicate):
-            key_predicate = is_eq(key_predicate)
-        if not callable(value_predicate):
-            value_predicate = is_eq(value_predicate)
-        self._key = key_predicate
-        self._value = value_predicate
+        self._key = to_pred(key_predicate)
+        self._value = to_pred(value_predicate)
 
     def _evaluate_explain(self, data, context):
         reasons, errors = {}, {}

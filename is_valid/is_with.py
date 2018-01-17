@@ -1,5 +1,6 @@
 from .base import Predicate
 from .is_fixed import is_fixed
+from .is_eq import to_pred
 
 
 class is_with(Predicate):
@@ -10,18 +11,23 @@ class is_with(Predicate):
 
     fail = is_fixed(False, 'set_failed', 'Failed to set context.')
 
-    def __init__(self, key, transform, success, fail=fail):
-        self._key = key
-        self._transform = transform
-        self._success = success
-        self._fail = fail
+    def __init__(self, context, success, fail=fail):
+        self._context = context
+        self._success = to_pred(success)
+        self._fail = to_pred(fail)
 
     def _evaluate(self, data, explain, context):
         try:
-            context.push(self._key, self._transform(data))
+            values = {
+                key: transform(data)
+                for key, transform in self._context.items()
+            }
         except Exception:
             return self._fail(data, explain, context)
         else:
+            for key, value in values.items():
+                context.push(key, value)
             res = self._success(data, explain, context)
-            context.pop(self._key)
+            for key in values:
+                context.pop(key)
             return res

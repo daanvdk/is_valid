@@ -1,5 +1,5 @@
 from .base import Predicate
-from .is_eq import is_eq
+from .is_eq import to_pred
 from .is_fixed import is_fixed
 
 
@@ -27,12 +27,12 @@ class is_cond(Predicate):
         default=is_no_match
     ):
         self._conditions = [
-            (c if callable(c) else is_eq(c), p if callable(p) else is_eq(p))
+            (to_pred(c), to_pred(p))
             for c, p in conditions
         ]
         self._cond_trans = cond_trans
         self._pred_trans = pred_trans
-        self._default = default if callable(default) else is_eq(default)
+        self._default = to_pred(default)
 
     def _evaluate(self, data, explain, context):
         cond_data = self._cond_trans(data)

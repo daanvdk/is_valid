@@ -1,6 +1,6 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import is_eq
+from .is_eq import to_pred
 
 
 class is_any(Predicate):
@@ -14,10 +14,8 @@ class is_any(Predicate):
         for predicate in predicates:
             if isinstance(predicate, is_any):
                 self._predicates.extend(predicate._predicates)
-            elif not callable(predicate):
-                self._predicates.append(is_eq(predicate))
             else:
-                self._predicates.append(predicate)
+                self._predicates.append(to_pred(predicate))
 
     def _evaluate_explain(self, data, context):
         reasons, errors = [], []
