@@ -19,10 +19,11 @@ present and could be evaluated.
 - Transform methods were added to `is_cond`, with `trans_cond` and `trans_pred`
 you can alter the data before it gets entered into the conds or preds
 respectively. By default they just do nothing with the data.
-- `is_with` was added. Here you specify a `key`, a function and a predicate 
-that then stores the output of that function when the data gets entered for
-that key. Then in the following predicate you can use `Get`-objects to
-reference to that specific key. See the tests for a good example. 
+- `is_with` was added. Here you specify a dict of keys mapping to functions and
+a predicate that then stores the output of that function when the data gets
+entered for that key. Then in the following predicate you can use `Get`-objects
+to reference to that specific key. See the tests for a good example.
+- `is_byte` was added which checks for an int in range 0 to 255.
 
 ## [0.5.1](https://pypi.python.org/pypi/is-valid/0.5.1) - 2018/12/12
 - Fix bug where `is_dict_of` didn't check if the value was a dict beforehand
