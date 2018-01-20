@@ -60,8 +60,39 @@
 - [utils.Wrapper](#utilswrapper)
 
 # Predicate
+The base class of all predicates within this library. It will never get
+instantiated directly.
+
+It's instances can be called  as a function with the spec
+`(data, explain=False, context={})` where `data` is the data that you want to 
+evaluate, explain is whether you want a full [Explanation](#explanation)-object
+or just a `bool` value as return value. For now we won't bother about the
+context argument, this will further be explained at [is_with](#is_with) and
+[Get](#Get).
+
+There is also a convenience function `.explain(data, context={})` that does the
+same as the function described above but with `explain=True`.
 
 # Explanation
+The class of the results that you get when calling a predicate with `.explain`
+or `explain=True`.
+
+All explanation have the attributes `valid`, `code`, and `message` that
+respectively hold whether the data was valid, a code for the kind of result and
+a message that explains the result. A lot of explanation objects also have an
+attribute called `details` that gives more in depth explanation about the
+result.
+
+The truth value of an explanation objects depends on whether the result was
+valid or not.
+
+You can also call `.dict(include_valid=False, include_details=True)` on an
+explanation object that will translate the explanation to a data structure
+consisting out of basic data types like `dict`. `list` and `str`.
+
+There is also the convenience function
+`.json(include_valid=False, include_details=True)` that does the same as
+`.dict` but encodes it to json.
 
 # is_all
 

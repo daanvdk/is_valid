@@ -1,11 +1,36 @@
 # Changelog
 
-## [0.5.1](https://pypi.python.org/pypi/is-valid/0.5.1) - 2018/12/12
+## [0.6.0](https://pypi.python.org/pypi/is-valid/0.6.0) - 2018/01/17
+- `Wrapper` class has been updated, it now doesn't just wrap function calls but
+also underlying attributes of the wrapped object. You now change what is
+wrapped by calling `Wrapper.wrap(obj)` instead of `Wrapper.func = obj`.
+- The dict predicates (`is_dict_where`, `is_superdict_where`,
+`is_subdict_where`) saw a small overhaul in how their explanation objects work.
+Instead of just giving an explanation that the keys are incorrect with details
+about which keys are extra and which are missing the explanation now gives
+explanation objects that state `not_allowed` or `missing` for these keys
+while also evaluating the keys that were present and could be evaluated.
+- `is_iterable_where` and it's subclasses (`is_tuple_of`, `is_list_of`) saw a
+small overhaul in how their explanation objects work. Instead of just giving an
+explanation that the length is incorrect the explanation now gives explanation
+objects that state `overflow` or `missing` for when data is too long or too
+short for the incorrect indexes while also evaluating the elements that were
+present and could be evaluated.
+- Transform methods were added to `is_cond`, with `trans_cond` and `trans_pred`
+you can alter the data before it gets entered into the conds or preds
+respectively. By default they just do nothing with the data.
+- `is_with` was added. Here you specify a dict of keys mapping to functions and
+a predicate that then stores the output of that function when the data gets
+entered for that key. Then in the following predicate you can use `Get`-objects
+to reference to that specific key. See the tests for a good example.
+- `is_byte` was added which checks for an int in range 0 to 255.
+
+## [0.5.1](https://pypi.python.org/pypi/is-valid/0.5.1) - 2018/01/12
 - Fix bug where `is_dict_of` didn't check if the value was a dict beforehand
 but only if it was iterable, thus leading to an exception being thrown when a
 value was evaluated that was iterable but not a dict.
 
-## [0.5.0](https://pypi.python.org/pypi/is-valid/0.5.0) - 2018/12/12
+## [0.5.0](https://pypi.python.org/pypi/is-valid/0.5.0) - 2018/01/12
 - Introduction of this changelog.
 - `is_dict_where` now also accepts two dicts as arguments to indicate
 required and optional keys respectively.

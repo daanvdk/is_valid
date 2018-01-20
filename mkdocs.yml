@@ -9,3 +9,4 @@ pages:
   - Reference: reference.md
   - Changelog: changelog.md
   - About: about.md
+theme: readthedocs

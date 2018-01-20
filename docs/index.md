@@ -7,6 +7,6 @@ predicates.
     - [Introduction](handbook/introduction.md)
     - [Installation](handbook/installation.md)
     - [Getting started](handbook/getting_started.md)
-- [Reference](reference/index.md)
+- [Reference](reference.md)
 - [Changelog](changelog.md)
 - [About](about.md)
