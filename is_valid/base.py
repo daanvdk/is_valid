@@ -21,10 +21,8 @@ class Predicate(object):
     def _evaluate_no_explain(self, data, context):
         raise NotImplementedError('evaluate_no_explain is not implemented.')
 
-    def __call__(self, data, explain=False, context=None):
-        if context is None:
-            context = Context()
-        if isinstance(context, dict):
+    def __call__(self, data, explain=False, context={}):
+        if not isinstance(context, Context):
             context = Context(context)
         try:
             for prerequisite in self.prerequisites:
@@ -35,7 +33,7 @@ class Predicate(object):
         except ContextError as e:
             return e.explanation if explain else False
 
-    def explain(self, data, context=None):
+    def explain(self, data, context={}):
         return self(data, True, context)
 
     def __and__(self, other):
