@@ -1,6 +1,6 @@
 # Index
-- [Predicate](#Predicate)
-- [Explanation](#Explanation)
+- [Predicate](#predicate)
+- [Explanation](#explanation)
 - [is_all](#is_all)
 - [is_any](#is_any)
 - [is_bool](#is_bool)
@@ -55,9 +55,9 @@
 - [is_tuple_where](#is_tuple_where)
 - [is_with](#is_with)
 - [Get](#Get)
-- [test.assert_valid](#test.assert_valid)
-- [utils.explain](#utils.explain)
-- [utils.Wrapper](#utils.Wrapper)
+- [test.assert_valid](#testassert_valid)
+- [utils.explain](#utilsexplain)
+- [utils.Wrapper](#utilswrapper)
 
 # Predicate
 
