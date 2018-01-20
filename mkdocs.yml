@@ -6,8 +6,6 @@ pages:
     - Introduction: handbook/introduction.md
     - Installation: handbook/installation.md
     - Getting started: handbook/getting_started.md
-  - Reference:
-    - Overview: reference/index.md
-    - Predicate: reference/Predicate.md
+  - Reference: reference.md
   - Changelog: changelog.md
   - About: about.md
