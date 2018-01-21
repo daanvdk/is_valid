@@ -1,5 +1,4 @@
 from .base import Predicate
-from .explanation import Explanation
 from .is_eq import to_pred
 from .is_fixed import is_fixed
 
