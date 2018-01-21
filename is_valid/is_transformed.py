@@ -1,6 +1,12 @@
 from .base import Predicate
 from .explanation import Explanation
 from .is_eq import to_pred
+from .is_fixed import is_fixed
+
+
+is_not_transformable = is_fixed(
+    False, 'not_transformable', 'Data can\'t be transformed.'
+)
 
 
 class is_transformed(Predicate):
@@ -17,25 +23,19 @@ class is_transformed(Predicate):
     """
 
     def __init__(
-        self, transform, predicate, *args,
+        self, transform, success, fail=is_not_transformable,
         exceptions=[Exception],
-        code='not_transformable', message='Data can\'t be transformed.',
-        **kwargs
     ):
         self._transform = transform
-        self._predicate = to_pred(predicate)
+        self._success = to_pred(success)
+        self._fail = to_pred(fail)
         self._exceptions = exceptions
-        self._not_valid_exp = Explanation(
-            False, 'not_{}'.format(code), message
-        )
-        self._args = args
-        self._kwargs = kwargs
 
     def _evaluate(self, data, explain, context):
         try:
-            data = self._transform(data, *self._args, **self._kwargs)
+            data = self._transform(data)
         except Exception as e:
             if not any(isinstance(e, exc) for exc in self._exceptions):
                 raise e
-            return self._not_valid_exp if explain else False
-        return self._predicate(data, explain, context)
+            return self._fail(data, explain, context)
+        return self._success(data, explain, context)
