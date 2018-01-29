@@ -174,22 +174,3 @@ invalid_json_data = """
 }
 """
 
-
-class MockTestCase:
-
-    def __init__(self):
-        self.results = {}
-
-    def run(self):
-        self.results = {}
-        for name, func in inspect.getmembers(self, inspect.ismethod):
-            if name.startswith('test_'):
-                try:
-                    func()
-                    self.results[name] = (True, None)
-                except AssertionError as e:
-                    self.results[name] = (False, e)
-
-    def assertTrue(self, value, msg='Not true.'):
-        if not value:
-            raise AssertionError(msg)

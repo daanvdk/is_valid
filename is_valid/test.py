@@ -9,12 +9,15 @@ class assert_valid(object):
     the assertion fails.
     """
 
-    def __init__(self, predicate):
+    def __init__(self, predicate, context={}):
         self._predicate = to_pred(predicate)
+        self._context = context
 
-    def __call__(self, data, message=None, advanced=True):
+    def __call__(self, data, context={}, message=None, advanced=True):
         if message is None:
-            explanation = self._predicate.explain(data)
+            c = self._context.copy()
+            c.update(context)
+            explanation = self._predicate.explain(data, context=c)
             valid = explanation.valid
             message = (repr if advanced else str)(explanation)
         else:
