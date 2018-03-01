@@ -39,21 +39,13 @@ class explain(Predicate):
         )
 
 
-class Wrapper:
+class Wrapper(Predicate):
 
     def __init__(self, wrapped=None):
-        super().__setattr__('_wrapped', wrapped)
+        self._wrapped = wrapped
 
     def wrap(self, wrapped):
-        super().__setattr__('_wrapped', wrapped)
+        self._wrapped = wrapped
 
-    def __getattr__(self, attr):
-        return getattr(self._wrapped, attr)
-
-    def __setattr__(self, attr, value):
-        setattr(self._wrapped, attr, value)
-
-    def __call__(self, *args, **kwargs):
-        if self._wrapped is None:
-            raise AttributeError('Wrapper has nothing wrapped.')
-        return self._wrapped(*args, **kwargs)
+    def _evaluate(self, data, explain, context):
+        return self._wrapped._evaluate(data, explain, context)

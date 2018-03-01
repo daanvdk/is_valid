@@ -42,8 +42,6 @@ class TestWrapper(TestCase):
         self._test(wrapper, 0, True)
         wrapper.wrap(is_eq(1))
         self._test(wrapper, 0, False)
-        wrapper._value = 0
-        self._test(wrapper, 0, True)
 
     def test_wrapper_predicate_with_arg(self):
         wrapper = Wrapper(is_something)
