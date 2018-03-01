@@ -467,8 +467,8 @@ objects returned by this value will look like.
 # utils.Wrapper
 `utils.Wrapper(wrapped=None)`
 
-Wraps an object in such a way that when calling the wrapper or getting
-attributes from it all these requests are forwarded to the wrap object with one
-exception. You can change the wrapped object with `.wrap(obj)`.
+Wraps a predicate within an object that also acts like a predicate. The wrapped
+predicate can easily be changed by calling `.wrap(predicate)` on the object to
+set a new predicate to wrap.
 
 This is useful to fix cyclic dependencies within predicates.
