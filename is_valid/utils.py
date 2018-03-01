@@ -1,6 +1,6 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import is_eq
+from .is_eq import is_eq, to_pred
 
 
 class explain(Predicate):
@@ -42,10 +42,12 @@ class explain(Predicate):
 class Wrapper(Predicate):
 
     def __init__(self, wrapped=None):
+        if wrapped is not None:
+            wrapped = to_pred(wrapped)
         self._wrapped = wrapped
 
     def wrap(self, wrapped):
-        self._wrapped = wrapped
+        self._wrapped = to_pred(wrapped)
 
     def _evaluate(self, data, explain, context):
         return self._wrapped._evaluate(data, explain, context)
