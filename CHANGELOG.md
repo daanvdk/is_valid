@@ -5,6 +5,8 @@
 will then be forwarded to the underlying predicate. The `assert_valid` class
 itself also accepts a context argument in it's constructor that serves as a
 base context for the generated assertion.
+- Simplified `is_tranformed` and `is_json_where` a bit. This change is
+backwards incompatible.
 
 ## [0.6.0](https://pypi.python.org/pypi/is-valid/0.6.0) - 2018/01/17
 - `Wrapper` class has been updated, it now doesn't just wrap function calls but
