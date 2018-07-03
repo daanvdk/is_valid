@@ -2,9 +2,10 @@ from unittest import TestCase
 import json
 
 from is_valid import is_json_where, is_dict_where, is_list_of, is_bool,\
-    is_str, is_int, is_optional, is_nullable
+    is_str, is_int, is_optional, is_nullable, is_decodable, is_decodable_where
 
-from .utils import json_data, incorrect_json_data, invalid_json_data
+from .utils import json_data, incorrect_json_data, invalid_json_data,\
+    decode_utf8_data, decode_utf32_data, decode_invalid_data
 
 
 class TestJSON(TestCase):
@@ -88,3 +89,40 @@ class TestOptionalPredicates(TestCase):
                 self.assertEqual(pred(value), pred.explain(value).valid)
             with self.subTest('pred correct; {}; {}'.format(value, expected)):
                 self.assertEqual(pred(value), expected)
+
+
+class TestDecodePredicates(TestCase):
+
+    def test_is_decodable_utf8(self):
+        self.assertTrue(is_decodable()(decode_utf8_data))
+
+    def test_is_decodable_utf32(self):
+        self.assertTrue(is_decodable('utf32')(decode_utf32_data))
+
+    def test_is_decodable_utf8_invalid_data(self):
+        self.assertFalse(is_decodable()(decode_invalid_data))
+
+    def test_is_decodable_utf32_invalid_data(self):
+        self.assertFalse(is_decodable('utf32')(decode_invalid_data))
+
+    def test_is_decodable_where_utf8(self):
+        self.assertTrue(is_decodable_where(is_str)(decode_utf8_data))
+
+    def test_is_decodable_where_utf32(self):
+        self.assertTrue(is_decodable_where(is_str, 'utf32')(decode_utf32_data))
+
+    def test_is_decodable_where_utf8_int(self):
+        self.assertFalse(is_decodable_where(is_int)(decode_utf8_data))
+
+    def test_is_decodable_where_utf32_int(self):
+        self.assertFalse(
+            is_decodable_where(is_int, 'utf32')(decode_utf32_data)
+        )
+
+    def test_is_decodable_where_utf8_invalid_data(self):
+        self.assertFalse(is_decodable_where(is_str)(decode_invalid_data))
+
+    def test_is_decodable_where_utf32_invalid_data(self):
+        self.assertFalse(
+            is_decodable_where(is_str, 'utf32')(decode_invalid_data)
+        )

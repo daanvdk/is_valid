@@ -3,6 +3,10 @@ from .is_eq import to_pred
 from .is_fixed import is_fixed
 
 
+is_transformable = is_fixed(
+    True, 'transformable', 'Data can be transformed.'
+)
+
 is_not_transformable = is_fixed(
     False, 'not_transformable', 'Data can\'t be transformed.'
 )
@@ -22,7 +26,7 @@ class is_transformed(Predicate):
     """
 
     def __init__(
-        self, transform, success, fail=is_not_transformable,
+        self, transform, success=is_transformable, fail=is_not_transformable,
         exceptions=[Exception],
     ):
         self._transform = transform

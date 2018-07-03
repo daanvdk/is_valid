@@ -5,7 +5,7 @@ from hypothesis import given
 
 from is_valid import is_iterable, is_instance, is_str, is_int, is_float,\
     is_bool, is_list, is_dict, is_set, is_tuple, is_datetime, is_date,\
-    is_time, is_timedelta, is_number, is_json, is_byte
+    is_time, is_timedelta, is_number, is_json, is_byte, is_bytes
 
 from .utils import classes, scalars, json_data, invalid_json_data
 
@@ -29,7 +29,7 @@ class TestTypePredicates(TestCase):
         with self.subTest('pred correct'):
             self.assertEqual(
                 is_iterable(value),
-                isinstance(value, (list, dict, set, tuple, str))
+                isinstance(value, (list, dict, set, tuple, str, bytes))
             )
 
     @given(scalars)
@@ -140,6 +140,15 @@ class TestTypePredicates(TestCase):
                 is_byte(value),
                 isinstance(value, int) and 0 <= value and value <= 255
             )
+
+    @given(scalars)
+    def test_is_bytes(self, value):
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(
+                is_bytes(value), is_bytes.explain(value).valid
+            )
+        with self.subTest('pred correct'):
+            self.assertEqual(is_bytes(value), isinstance(value, bytes))
 
     def test_is_json_valid_data(self):
         with self.subTest('explain=True == explain=False'):

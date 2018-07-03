@@ -23,7 +23,7 @@ class TestTest(TestCase):
 
     def test_pass_context_1(self):
         self.assertion_context(False)
-    
+
     def test_pass_context_2(self):
         self.assertion_context(True, context={'a': True})
 
@@ -34,4 +34,3 @@ class TestTest(TestCase):
     def test_fail_context_2(self):
         with self.assertRaises(AssertionError):
             self.assertion_context(False, context={'a': True})
-
