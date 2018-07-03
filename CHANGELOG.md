@@ -1,6 +1,6 @@
 # Changelog
 
-## HEAD
+## [0.7.1](https://pypi.python.org/pypi/is-valid/0.7.1) - 2018/07/03
 - Refactored `is_json_where`, and `is_json`.
 - Added `is_bytes`, `is_decodable_where`, and `is_decodable`.
 
