@@ -1,5 +1,11 @@
 # Changelog
 
+## HEAD
+- Refactored automatic predicate conversion to convert `dict`, `tuple`, and
+`list` instances to `is_dict_where`, `is_tuple_where`, and `is_list_where`
+respectively. For normal data this should be functionally equivalent but now
+you can nest other predicates inside this data.
+
 ## [0.7.1](https://pypi.python.org/pypi/is-valid/0.7.1) - 2018/07/03
 - Refactored `is_json_where`, and `is_json`.
 - Added `is_bytes`, `is_decodable_where`, and `is_decodable`.
