@@ -1,6 +1,7 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import is_eq, to_pred
+from .is_eq import is_eq
+from .to_pred import to_pred
 
 
 class explain(Predicate):

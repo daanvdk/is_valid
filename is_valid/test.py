@@ -1,4 +1,4 @@
-from .is_eq import to_pred
+from .to_pred import to_pred
 
 
 class assert_valid(object):

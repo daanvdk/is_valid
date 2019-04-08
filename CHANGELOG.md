@@ -5,6 +5,7 @@
 `list` instances to `is_dict_where`, `is_tuple_where`, and `is_list_where`
 respectively. For normal data this should be functionally equivalent but now
 you can nest other predicates inside this data.
+- Moved `to_pred` from `is_eq` to it's own module.
 
 ## [0.7.1](https://pypi.python.org/pypi/is-valid/0.7.1) - 2018/07/03
 - Refactored `is_json_where`, and `is_json`.

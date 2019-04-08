@@ -55,6 +55,7 @@ from .is_byte import is_byte
 from .is_bytes import is_bytes
 from .is_decodable import is_decodable
 from .is_decodable_where import is_decodable_where
+from .to_pred import to_pred
 from .get import Get
 
 __all__ = [
@@ -67,5 +68,5 @@ __all__ = [
     is_list, is_dict, is_set, is_tuple, is_datetime, is_date, is_time,
     is_timedelta, is_number, is_json, is_transformed, is_json_where,
     is_optional, is_nullable, is_with, is_byte, Get, is_bytes, is_decodable,
-    is_decodable_where,
+    is_decodable_where, to_pred,
 ]

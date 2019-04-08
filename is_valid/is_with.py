@@ -1,6 +1,6 @@
 from .base import Predicate
 from .is_fixed import is_fixed
-from .is_eq import to_pred
+from .to_pred import to_pred
 
 
 class is_with(Predicate):

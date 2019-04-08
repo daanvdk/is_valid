@@ -1,6 +1,6 @@
 from .base import Predicate
 from .explanation import Explanation
-from .is_eq import to_pred
+from .to_pred import to_pred
 
 
 class is_object_where(Predicate):
