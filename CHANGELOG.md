@@ -6,6 +6,8 @@
 respectively. For normal data this should be functionally equivalent but now
 you can nest other predicates inside this data.
 - Moved `to_pred` from `is_eq` to it's own module.
+- Simplify `assert_valid` into just an assertion function instead of a function
+generator.
 
 ## [0.7.1](https://pypi.python.org/pypi/is-valid/0.7.1) - 2018/07/03
 - Refactored `is_json_where`, and `is_json`.

@@ -6,9 +6,11 @@ from is_valid.test import assert_valid
 
 class TestTest(TestCase):
 
-    def setUp(self):
-        self.assertion = assert_valid(True)
-        self.assertion_context = assert_valid(Get('a'), context={'a': False})
+    def assertion(self, value, message=None):
+        assert_valid(True, value, message=message)
+
+    def assertion_context(self, value, context={'a': False}):
+        assert_valid(value, Get('a'), context=context)
 
     def test_pass(self):
         self.assertion(True)
