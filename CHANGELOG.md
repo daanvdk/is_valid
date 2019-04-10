@@ -1,6 +1,6 @@
 # Changelog
 
-## HEAD
+## [0.8.0](https://pypi.pthon.org/pypi/is-valid/0.8.0) - 2019/04/10
 - Refactored automatic predicate conversion to convert `dict`, `tuple`, and
 `list` instances to `is_dict_where`, `is_tuple_where`, and `is_list_where`
 respectively. For normal data this should be functionally equivalent but now
