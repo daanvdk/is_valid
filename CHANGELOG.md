@@ -1,7 +1,6 @@
 # Changelog
 
 ## HEAD
-- Changed `is_if` default of `else_valid` keyword argument from `True` to
 `False`.
 - `Explanation` objects now have a new attributes `data` which holds the data
 that was used to generate the explanation. For `is_transformed` and any of it's
@@ -10,6 +9,11 @@ subclasses this will contain the transformed data.
 `(path, subexplanation)`.
 - `Explanation` objects now have a more human readable result when you call
 `repr`.
+- Added `is_blank` and `is_not_blank` where `value` is considered `blank` if
+and only if `not value` holds.
+- Added `is_pre` for adding preconditions to predicates.
+- Using `is_if` with `else_valid=False` is now deprecated, in this case you
+should be using `is_pre` instead.
 
 ## [0.8.0](https://pypi.pthon.org/pypi/is-valid/0.8.0) - 2019/04/10
 - Refactored automatic predicate conversion to convert `dict`, `tuple`, and

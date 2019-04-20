@@ -9,3 +9,9 @@ class is_tuple_of(is_iterable_of):
     """
 
     prerequisites = [is_tuple]
+
+    def _evaluate(self, data, explain, context):
+        res = super()._evaluate(data, explain, context)
+        if explain:
+            res.data = tuple(res.data)
+        return res

@@ -41,4 +41,5 @@ class is_transformed(Predicate):
             if not any(isinstance(e, exc) for exc in self._exceptions):
                 raise e
             return self._fail(data, explain, context)
-        return self._success(data, explain, context)
+        else:
+            return self._success(data, explain, context)

@@ -7,14 +7,11 @@ def assert_valid(data, predicate, context={}, message=None):
     ``message`` is provided to this function the explanation of the predicate
     will be used for the AssertionError in case the assertion fails.
     """
-    predicate = to_pred(predicate)
-
-    if message is None:
-        explanation = predicate.explain(data, context=context)
-        valid = explanation.valid
-        message = repr(explanation)
-    else:
-        valid = predicate(data)
+    valid = to_pred(predicate).explain(data, context=context)
 
     if not valid:
+        if message is None:
+            message = repr(valid)
         raise AssertionError(message)
+
+    return valid.data

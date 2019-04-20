@@ -1,10 +1,7 @@
-from .base import Predicate
-from .explanation import Explanation
-from .to_pred import to_pred
-from .is_dict import is_dict
+from .is_dict_where import is_dict_where
 
 
-class is_subdict_where(Predicate):
+class is_subdict_where(is_dict_where):
     """
     Generates a predicate that checks that the data is a dict where for every
     key the value corresponding to that key is valid according to the given
@@ -15,36 +12,5 @@ class is_subdict_where(Predicate):
     constructor.
     """
 
-    prerequisites = [is_dict]
-
-    _extra_exp = Explanation(False, 'not_allowed', 'key is not allowed')
-
     def __init__(self, *args, **kwargs):
-        self._predicates = {
-            key: to_pred(predicate)
-            for key, predicate in dict(*args, **kwargs).items()
-        }
-
-    def _evaluate(self, data, explain, context):
-        evaluate = set(data) & set(self._predicates)
-        extra = set(data) - set(self._predicates)
-        if not explain:
-            return not extra and all(
-                self._predicates[key](data[key], context=context)
-                for key in evaluate
-            )
-        reasons, errors = {}, {}
-        for key in evaluate:
-            explanation = self._predicates[key].explain(data[key], context)
-            (reasons if explanation else errors)[key] = explanation
-        for key in extra:
-            errors[key] = self._extra_exp
-        return Explanation(
-            True, 'subdict_where',
-            'data is a subdict where all the given predicates hold',
-            reasons,
-        ) if not errors else Explanation(
-            False, 'not_subdict_where',
-            'data is not a subdict where all the given predicates hold',
-            errors,
-        )
+        super().__init__({}, dict(*args, **kwargs))

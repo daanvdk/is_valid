@@ -1,7 +1,10 @@
+from collections import defaultdict
+
 from .base import Predicate
 from .explanation import Explanation
 from .to_pred import to_pred
 from .is_dict import is_dict
+from .is_fixed import is_fixed
 
 
 class is_dict_where(Predicate):
@@ -18,51 +21,62 @@ class is_dict_where(Predicate):
     prerequisites = [is_dict]
 
     _missing_exp = Explanation(False, 'missing', 'key is missing')
-    _extra_exp = Explanation(False, 'not_allowed', 'key is not allowed')
+    _extra_pred = is_fixed(False, 'not_allowed', 'key is not allowed')
 
     def __init__(self, *args, **kwargs):
+        self._predicates = defaultdict(lambda: self._extra_pred)
+
         if len(args) == 2 and len(kwargs) == 0:
             self._required = {
                 key: to_pred(predicate)
                 for key, predicate in args[0].items()
             }
-            self._optional = {
-                key: to_pred(predicate)
+            self._predicates.update(
+                (key, to_pred(predicate))
                 for key, predicate in args[1].items()
-            }
+            )
         else:
             self._required = {
                 key: to_pred(predicate)
                 for key, predicate in dict(*args, **kwargs).items()
             }
-            self._optional = {}
 
-        self._predicates = dict(self._optional)
         self._predicates.update(self._required)
 
     def _evaluate(self, data, explain, context):
-        evaluate = set(data) & set(self._predicates)
-        missing = set(self._required) - set(data)
-        extra = set(data) - set(self._required) - set(self._optional)
+        missing = {key for key in self._required if key not in data}
+
         if not explain:
-            return not extra and not missing and all(
-                self._predicates[key](data[key], context=context)
-                for key in evaluate
+            return not missing and all(
+                self._predicates[key](value, context=context)
+                for key, value in data.items()
             )
-        reasons, errors = {}, {}
-        for key in evaluate:
-            explanation = self._predicates[key].explain(data[key], context)
-            (reasons if explanation else errors)[key] = explanation
+
+        reasons = {}
+        errors = {}
+        new_data = {}
+
+        for key, value in data.items():
+            explanation = self._predicates[key].explain(value, context)
+            if explanation:
+                reasons[key] = explanation
+            else:
+                errors[key] = explanation
+            new_data[key] = explanation.data
         for key in missing:
             errors[key] = self._missing_exp
-        for key in extra:
-            errors[key] = self._extra_exp
-        return Explanation(
-            True, 'dict_where',
-            'data is a dict where all the given predicates hold',
-            reasons,
-        ) if not errors else Explanation(
-            False, 'not_dict_where',
-            'data is not a dict where all the given predicates hold',
-            errors,
-        )
+
+        if errors:
+            explanation = Explanation(
+                False, 'not_dict_where',
+                'data is not a dict where all the given predicates hold',
+                errors,
+            )
+        else:
+            explanation = Explanation(
+                True, 'dict_where',
+                'data is a dict where all the given predicates hold',
+                reasons,
+            )
+        explanation.data = new_data
+        return explanation

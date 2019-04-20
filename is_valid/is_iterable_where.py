@@ -28,21 +28,37 @@ class is_iterable_where(Predicate):
                 predicate(value, context=context)
                 for predicate, value in zip(self._predicates, data)
             )
-        reasons, errors = {}, {}
+
+        reasons = {}
+        errors = {}
+        new_data = []
         for i, (predicate, value) in enumerate(zip(self._predicates, data)):
             explanation = predicate.explain(value, context)
-            (reasons if explanation else errors)[i] = explanation
-        for i in range(len(reasons) + len(errors), len(data)):
+            if explanation:
+                reasons[i] = explanation
+            else:
+                errors[i] = explanation
+            new_data.append(explanation.data)
+        for i in range(len(self._predicates), len(data)):
             errors[i] = self._overflow_exp
-        for i in range(len(reasons) + len(errors), len(self._predicates)):
+        for i in range(len(data), len(self._predicates)):
             errors[i] = self._missing_exp
-        return Explanation(
-            True, 'iterable_where',
-            'all elements are valid according to their respective predicate',
-            reasons,
-        ) if not errors else Explanation(
-            False, 'not_iterable_where',
-            'not all elements are valid according to their respective '
-            'predicate',
-            errors,
-        )
+
+        if errors:
+            explanation = Explanation(
+                False, 'not_iterable_where',
+                'not all elements are valid according to their respective '
+                'predicate',
+                errors,
+            )
+        else:
+            explanation = Explanation(
+                True, 'iterable_where',
+                (
+                    'all elements are valid according to their respective '
+                    'predicate'
+                ),
+                reasons,
+            )
+        explanation.data = new_data
+        return explanation

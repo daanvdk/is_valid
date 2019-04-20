@@ -18,26 +18,46 @@ class is_dict_of(Predicate):
         self._value = to_pred(value_predicate)
 
     def _evaluate_explain(self, data, context):
-        reasons, errors = {}, {}
+        new_data = {}
+        reasons = {}
+        errors = {}
+
         for key, value in data.items():
             reason, error = {}, {}
-            explanation = self._key.explain(key, context)
-            (reason if explanation else error)['key'] = explanation
-            explanation = self._value.explain(value, context)
-            (reason if explanation else error)['value'] = explanation
+
+            key_explanation = self._key.explain(key, context)
+            if key_explanation:
+                reason['key'] = key_explanation
+            else:
+                error['key'] = key_explanation
+
+            value_explanation = self._value.explain(value, context)
+            if value_explanation:
+                reason['value'] = key_explanation
+            else:
+                error['value'] = key_explanation
+
             if error:
                 errors[key] = error
             else:
                 reasons[key] = reason
-        return Explanation(
-            True, 'dict_of',
-            'all elements are valid according to the predicate',
-            reasons,
-        ) if not errors else Explanation(
-            False, 'not_dict_of',
-            'not all elements are valid according to the predicate',
-            errors,
-        )
+
+            new_data[key_explanation.data] = value_explanation.data
+
+        if errors:
+            explanation = Explanation(
+                False, 'not_dict_of',
+                'not all elements are valid according to the predicate',
+                errors,
+            )
+        else:
+            explanation = Explanation(
+                True, 'dict_of',
+                'all elements are valid according to the predicate',
+                reasons,
+            )
+        explanation.data = new_data
+        return explanation
 
     def _evaluate_no_explain(self, data, context):
         return all(

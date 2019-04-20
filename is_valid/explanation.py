@@ -21,15 +21,12 @@ class Explanation:
         self.message = message
         self.details = details
 
-    def __str__(self):
-        return '{}: {}'.format(self.code, self.message)
-
     def __repr__(self):
         subexplanations = self.by_path()
         # So we want to call __repr if and only if we have exactly one
         # subexplanation with an empty path, otherwise we call __repr_by_path
         path, _ = next(subexplanations)
-        if path != []:
+        if path:
             # Not an empty path
             return self.__repr_by_path()
         try:
@@ -43,7 +40,7 @@ class Explanation:
     def __repr(self, prefix=''):
         res = '{}{}: {}'.format(prefix, self.code, self.message)
         if hasattr(self, 'data'):
-            res += ', {!r}'.format(self.data)
+            res += ', data: {!r}'.format(self.data)
         return res
 
     def __repr_by_path(self):
