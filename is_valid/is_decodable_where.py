@@ -10,6 +10,6 @@ class is_decodable_where(is_transformed):
     def __init__(self, predicate, encoding='utf-8', errors='strict'):
         super().__init__(
             lambda s: s.decode(encoding, errors), predicate,
-            is_fixed(False, 'not_decodable', 'Data is not decodable.'),
+            is_fixed(False, 'not_decodable', 'data is not decodable'),
             exceptions=[UnicodeDecodeError],
         )

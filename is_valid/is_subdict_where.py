@@ -17,7 +17,7 @@ class is_subdict_where(Predicate):
 
     prerequisites = [is_dict]
 
-    _extra_exp = Explanation(False, 'not_allowed', 'Key is not allowed.')
+    _extra_exp = Explanation(False, 'not_allowed', 'key is not allowed')
 
     def __init__(self, *args, **kwargs):
         self._predicates = {
@@ -41,10 +41,10 @@ class is_subdict_where(Predicate):
             errors[key] = self._extra_exp
         return Explanation(
             True, 'subdict_where',
-            'Data is a subdict where all the given predicates hold.',
+            'data is a subdict where all the given predicates hold',
             reasons,
         ) if not errors else Explanation(
             False, 'not_subdict_where',
-            'Data is not a subdict where all the given predicates hold.',
+            'data is not a subdict where all the given predicates hold',
             errors,
         )

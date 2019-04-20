@@ -1,5 +1,16 @@
 # Changelog
 
+## HEAD
+- Changed `is_if` default of `else_valid` keyword argument from `True` to
+`False`.
+- `Explanation` objects now have a new attributes `data` which holds the data
+that was used to generate the explanation. For `is_transformed` and any of it's
+subclasses this will contain the transformed data.
+- `Explanation` objects now have a new method `by_path` that yields tuples of
+`(path, subexplanation)`.
+- `Explanation` objects now have a more human readable result when you call
+`repr`.
+
 ## [0.8.0](https://pypi.pthon.org/pypi/is-valid/0.8.0) - 2019/04/10
 - Refactored automatic predicate conversion to convert `dict`, `tuple`, and
 `list` instances to `is_dict_where`, `is_tuple_where`, and `is_list_where`

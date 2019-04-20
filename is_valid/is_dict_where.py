@@ -17,8 +17,8 @@ class is_dict_where(Predicate):
 
     prerequisites = [is_dict]
 
-    _missing_exp = Explanation(False, 'missing', 'Key is missing')
-    _extra_exp = Explanation(False, 'not_allowed', 'Key is not allowed.')
+    _missing_exp = Explanation(False, 'missing', 'key is missing')
+    _extra_exp = Explanation(False, 'not_allowed', 'key is not allowed')
 
     def __init__(self, *args, **kwargs):
         if len(args) == 2 and len(kwargs) == 0:
@@ -59,10 +59,10 @@ class is_dict_where(Predicate):
             errors[key] = self._extra_exp
         return Explanation(
             True, 'dict_where',
-            'Data is a dict where all the given predicates hold.',
+            'data is a dict where all the given predicates hold',
             reasons,
         ) if not errors else Explanation(
             False, 'not_dict_where',
-            'Data is not a dict where all the given predicates hold.',
+            'data is not a dict where all the given predicates hold',
             errors,
         )

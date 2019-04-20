@@ -30,12 +30,12 @@ class is_dict_of(Predicate):
             else:
                 reasons[key] = reason
         return Explanation(
-            True, 'all_valid',
-            'All elements are valid according to the predicate.',
+            True, 'dict_of',
+            'all elements are valid according to the predicate',
             reasons,
         ) if not errors else Explanation(
-            False, 'not_all_valid',
-            'Not all elements are valid according to the predicate.',
+            False, 'not_dict_of',
+            'not all elements are valid according to the predicate',
             errors,
         )
 

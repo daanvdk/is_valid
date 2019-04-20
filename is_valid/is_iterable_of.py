@@ -21,12 +21,12 @@ class is_iterable_of(Predicate):
             explanation = self._predicate.explain(value, context)
             (reasons if explanation else errors)[i] = explanation
         return Explanation(
-            True, 'all_valid',
-            'All elements are valid according to the predicate.',
+            True, 'iterable_of',
+            'all elements are valid according to the predicate',
             reasons,
         ) if not errors else Explanation(
-            False, 'not_all_valid',
-            'Not all elements are valid according to the predicate.',
+            False, 'not_iterable_of',
+            'not all elements are valid according to the predicate',
             errors,
         )
 

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from is_valid import Get
+from is_valid import Get, is_str
 from is_valid.test import assert_valid
 
 
@@ -36,3 +36,10 @@ class TestTest(TestCase):
     def test_fail_context_2(self):
         with self.assertRaises(AssertionError):
             self.assertion_context(False, context={'a': True})
+
+    def test_assertion_to_pred(self):
+        spec = ('foo', 'bar', is_str)
+        assert_valid(('foo', 'bar', 'baz'), spec)
+        assert_valid(('foo', 'bar', 'bal'), spec)
+        with self.assertRaises(AssertionError):
+            assert_valid(('baz', 'bar', 'foo'), spec)

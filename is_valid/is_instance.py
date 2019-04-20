@@ -15,10 +15,10 @@ class is_instance(Predicate):
             rep = 'an instance of {}'.format(cls.__name__)
         self._cls = cls
         self._valid_exp = Explanation(
-            True, 'instance_of', 'Data is {}'.format(rep)
+            True, 'instance_of', 'data is {}'.format(rep)
         )
         self._not_valid_exp = Explanation(
-            False, 'not_instance_of', 'Data is not {}'.format(rep)
+            False, 'not_instance_of', 'data is not {}'.format(rep)
         )
 
     def _evaluate(self, data, explain, context):

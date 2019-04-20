@@ -9,9 +9,9 @@ class is_none(Predicate):
     """
 
     def __init__(self):
-        self._valid_exp = Explanation(True, 'none', 'Data is None.')
+        self._valid_exp = Explanation(True, 'none', 'data is None')
         self._not_valid_exp = Explanation(
-            False, 'not_none', 'Data is not None.'
+            False, 'not_none', 'data is not None'
         )
 
     def _evaluate(self, data, explain, context):

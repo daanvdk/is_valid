@@ -15,11 +15,11 @@ class is_gt(Predicate):
             rep = repr(value)
         self._value = value
         self._valid_exp = Explanation(
-            True, 'greater_than', 'Data is greater than {}'.format(rep)
+            True, 'greater_than', 'data is greater than {}'.format(rep)
         )
         self._not_valid_exp = Explanation(
             False, 'not_greater_than',
-            'Data is not greater than {}'.format(rep)
+            'data is not greater than {}'.format(rep)
         )
 
     def _evaluate(self, data, explain, context):

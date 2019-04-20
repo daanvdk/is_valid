@@ -15,10 +15,10 @@ class is_eq(Predicate):
             rep = repr(value)
         self._value = value
         self._valid_exp = Explanation(
-            True, 'equal_to', 'Data is equal to {}'.format(rep)
+            True, 'equal_to', 'data is equal to {}'.format(rep)
         )
         self._not_valid_exp = Explanation(
-            False, 'not_equal_to', 'Data is not equal to {}'.format(rep)
+            False, 'not_equal_to', 'data is not equal to {}'.format(rep)
         )
 
     def _evaluate(self, data, explain, context):

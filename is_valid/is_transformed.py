@@ -4,11 +4,11 @@ from .is_fixed import is_fixed
 
 
 is_transformable = is_fixed(
-    True, 'transformable', 'Data can be transformed.'
+    True, 'transformable', 'data can be transformed'
 )
 
 is_not_transformable = is_fixed(
-    False, 'not_transformable', 'Data can\'t be transformed.'
+    False, 'not_transformable', 'data can not be transformed'
 )
 
 

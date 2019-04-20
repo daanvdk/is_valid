@@ -16,11 +16,11 @@ class is_leq(Predicate):
         self._value = value
         self._valid_exp = Explanation(
             True, 'lower_than_or_equal_to',
-            'Data is lower than or equal to {}'.format(rep)
+            'data is lower than or equal to {}'.format(rep)
         )
         self._not_valid_exp = Explanation(
             False, 'not_lower_than_or_equal_to',
-            'Data is not lower than or equal to {}'.format(rep)
+            'data is not lower than or equal to {}'.format(rep)
         )
 
     def _evaluate(self, data, explain, context):

@@ -10,7 +10,7 @@ install:
     - python3 setup.py install
     - pip install flake8 codecov coverage
 script:
-    - flake8 is_valid
-    - coverage run --include="is_valid/*" setup.py test
+    - flake8
+    - coverage run setup.py test
 after_success:
     - codecov

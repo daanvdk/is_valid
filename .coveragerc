@@ -1,0 +1,10 @@
+[coverage:run]
+include =
+    is_valid/*
+
+[report]
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+    # Don't complain about code not ment to be implemented
+    raise NotImplementedError

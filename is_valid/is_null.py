@@ -11,9 +11,9 @@ class is_null(Predicate):
     """
 
     def __init__(self):
-        self._valid_exp = Explanation(True, 'null', 'Data is null.')
+        self._valid_exp = Explanation(True, 'null', 'data is null')
         self._not_valid_exp = Explanation(
-            False, 'not_null', 'Data is not null.'
+            False, 'not_null', 'data is not null'
         )
 
     def _evaluate(self, data, explain, context):

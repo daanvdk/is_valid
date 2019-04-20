@@ -9,7 +9,7 @@ class is_with(Predicate):
     objects.
     """
 
-    fail = is_fixed(False, 'set_failed', 'Failed to set context.')
+    fail = is_fixed(False, 'set_failed', 'failed to set context')
 
     def __init__(self, context, success, fail=fail):
         self._context = context

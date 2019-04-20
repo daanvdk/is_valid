@@ -1,7 +1,7 @@
 from .to_pred import to_pred
 
 
-def assert_valid(data, predicate, context={}, message=None, advanced=True):
+def assert_valid(data, predicate, context={}, message=None):
     """
     Asserts that the data is valid according to the given predicate. If no
     ``message`` is provided to this function the explanation of the predicate
@@ -12,7 +12,7 @@ def assert_valid(data, predicate, context={}, message=None, advanced=True):
     if message is None:
         explanation = predicate.explain(data, context=context)
         valid = explanation.valid
-        message = (repr if advanced else str)(explanation)
+        message = repr(explanation)
     else:
         valid = predicate(data)
 

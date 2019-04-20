@@ -28,10 +28,10 @@ class is_match(Predicate):
         self._regex = regex
         self._full = full
         self._valid_exp = Explanation(
-            True, 'match', 'Data does match {}'.format(rep)
+            True, 'match', 'data does match {}'.format(rep)
         )
         self._not_valid_exp = Explanation(
-            False, 'not_match', 'Data does not match {}'.format(rep)
+            False, 'not_match', 'data does not match {}'.format(rep)
         )
 
     def _evaluate(self, data, explain, context):

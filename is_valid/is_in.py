@@ -12,11 +12,11 @@ class is_in(Predicate):
         self._collection = collection
         self._valid_exp = Explanation(
             True, 'in_collection',
-            'Data is in {}.'.format(rep)
+            'data is in {}'.format(rep)
         )
         self._not_valid_exp = Explanation(
             False, 'not_in_collection',
-            'Data is not in {}.'.format(rep)
+            'data is not in {}'.format(rep)
         )
 
     def _evaluate(self, data, explain, context):

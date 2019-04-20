@@ -41,12 +41,23 @@ class TestConditionPredicates(TestCase):
         hs.sampled_from([is_something, is_nothing]),
         hs.sampled_from([is_something, is_nothing])
     )
-    def test_is_if(self, cond, pred):
-        pred = is_if(cond, pred)
+    def test_is_if(self, cond, subpred):
+        pred = is_if(cond, subpred)
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(pred(1), pred.explain(1).valid)
         with self.subTest('pred correct'):
-            self.assertEqual(pred(1), pred(1) if cond(1) else True)
+            self.assertEqual(pred(1), subpred(1) if cond(1) else False)
+
+    @given(
+        hs.sampled_from([is_something, is_nothing]),
+        hs.sampled_from([is_something, is_nothing])
+    )
+    def test_is_if_else_valid(self, cond, subpred):
+        pred = is_if(cond, subpred, else_valid=True)
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(pred(1), pred.explain(1).valid)
+        with self.subTest('pred correct'):
+            self.assertEqual(pred(1), subpred(1) if cond(1) else True)
 
     @given(
         hs.sampled_from([is_something, is_nothing]),

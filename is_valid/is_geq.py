@@ -16,11 +16,11 @@ class is_geq(Predicate):
         self._value = value
         self._valid_exp = Explanation(
             True, 'greater_than_or_equal_to',
-            'Data is greater than or equal to {}'.format(rep)
+            'data is greater than or equal to {}'.format(rep)
         )
         self._not_valid_exp = Explanation(
             False, 'not_greater_than_or_equal_to',
-            'Data is not greater than or equal to {}'.format(rep)
+            'data is not greater than or equal to {}'.format(rep)
         )
 
     def _evaluate(self, data, explain, context):

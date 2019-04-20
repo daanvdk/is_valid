@@ -13,7 +13,7 @@ class is_if(Predicate):
     """
 
     def __init__(
-        self, condition, if_predicate, else_predicate=None, else_valid=True
+        self, condition, if_predicate, else_predicate=None, else_valid=False
     ):
         self._cond = to_pred(condition)
         self._if = to_pred(if_predicate)

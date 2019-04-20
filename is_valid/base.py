@@ -24,14 +24,20 @@ class Predicate(object):
     def __call__(self, data, explain=False, context={}):
         if not isinstance(context, Context):
             context = Context(context)
+
         try:
             for prerequisite in self.prerequisites:
                 res = prerequisite(data, explain, context)
                 if not res:
-                    return res
-            return self._evaluate(data, explain, context)
+                    break
+            else:
+                res = self._evaluate(data, explain, context)
         except ContextError as e:
-            return e.explanation if explain else False
+            res = e.explanation if explain else False
+
+        if explain and not hasattr(res, 'data'):
+            res = res.copy(data=data)
+        return res
 
     def explain(self, data, context={}):
         return self(data, True, context)

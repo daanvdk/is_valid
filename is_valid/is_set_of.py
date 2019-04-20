@@ -11,6 +11,8 @@ class is_set_of(is_iterable_of):
         data = list(data)
         explanation = super()._evaluate_explain(data, context)
         return Explanation(
-            explanation.valid, explanation.code, explanation.message,
+            explanation.valid,
+            'set_of' if explanation.valid else 'not_set_of',
+            explanation.message,
             {data[i]: e for i, e in explanation.details.items()},
         )

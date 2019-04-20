@@ -26,8 +26,8 @@ class is_in_range(Predicate):
         self._stop = (is_leq if stop_in else is_lt)(stop, rep=stop_rep)
         self._valid_exp = Explanation(
             True, 'in_range',
-            self._start._valid_exp.message[:-1] + ' and ' +
-            self._stop._valid_exp.message[9:],
+            self._start._valid_exp.message + ' and ' +
+            self._stop._valid_exp.message,
         )
 
     def _evaluate_explain(self, data, context):

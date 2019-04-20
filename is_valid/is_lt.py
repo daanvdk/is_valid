@@ -15,10 +15,10 @@ class is_lt(Predicate):
             rep = repr(value)
         self._value = value
         self._valid_exp = Explanation(
-            True, 'lower_than', 'Data is lower than {}'.format(rep)
+            True, 'lower_than', 'data is lower than {}'.format(rep)
         )
         self._not_valid_exp = Explanation(
-            False, 'not_lower_than', 'Data is not lower than {}'.format(rep)
+            False, 'not_lower_than', 'data is not lower than {}'.format(rep)
         )
 
     def _evaluate(self, data, explain, context):

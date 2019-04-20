@@ -17,7 +17,12 @@ class TestExplain(TestCase):
         with self.subTest('pred correct'):
             self.assertEqual(
                 self.predicate.explain(1).dict(include_valid=True),
-                {'valid': True, 'code': 'valid', 'message': 'foo'}
+                {
+                    'valid': True,
+                    'code': 'valid',
+                    'message': 'foo',
+                    'data': 1,
+                },
             )
 
     def test_explain_invalid(self):
@@ -28,7 +33,12 @@ class TestExplain(TestCase):
         with self.subTest('pred correct'):
             self.assertEqual(
                 self.predicate.explain(0).dict(include_valid=True),
-                {'valid': False, 'code': 'not_valid', 'message': 'bar'}
+                {
+                    'valid': False,
+                    'code': 'not_valid',
+                    'message': 'bar',
+                    'data': 0,
+                },
             )
 
 

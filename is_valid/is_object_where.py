@@ -11,7 +11,7 @@ class is_object_where(Predicate):
 
     _no_such_attr = Explanation(
         False, 'no_such_attr',
-        'Data does not have this attribute.',
+        'Data does not have this attribute',
     )
 
     def __init__(self, *args, **kwargs):
@@ -30,11 +30,11 @@ class is_object_where(Predicate):
                 errors[attr] = self._no_such_attr
         return Explanation(
             True, 'object_where',
-            'Data is an object where all the given predicates hold.',
+            'data is an object where all the given predicates hold',
             reasons,
         ) if not errors else Explanation(
             False, 'not_object_where',
-            'Data is not an object where all the given predicates hold.',
+            'data is not an object where all the given predicates hold',
             errors,
         )
 

@@ -15,8 +15,8 @@ class is_iterable_where(Predicate):
 
     prerequisites = [is_iterable]
 
-    _overflow_exp = Explanation(False, 'overflow', 'Data is overflowing.')
-    _missing_exp = Explanation(False, 'missing', 'Data is missing.')
+    _overflow_exp = Explanation(False, 'overflow', 'data is overflowing')
+    _missing_exp = Explanation(False, 'missing', 'data is missing')
 
     def __init__(self, *predicates):
         self._predicates = [to_pred(predicate) for predicate in predicates]
@@ -37,12 +37,12 @@ class is_iterable_where(Predicate):
         for i in range(len(reasons) + len(errors), len(self._predicates)):
             errors[i] = self._missing_exp
         return Explanation(
-            True, 'all_valid',
-            'All elements are valid according to their respective predicate.',
+            True, 'iterable_where',
+            'all elements are valid according to their respective predicate',
             reasons,
         ) if not errors else Explanation(
-            False, 'not_all_valid',
-            'Not all elements are valid according to their respective '
-            'predicate.',
+            False, 'not_iterable_where',
+            'not all elements are valid according to their respective '
+            'predicate',
             errors,
         )

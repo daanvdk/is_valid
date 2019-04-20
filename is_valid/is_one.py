@@ -19,15 +19,15 @@ class is_one(Predicate):
             (reasons if explanation else errors).append(explanation)
         return Explanation(
             True, 'one_holds',
-            'Exactly one of the given predicates hold.',
+            'exactly one of the given predicates hold',
             reasons[0],
          ) if len(reasons) == 1 else Explanation(
             False, 'none_hold',
-            'None of the given predicates hold.',
+            'none of the given predicates hold',
             errors,
          ) if len(reasons) == 0 else Explanation(
              False, 'multiple_hold',
-            'Multiple of the given predicates hold.',
+            'multiple of the given predicates hold',
             reasons,
          )
 

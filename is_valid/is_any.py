@@ -24,11 +24,11 @@ class is_any(Predicate):
             (reasons if explanation else errors).append(explanation)
         return Explanation(
             True, 'any_holds',
-            'At least one of the given predicates holds.',
+            'at least one of the given predicates holds',
             reasons,
         ) if reasons else Explanation(
             False, 'not_any_holds',
-            'None of the given predicates holds.',
+            'none of the given predicates holds',
             errors,
         )
 

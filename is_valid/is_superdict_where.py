@@ -17,7 +17,7 @@ class is_superdict_where(Predicate):
 
     prerequisites = [is_dict]
 
-    _missing_exp = Explanation(False, 'missing', 'Key is missing')
+    _missing_exp = Explanation(False, 'missing', 'key is missing')
 
     def __init__(self, *args, **kwargs):
         self._predicates = {
@@ -41,10 +41,10 @@ class is_superdict_where(Predicate):
             errors[key] = self._missing_exp
         return Explanation(
             True, 'superdict_where',
-            'Data is a superdict where all the given predicates hold.',
+            'data is a superdict where all the given predicates hold',
             reasons,
         ) if not errors else Explanation(
             False, 'not_superdict_where',
-            'Data is not a superdict where all the given predicates hold.',
+            'data is not a superdict where all the given predicates hold',
             errors,
         )

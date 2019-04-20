@@ -11,6 +11,6 @@ class is_json_where(is_transformed):
     def __init__(self, predicate, loader=json.loads):
         super().__init__(
             loader, predicate,
-            is_fixed(False, 'not_json', 'Data is not json.'),
+            is_fixed(False, 'not_json', 'data is not json'),
             exceptions=[ValueError],
         )

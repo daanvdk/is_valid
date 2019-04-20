@@ -24,11 +24,11 @@ class is_all(Predicate):
             (reasons if explanation else errors).append(explanation)
         return Explanation(
             True, 'all_hold',
-            'All of the given predicates hold.',
+            'all of the given predicates hold',
             reasons,
         ) if not errors else Explanation(
             False, 'not_all_hold',
-            'At least one of the given predicates does not hold.',
+            'at least one of the given predicates does not hold',
             errors,
         )
 

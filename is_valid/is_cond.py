@@ -3,7 +3,7 @@ from .to_pred import to_pred
 from .is_fixed import is_fixed
 
 
-is_no_match = is_fixed(False, 'no_match', 'None of the conditions match.')
+is_no_match = is_fixed(False, 'no_match', 'none of the conditions match')
 
 
 def identity(data):
