@@ -25,7 +25,7 @@ class Explanation:
         res = 'Data is valid.\n' if self.valid else 'Data is not valid.\n'
         for path, subexplanation in self.by_path():
             if path:
-                prefix = '{}: '.format(':'.join(map(repr, path)))
+                prefix = '[{}] '.format(':'.join(map(repr, path)))
             else:
                 prefix = ''
             res += '\n' + subexplanation.__summary(prefix)
