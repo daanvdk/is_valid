@@ -1,10 +1,11 @@
 # Changelog
 
 ## HEAD
-`False`.
 - `Explanation` objects now have a new attributes `data` which holds the data
 that was used to generate the explanation. For `is_transformed` and any of it's
-subclasses this will contain the transformed data.
+subclasses this will contain the transformed data. For classes like
+`is_dict_where` where other predicates are ran on parts of it's data it will
+replace these parts with the data on the explanation of that result.
 - `Explanation` objects now have a new method `by_path` that yields tuples of
 `(path, subexplanation)`.
 - `Explanation` objects now have a more human readable result when you call
