@@ -21,33 +21,41 @@ class Explanation:
         self.message = message
         self.details = details
 
-    def __repr__(self):
+    def summary(self):
+
+        res = 'Data is valid.\n' if self.valid else 'Data is not valid.\n'
+
+        # So we want to call __summary if and only if we have exactly one
+        # subexplanation with an empty path, otherwise we call
+        # __summary_by_path
         subexplanations = self.by_path()
-        # So we want to call __repr if and only if we have exactly one
-        # subexplanation with an empty path, otherwise we call __repr_by_path
         path, _ = next(subexplanations)
         if path:
-            # Not an empty path
-            return self.__repr_by_path()
-        try:
-            next(subexplanations)
-        except StopIteration:
-            return self.__repr()
+            res += self.__summary_by_path()
         else:
-            # Multiple subexplanations
-            return self.__repr_by_path()
+            try:
+                next(subexplanations)
+            except StopIteration:
+                res += self.__summary()
+            else:
+                # Multiple subexplanations
+                res += self.__summary_by_path()
 
-    def __repr(self, prefix=''):
-        res = '{}{}: {}'.format(prefix, self.code, self.message)
-        if hasattr(self, 'data'):
-            res += ', data: {!r}'.format(self.data)
         return res
 
-    def __repr_by_path(self):
+    def __summary(self, prefix=''):
+        if hasattr(self, 'data'):
+            prefix += '({!r}) ' .format(self.data)
+        return prefix + self.message
+
+    def __summary_by_path(self):
         return '\n'.join(
-            subexplanation.__repr('[{}] '.format(':'.join(map(repr, path))))
+            subexplanation.__summary('{} '.format(':'.join(map(repr, path))))
             for path, subexplanation in self.by_path()
         )
+
+    def __str__(self):
+        return self.__summary()
 
     def __bool__(self):
         return self.valid

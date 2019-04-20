@@ -50,14 +50,15 @@ class TestConditionPredicates(TestCase):
 
     @given(
         hs.sampled_from([is_something, is_nothing]),
+        hs.sampled_from([is_something, is_nothing]),
         hs.sampled_from([is_something, is_nothing])
     )
-    def test_is_if_else_valid(self, cond, subpred):
-        pred = is_if(cond, subpred, else_valid=False)
+    def test_is_if_with_else(self, cond, pred_if, pred_else):
+        pred = is_if(cond, pred_if, pred_else)
         with self.subTest('explain=True == explain=False'):
             self.assertEqual(pred(1), pred.explain(1).valid)
         with self.subTest('pred correct'):
-            self.assertEqual(pred(1), subpred(1) if cond(1) else False)
+            self.assertEqual(pred(1), pred_if(1) if cond(1) else pred_else(1))
 
     @given(
         hs.sampled_from([is_something, is_nothing]),
@@ -69,18 +70,6 @@ class TestConditionPredicates(TestCase):
             self.assertEqual(pred(1), pred.explain(1).valid)
         with self.subTest('pred correct'):
             self.assertEqual(pred(1), subpred(1) if cond(1) else False)
-
-    @given(
-        hs.sampled_from([is_something, is_nothing]),
-        hs.sampled_from([is_something, is_nothing]),
-        hs.sampled_from([is_something, is_nothing])
-    )
-    def test_is_if_with_else(self, cond, pred_if, pred_else):
-        pred = is_if(cond, pred_if, pred_else)
-        with self.subTest('explain=True == explain=False'):
-            self.assertEqual(pred(1), pred.explain(1).valid)
-        with self.subTest('pred correct'):
-            self.assertEqual(pred(1), pred_if(1) if cond(1) else pred_else(1))
 
     @given(hs.sampled_from([1, 3, 4, 5, 6, 7, 8, 9, 10]))
     def test_is_if_on_non_preds(self, a):

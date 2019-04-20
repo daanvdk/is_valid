@@ -15,6 +15,12 @@ and only if `not value` holds.
 - Added `is_pre` for adding preconditions to predicates.
 - Using `is_if` with `else_valid=False` is now deprecated, in this case you
 should be using `is_pre` instead.
+- Changed `if_match` so that it now always uses `search` instead of `match` or
+`fullmatch` based on the `full` parameter to find the match. Behaviour of match
+and fullmatch can still be achieved by using the `^` and `$` characters in your
+pattern.
+- Added the `match_as_data` option to `is_match` which when set to `True` will
+replace the explanation objects `data` attribute with the match object.
 
 ## [0.8.0](https://pypi.pthon.org/pypi/is-valid/0.8.0) - 2019/04/10
 - Refactored automatic predicate conversion to convert `dict`, `tuple`, and

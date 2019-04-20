@@ -146,7 +146,7 @@ class TestExpressionPredicates(TestCase):
         with self.subTest('{}; pred correct'.format(regex.pattern)):
             self.assertEqual(
                 pred(value),
-                isinstance(value, str) and bool(regex.match(value))
+                isinstance(value, str) and bool(regex.search(value))
             )
 
     @given(regex_with_match())

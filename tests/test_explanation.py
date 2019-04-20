@@ -11,8 +11,8 @@ class ExplanationTest(TestCase):
             True, 'code', 'message', 'details'
         )
 
-    def test_str(self):
-        self.assertEqual(str(self.explanation), 'code: message')
+    def test_summary(self):
+        self.assertEqual(str(self.explanation), 'message')
 
     def test_dict(self):
         self.assertEqual(self.explanation.dict(), dict(

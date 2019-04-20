@@ -11,7 +11,7 @@ def assert_valid(data, predicate, context={}, message=None):
 
     if not valid:
         if message is None:
-            message = repr(valid)
+            message = valid.summary()
         raise AssertionError(message)
 
     return valid.data
