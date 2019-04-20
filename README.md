@@ -121,8 +121,8 @@ programmatically. If we want human readable errors we can just get the summary.
 ```
 ```
 Data is not valid.
-1:'pubdate' ('1997-6-26') data is not a date
-2:'ISBN' ('0-618-57494-8') data does not match /^\d{9}(\d|X)$/
+1:'pubdate': '1997-6-26' is not a date
+2:'ISBN': '0-618-57494-8' does not match /^\d{9}(\d|X)$/
 ```
 Which would've made it instantly clear to us what to do.
 

@@ -22,37 +22,22 @@ class Explanation:
         self.details = details
 
     def summary(self):
-
         res = 'Data is valid.\n' if self.valid else 'Data is not valid.\n'
-
-        # So we want to call __summary if and only if we have exactly one
-        # subexplanation with an empty path, otherwise we call
-        # __summary_by_path
-        subexplanations = self.by_path()
-        path, _ = next(subexplanations)
-        if path:
-            res += self.__summary_by_path()
-        else:
-            try:
-                next(subexplanations)
-            except StopIteration:
-                res += self.__summary()
+        for path, subexplanation in self.by_path():
+            if path:
+                prefix = '{}: '.format(':'.join(map(repr, path)))
             else:
-                # Multiple subexplanations
-                res += self.__summary_by_path()
-
+                prefix = ''
+            res += '\n' + subexplanation.__summary(prefix)
         return res
 
     def __summary(self, prefix=''):
         if hasattr(self, 'data'):
-            prefix += '({!r}) ' .format(self.data)
+            if self.message.startswith('data '):
+                return '{!r} {}' .format(self.data, self.message[4:])
+            else:
+                return '{} ({!r})' .format(self.message, self.data)
         return prefix + self.message
-
-    def __summary_by_path(self):
-        return '\n'.join(
-            subexplanation.__summary('{} '.format(':'.join(map(repr, path))))
-            for path, subexplanation in self.by_path()
-        )
 
     def __str__(self):
         return self.__summary()
