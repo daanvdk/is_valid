@@ -103,7 +103,7 @@ the right keys). So lets have a look.
 ```
 ```
 1 pubdate data is not a date
-2 ISBN data does not match /^\\d{9}(\\d|X)$/
+2 ISBN data does not match /^\d{9}(\d|X)$/
 ```
 So now we've found the issues! Let's try fixing them and evaluating again.
 ```python
