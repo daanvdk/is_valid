@@ -114,8 +114,8 @@ True
 ```
 
 So you might think this way of finding all the errors was a bit cumbersome.
-This is because the API shown above is optimized to handling programmatically.
-If we want human readable errors we can just get the summary.
+This is because the API shown above is optimized to handling the result
+programmatically. If we want human readable errors we can just get the summary.
 ```python
 >>> explanation.summary()
 ```
