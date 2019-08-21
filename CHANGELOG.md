@@ -21,6 +21,9 @@ and fullmatch can still be achieved by using the `^` and `$` characters in your
 pattern.
 - Added the `match_as_data` option to `is_match` which when set to `True` will
 replace the explanation objects `data` attribute with the match object.
+- Added the `is_decodable_json_where` predicate which is a combination of
+`is_decodable_where` and `is_json_where` since these two are often used
+together.
 
 ## [0.8.0](https://pypi.pthon.org/pypi/is-valid/0.8.0) - 2019/04/10
 - Refactored automatic predicate conversion to convert `dict`, `tuple`, and
