@@ -94,6 +94,8 @@ class Explanation:
                 message = '{!r} {}' .format(self.data, self.message[4:])
             else:
                 message = '{} ({!r})' .format(self.message, self.data)
+        else:
+            message = self.message
         return prefix + message
 
     def __str__(self):
