@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 
 
 def _dictify(value, include_valid):
@@ -11,6 +12,62 @@ def _dictify(value, include_valid):
     if isinstance(value, tuple):
         return tuple(_dictify(v, include_valid) for v in value)
     return value
+
+
+def merge(*explanations):
+    if any(not explanation for explanation in explanations):
+        explanations = [
+            explanation
+            for explanation in explanations
+            if not explanation
+        ]
+        valid = False
+    else:
+        valid = True
+
+    details = defaultdict(list)
+    merged_explanations = []
+
+    for explanation in explanations:
+        if explanation.code in ['dict_where', 'not_dict_where']:
+            for key, value in explanation.details.items():
+                details[key].append(value)
+        elif explanation.code in ['all_hold', 'not_all_hold']:
+            merged_explanations.extend(explanation.details)
+        else:
+            merged_explanations.append(explanation)
+
+    if details:
+        merged_explanations.append(Explanation(
+            valid,
+            'dict_where' if valid else 'not_dict_where',
+            (
+                'data is a dict where all the given predicates hold'
+                if valid else
+                'data is not a dict where all the given predicates hold'
+            ),
+            {
+                key: merge(*explanations)
+                for key, explanations in details.items()
+            },
+        ))
+
+    if not merged_explanations:
+        raise ValueError('Cannot merge 0 explanations')
+
+    if len(merged_explanations) == 1:
+        return merged_explanations[0]
+
+    return Explanation(
+        valid,
+        'all_hold' if valid else 'not_all_hold',
+        (
+            'all of the given predicates hold'
+            if valid else
+            'at least one of the given predicates does not hold'
+        ),
+        merged_explanations,
+    )
 
 
 class Explanation:
@@ -129,3 +186,8 @@ class Explanation:
             yield prefix, self.details
         else:
             yield prefix, self
+
+    def __add__(self, other):
+        if not isinstance(other, Explanation):
+            raise TypeError
+        return merge(self, other)

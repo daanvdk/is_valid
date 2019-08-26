@@ -43,3 +43,47 @@ class ExplanationTest(TestCase):
         self.assertEqual(explanation.dict(include_valid=True), dict(
             base, details=[base, {'explanation': base}, (base,)]
         ))
+
+
+class ExplanationMergeTest(TestCase):
+
+    def test_merge_all_not_valid(self):
+        foo = Explanation(False, 'foo', '')
+        bar = Explanation(False, 'bar', '')
+        merged = foo + bar
+
+        self.assertEqual(merged.valid, False)
+        self.assertEqual(merged.code, 'not_all_hold')
+        self.assertEqual(merged.details, [foo, bar])
+
+    def test_merge_all_valid(self):
+        foo = Explanation(True, 'foo', '')
+        bar = Explanation(True, 'bar', '')
+        merged = foo + bar
+
+        self.assertEqual(merged.valid, True)
+        self.assertEqual(merged.code, 'all_hold')
+        self.assertEqual(merged.details, [foo, bar])
+
+    def test_merge_some_not_valid(self):
+        foo = Explanation(True, 'foo', '')
+        bar = Explanation(False, 'bar', '')
+        merged = foo + bar
+
+        self.assertEqual(merged, bar)
+
+    def test_merge_dict(self):
+        foo = Explanation(False, 'not_dict_where', '', {
+            'foo': Explanation(False, 'foo', 'foo')
+        })
+        bar = Explanation(False, 'not_dict_where', '', {
+            'bar': Explanation(False, 'bar', 'bar'),
+        })
+        merged = foo + bar
+
+        self.assertEqual(merged.valid, False)
+        self.assertEqual(merged.code, 'not_dict_where')
+        self.assertEqual(merged.details, {
+            'foo': foo.details['foo'],
+            'bar': bar.details['bar'],
+        })
