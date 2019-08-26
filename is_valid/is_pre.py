@@ -27,4 +27,6 @@ class is_pre(Predicate):
             if not valid:
                 break
             valid = predicate(data, explain, context)
+            if explain:
+                data = valid.data
         return valid

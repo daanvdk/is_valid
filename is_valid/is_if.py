@@ -41,7 +41,9 @@ class is_if(Predicate):
         self._else = else_predicate
 
     def _evaluate(self, data, explain, context):
-        res = self._cond(data, explain and self._else is None, context)
+        res = self._cond(data, explain, context)
+        if explain:
+            data = res.data
         if res:
             res = self._if(data, explain, context)
         elif self._else is not None:

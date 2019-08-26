@@ -28,6 +28,8 @@ class Predicate(object):
         try:
             for prerequisite in self.prerequisites:
                 res = prerequisite(data, explain, context)
+                if explain:
+                    data = res.data
                 if not res:
                     break
             else:
