@@ -91,10 +91,10 @@ class Explanation:
     def __summary(self, prefix=''):
         if hasattr(self, 'data'):
             if self.message.startswith('data '):
-                return '{!r} {}' .format(self.data, self.message[4:])
+                message = '{!r} {}' .format(self.data, self.message[4:])
             else:
-                return '{} ({!r})' .format(self.message, self.data)
-        return prefix + self.message
+                message = '{} ({!r})' .format(self.message, self.data)
+        return prefix + message
 
     def __str__(self):
         return self.__summary()
