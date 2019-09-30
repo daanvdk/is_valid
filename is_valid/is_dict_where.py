@@ -27,21 +27,22 @@ class is_dict_where(Predicate):
         self._predicates = defaultdict(lambda: self._extra_pred)
 
         if len(args) == 2 and len(kwargs) == 0:
-            self._required = {
-                key: to_pred(predicate)
+            self._required = set(args[0])
+            self._predicates.update(
+                (key, to_pred(predicate))
                 for key, predicate in args[0].items()
-            }
+            )
             self._predicates.update(
                 (key, to_pred(predicate))
                 for key, predicate in args[1].items()
             )
         else:
-            self._required = {
-                key: to_pred(predicate)
-                for key, predicate in dict(*args, **kwargs).items()
-            }
-
-        self._predicates.update(self._required)
+            predicates = dict(*args, **kwargs)
+            self._required = set(predicates)
+            self._predicates.update(
+                (key, to_pred(predicate))
+                for key, predicate in predicates.items()
+            )
 
     def _evaluate(self, data, explain, context):
         missing = {key for key in self._required if key not in data}
