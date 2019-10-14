@@ -8,7 +8,11 @@ from .to_pred import to_pred
 
 class is_dict_union(Predicate):
 
-    def __init__(self, key, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        if args and isinstance(args[0], str):
+            key, *args = args
+        else:
+            key = 'type'
         self._key = key
         self._preds = {
             value: self._to_pred(pred, value)
@@ -36,6 +40,12 @@ class is_dict_union(Predicate):
                     optional[key] = subpred
 
             pred = cls(required, optional)
+
+        elif type(pred) is is_dict_union:
+            return is_dict_union(pred._key, {
+                subvalue: self._to_pred(subpred, value)
+                for subvalue, subpred in pred._preds.items()
+            })
 
         return pred
 
