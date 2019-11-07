@@ -3,6 +3,12 @@ from .is_fixed import is_fixed
 from .to_pred import to_pred
 
 
+def const(value):
+    def function(*args, **kwargs):
+        return value
+    return function
+
+
 class is_with(Predicate):
     """
     A predicate that can set context that can then be retrieved using Get
@@ -12,7 +18,10 @@ class is_with(Predicate):
     fail = is_fixed(False, 'set_failed', 'failed to set context')
 
     def __init__(self, context, success, fail=fail):
-        self._context = context
+        self._context = {
+            key: transform if callable(transform) else const(transform)
+            for key, transform in context.items()
+        }
         self._success = to_pred(success)
         self._fail = to_pred(fail)
 

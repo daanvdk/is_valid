@@ -24,6 +24,8 @@ replace the explanation objects `data` attribute with the match object.
 - Added the `is_decodable_json_where` predicate which is a combination of
 `is_decodable_where` and `is_json_where` since these two are often used
 together.
+- Changed `is_with` so that if a non callable value is provided as a transform
+function it will be changed into a function that always returns this value.
 - Added `is_with_context` which is similar to `is_with` but operators on the
 current context instead of the data.
 
