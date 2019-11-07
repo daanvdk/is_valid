@@ -24,6 +24,8 @@ replace the explanation objects `data` attribute with the match object.
 - Added the `is_decodable_json_where` predicate which is a combination of
 `is_decodable_where` and `is_json_where` since these two are often used
 together.
+- Added `is_with_context` which is similar to `is_with` but operators on the
+current context instead of the data.
 
 ## [0.8.0](https://pypi.pthon.org/pypi/is-valid/0.8.0) - 2019/04/10
 - Refactored automatic predicate conversion to convert `dict`, `tuple`, and

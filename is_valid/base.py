@@ -78,6 +78,8 @@ class Context(object):
 
     def pop(self, key):
         self._values[key].pop()
+        if not self._values[key]:
+            del self._values[key]
 
     def __call__(self, value):
         if isinstance(value, Get):
