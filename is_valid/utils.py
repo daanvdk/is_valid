@@ -49,7 +49,9 @@ class Wrapper(Predicate):
         self._wrapped = wrapped
 
     def wrap(self, wrapped):
-        self._wrapped = to_pred(wrapped)
+        wrapped = to_pred(wrapped)
+        self._wrapped = wrapped
+        return wrapped
 
     def _evaluate(self, data, explain, context):
         return self._wrapped._evaluate(data, explain, context)
