@@ -1,5 +1,6 @@
 from .base import Predicate
 from .to_pred import to_pred
+from .is_nothing import is_nothing
 
 
 class is_if(Predicate):
@@ -51,3 +52,10 @@ class is_if(Predicate):
         else:
             res = ~res if explain else not res
         return res
+
+    @classmethod
+    def cases(cls, *cases, default=is_nothing):
+        predicate = to_pred(default)
+        for cond, then_ in reversed(cases):
+            predicate = cls(cond, then_, predicate)
+        return predicate

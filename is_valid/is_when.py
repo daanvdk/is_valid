@@ -16,3 +16,10 @@ class is_when(Predicate):
             return self._then(data, explain, context)
         else:
             return self._else(data, explain, context)
+
+    @classmethod
+    def cases(cls, *cases, default=is_nothing):
+        predicate = to_pred(default)
+        for cond, then_ in reversed(cases):
+            predicate = cls(cond, then_, predicate)
+        return predicate
