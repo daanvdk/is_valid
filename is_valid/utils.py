@@ -2,6 +2,7 @@ from .base import Predicate
 from .explanation import Explanation
 from .is_eq import is_eq
 from .to_pred import to_pred
+from .is_with_context import is_with_context
 
 
 class explain(Predicate):
@@ -55,3 +56,19 @@ class Wrapper(Predicate):
 
     def _evaluate(self, data, explain, context):
         return self._wrapped._evaluate(data, explain, context)
+
+
+def default_context(pred, *args, **kwargs):
+    """
+    Wraps a predicate with default context.
+    """
+    defaults = dict(*args, **kwargs)
+
+    def context_func(context):
+        return {
+            key: value
+            for key, value in defaults.items()
+            if key not in context
+        }
+
+    return is_with_context(context_func, pred)

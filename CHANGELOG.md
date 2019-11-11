@@ -31,6 +31,8 @@ current context instead of the data.
 - Changed `Wrapper.wrap` to return whatever it wrapped.
 - Added `is_if.cases` and `is_when.cases` as a shorthand for creating long
 if ... elif ... elif ... else structures without having to nest.
+- Added `default_context` to `utils` to easily specify default values for the
+predicate context.
 
 ## [0.8.0](https://pypi.pthon.org/pypi/is-valid/0.8.0) - 2019/04/10
 - Refactored automatic predicate conversion to convert `dict`, `tuple`, and
