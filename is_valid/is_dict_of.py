@@ -33,9 +33,9 @@ class is_dict_of(Predicate):
 
             value_explanation = self._value.explain(value, context)
             if value_explanation:
-                reason['value'] = key_explanation
+                reason['value'] = value_explanation
             else:
-                error['value'] = key_explanation
+                error['value'] = value_explanation
 
             if error:
                 errors[key] = error
