@@ -33,13 +33,18 @@ class explain(Predicate):
 
     def _evaluate(self, data, explain, context):
         if self._context:
-            valid = self._predicate(data, context=context)
+            valid = self._predicate(data, explain, context)
         else:
             valid = self._predicate(data)
-        if valid:
-            return self._valid_exp if explain else True
+
+        if explain:
+            res = self._valid_exp if valid else self._not_valid_exp
+            if self._context:
+                res = res.copy()
+                res.data = valid.data
+            return res
         else:
-            return self._not_valid_exp if explain else False
+            return bool(valid)
 
 
 class Wrapper(Predicate):
