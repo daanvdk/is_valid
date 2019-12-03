@@ -46,7 +46,7 @@ class TestWrapper(TestCase):
 
     def test_wrapper_predicate(self):
         wrapper = Wrapper()
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TypeError):
             wrapper(None)
         wrapper.wrap(is_eq(0))
         self._test(wrapper, 0, True)
