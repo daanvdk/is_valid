@@ -33,6 +33,8 @@ current context instead of the data.
 if ... elif ... elif ... else structures without having to nest.
 - Added `default_context` to `utils` to easily specify default values for the
 predicate context.
+- Fixed `utils.Wrapper` incorrectly calling the wrapped predicate so that
+prerequisites were ignored.
 
 ## [0.8.0](https://pypi.pthon.org/pypi/is-valid/0.8.0) - 2019/04/10
 - Refactored automatic predicate conversion to convert `dict`, `tuple`, and

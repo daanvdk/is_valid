@@ -60,7 +60,7 @@ class Wrapper(Predicate):
         return wrapped
 
     def _evaluate(self, data, explain, context):
-        return self._wrapped._evaluate(data, explain, context)
+        return self._wrapped(data, explain, context)
 
 
 def default_context(pred, *args, **kwargs):
