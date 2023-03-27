@@ -1,11 +1,12 @@
 from unittest import TestCase
 from datetime import datetime, date, time, timedelta
+from decimal import Decimal
 
 from hypothesis import given
 
 from is_valid import is_iterable, is_instance, is_str, is_int, is_float,\
     is_bool, is_list, is_dict, is_set, is_tuple, is_datetime, is_date,\
-    is_time, is_timedelta, is_number, is_json, is_byte, is_bytes
+    is_time, is_timedelta, is_number, is_json, is_byte, is_bytes, is_decimal
 
 from .utils import classes, scalars, json_data, invalid_json_data
 
@@ -52,6 +53,13 @@ class TestTypePredicates(TestCase):
             self.assertEqual(is_float(value), is_float.explain(value).valid)
         with self.subTest('pred correct'):
             self.assertEqual(is_float(value), isinstance(value, float))
+
+    @given(scalars)
+    def test_is_decimal(self, value):
+        with self.subTest('explain=True == explain=False'):
+            self.assertEqual(is_decimal(value), is_decimal.explain(value).valid)
+        with self.subTest('pred correct'):
+            self.assertEqual(is_decimal(value), isinstance(value, Decimal))
 
     @given(scalars)
     def test_is_bool(self, value):
@@ -127,7 +135,7 @@ class TestTypePredicates(TestCase):
                 is_number(value), is_number.explain(value).valid
             )
         with self.subTest('pred correct'):
-            self.assertEqual(is_number(value), isinstance(value, (int, float)))
+            self.assertEqual(is_number(value), isinstance(value, (int, float, Decimal)))
 
     @given(scalars)
     def test_is_byte(self, value):

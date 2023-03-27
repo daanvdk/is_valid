@@ -1,5 +1,11 @@
 # Changelog
 
+## HEAD
+- `is_decimal` was added which validates if an object is an instance of
+`decimal.Decimal`.
+- `is_number` was modified to also consider instances of `decimal.Decimal` as
+numbers.
+
 ## [0.9.0](https://pypi.pthon.org/pypi/is-valid/0.9.0) - 2020/01/07
 - `Explanation` objects now have a new attributes `data` which holds the data
 that was used to generate the explanation. For `is_transformed` and any of it's
