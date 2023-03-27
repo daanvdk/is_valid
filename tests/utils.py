@@ -1,17 +1,18 @@
 import re
 from datetime import datetime, date, time, timedelta
+from decimal import Decimal
 
 import hypothesis.strategies as hs
 
 
-varying = hs.one_of(hs.integers(), hs.floats(), hs.text(), hs.booleans())
+varying = hs.one_of(hs.integers(), hs.floats(), hs.decimals(), hs.text(), hs.booleans())
 for _ in range(3):
     varying = hs.one_of(
         varying,
         hs.lists(varying, max_size=10),
     )
 
-numbers = hs.one_of(hs.integers(), hs.floats())
+numbers = hs.one_of(hs.integers(), hs.floats(), hs.decimals())
 
 
 regexs = [r'\d+', r'^foo(bar){3}$', re.compile(r'^FoOBaR$', flags=re.I)]
@@ -25,13 +26,13 @@ def regex_with_match(draw):
 
 
 scalars = hs.one_of(
-    hs.text(), hs.integers(), hs.floats(), hs.booleans(),
+    hs.text(), hs.integers(), hs.floats(), hs.decimals(), hs.booleans(),
     hs.lists(hs.integers()), hs.dictionaries(hs.integers(), hs.integers()),
     hs.sets(hs.integers()), hs.tuples(hs.integers()), hs.datetimes(),
     hs.dates(), hs.times(), hs.timedeltas(), hs.binary(),
 )
 classes = hs.sampled_from([
-    str, int, float, bool, list, dict, set, tuple, datetime, date, time,
+    str, int, float, Decimal, bool, list, dict, set, tuple, datetime, date, time,
     timedelta
 ])
 

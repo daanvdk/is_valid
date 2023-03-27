@@ -24,6 +24,7 @@ from .is_instance import is_instance
 from .is_str import is_str
 from .is_int import is_int
 from .is_float import is_float
+from .is_decimal import is_decimal
 from .is_bool import is_bool
 from .is_list import is_list
 from .is_dict import is_dict
@@ -71,7 +72,7 @@ __all__ = [
     is_iterable_where, is_iterable_of, is_dict_where, is_subdict_where,
     is_superdict_where, is_dict_of, is_object_where, is_list_of, is_list_where,
     is_tuple_of, is_tuple_where, is_set_of, is_iterable, is_instance, is_str,
-    is_int, is_float, is_bool, is_list, is_dict, is_set, is_tuple, is_datetime,
+    is_int, is_float, is_decimal, is_bool, is_list, is_dict, is_set, is_tuple, is_datetime,
     is_date, is_time, is_timedelta, is_number, is_json, is_transformed,
     is_json_where, is_optional, is_pre, is_nullable, is_with, is_byte, Get,
     is_bytes, is_decodable, is_decodable_where, is_decodable_json_where,

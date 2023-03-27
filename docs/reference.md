@@ -102,6 +102,11 @@ A predicate that checks whether the data is an instance of `datetime.date`.
 
 A predicate that checks whether the data is an instance of `datetime.datetime`.
 
+# is_decimal
+`is_decimal`
+
+A predicate that checks whether the data is an instance of `decimal.Decimal`.
+
 # is_dict
 `is_dict`
 
