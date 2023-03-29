@@ -7,7 +7,7 @@ setup(
     packages=['is_valid'],
     package_dir={'is_valid': 'is_valid'},
     license='MIT',
-    version='0.9.0',
+    version='0.10.0',
     description='A small validation library.',
     author='Daan van der Kallen',
     author_email='mail@daanvdk.com',

@@ -1,6 +1,6 @@
 # Changelog
 
-## HEAD
+## [0.10.0](https://pypi.pthon.org/pypi/is-valid/0.10.0) - 2020/01/07
 - `is_decimal` was added which validates if an object is an instance of
 `decimal.Decimal`.
 - `is_number` was modified to also consider instances of `decimal.Decimal` as
